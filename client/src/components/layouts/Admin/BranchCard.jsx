@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import maleProfilePic from "../../../assets/view-emp/maleUserPic.png";
 import femaleProfilePic from "../../../assets/view-emp/femaleUserPic.png";
 import "../../../assets/search-emp/empCard.css";
 
-export default class EmpCard extends Component {
+export default class BranchCard extends Component {
   onGetDate = (date) => {
     const d = new Date(date);
     let returnDate = d.toLocaleDateString("en-GB");
@@ -35,38 +34,19 @@ export default class EmpCard extends Component {
           <div className="col p-0">
             <span className="text-center">
               <h4>{data.name.toUpperCase()}</h4>
-
-              <p style={{ fontSize: "13px" }}>
-                <i className="fas fa-envelope"> {data.email}</i>
-              </p>
             </span>
             <div className="text-center">
-              <span>Branch: {data.branch}</span> <br />
-              <span>Role: {data.role}</span> <br />
               <span>
+              <span>Address: {data.address}</span> <br />
+              <span>Phone: {data.phoneNo}</span> <br />
+
                 <i className="fas fa-calendar-alt">
                   {" "}
-                  {this.onGetDate(data.doj)}
+                  {this.onGetDate(data.dop)}
                 </i>
               </span>
               <br />
-              {/* {data.skills ? <small>Skills: {data.skills}</small> : null} */}
             </div>
-            <hr />
-            <Link
-              to={`/editEmpProfile/${data._id}`}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <input
-                type="button"
-                value="Full Details"
-                className="btn btn-primary"
-              />
-            </Link>
           </div>
         </div>
       </div>

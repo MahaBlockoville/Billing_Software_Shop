@@ -26,6 +26,10 @@ import Options from "./components/layouts/Admin/Options";
 import ViewSingleRequest from "./components/layouts/Employee/ViewSingleRequest";
 import CompanyInfo from "./components/layouts/Employee/CompanyInfo";
 import ActiveLoans from "./components/layouts/Admin/ActiveLoans";
+import AddBranch from "./components/layouts/Admin/AddBranch";
+import ViewBranches from "./components/layouts/Admin/View Requests/ViewBranches";
+import AddInWard from "./components/layouts/AddInWard";
+import ViewInWards from "./components/layouts/Admin/View Requests/ViewInWards";
 
 export default class App extends Component {
   render() {
@@ -33,7 +37,7 @@ export default class App extends Component {
       <Provider>
         <Router>
           <div>
-            <Header branding="HRMS" />
+            <Header branding="GetEasyTech" />
 
             <Switch>
               {/* general */}
@@ -60,6 +64,10 @@ export default class App extends Component {
               <Route exact path="/" component={Statistics} />
               <Route exact path="/add" component={AddEmployee} />
               <Route exact path="/viewRequests" component={ViewRequests} />
+              <Route exact path="/addBranch" component={AddBranch} />
+              <Route exact path="/addInWard" component={AddInWard} />
+              <Route exact path="/viewInWards" component={ViewInWards} />
+              <Route exact path="/viewBranches" component={ViewBranches} />
               <Route exact path="/statistics" component={Statistics} />
               <Route exact path="/options" component={Options} />
               <Route exact path="/payroll" component={Payroll} />

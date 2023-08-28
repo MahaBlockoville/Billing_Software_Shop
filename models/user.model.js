@@ -11,6 +11,7 @@ const userSchema = new Schema({
   phoneNo: { type: String },
   role: { type: String },
   team: { type: String },
+  branch: { type: String },
   objective: { type: String },
   skills: { type: String },
   doj: { type: String },

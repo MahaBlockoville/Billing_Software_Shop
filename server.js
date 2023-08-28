@@ -21,17 +21,21 @@ app.use((req, res, next) => {
 });
 // extra end
 
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-});
+const url = process.env.ATLAS_URI;
 
-const connection = mongoose.connection;
-connection.once("open", () => {
-  console.log("MongoDB database connection established successfully");
-});
+const connectionParams={
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true 
+}
+mongoose.connect(url,connectionParams)
+  .then( () => {
+      console.log('Connected to the database ')
+  })
+  .catch( (err) => {
+      console.error(`Error connecting to the database. n${err}`);
+  })
+
 
 const usersRouter = require("./routes/users");
 const adminRouter = require("./routes/admin");

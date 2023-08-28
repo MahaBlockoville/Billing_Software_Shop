@@ -137,7 +137,7 @@ class Signup extends Component {
                               Create new Admin Account!
                             </h3>
 
-                            {error.length ? (
+                            {error && error.length ? (
                               <div className="alert alert-danger mt-4">
                                 {error}
                               </div>

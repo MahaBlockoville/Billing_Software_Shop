@@ -2,36 +2,30 @@ import axios from "axios";
 import React, { Component } from "react";
 import "../../../assets/search-emp/searchEmp.css";
 
-export default class SearchEmp extends Component {
+export default class SearchBranch extends Component {
   constructor() {
     super();
 
     this.state = {
       name: "",
-      role: "",
-      email: "",
-      team: "",
-      doj: "",
-      dojCheck: false,
+      dop: "",
+      dopCheck: false,
     };
   }
 
-  toggleDateRange = () => this.setState({ dojCheck: !this.state.dojCheck });
+  toggleDateRange = () => this.setState({ dopCheck: !this.state.dopCheck });
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = async (e) => {
     e.preventDefault();
 
-    let { name, role, branch, email, doj } = this.state;
+    let { name, dop } = this.state;
 
     try {
-      const res = await axios.post("/api/admin/search", {
+      const res = await axios.post("/api/admin/searchBranch", {
         name,
-        role,
-        branch,
-        email,
-        doj,
+        dop,
       });
 
       this.props.onFilter(res.data);
@@ -59,57 +53,14 @@ export default class SearchEmp extends Component {
                 />
               </div>
             </div>
-
             <div className="col">
-              <label htmlFor="role">Role</label>
-              <div className="form-group">
-                <input
-                  placeholder="Front End Developer"
-                  name="role"
-                  type="text"
-                  id="role"
-                  className="form-control mb-3 mb-3"
-                  onChange={this.onChange}
-                />
-              </div>
-            </div>
-
-            <div className="col">
-              <label htmlFor="email">Email</label>
-              <div className="form-group">
-                <input
-                  placeholder="joey@gmail.com"
-                  name="email"
-                  type="email"
-                  id="email"
-                  className="form-control mb-3"
-                  onChange={this.onChange}
-                />
-              </div>
-            </div>
-
-            <div className="col">
-              <label htmlFor="team">Branch</label>
-              <div className="form-group">
-                <input
-                  placeholder="Development"
-                  name="branch"
-                  type="text"
-                  id="branch"
-                  className="form-control mb-3"
-                  onChange={this.onChange}
-                />
-              </div>
-            </div>
-
-            <div className="col">
-              <label htmlFor="doj">Date Of Joining</label>
+              <label htmlFor="doj">Date Of Opening</label>
               <div className="form-group">
                 <input
                   placeholder="Date"
-                  name="doj"
+                  name="dop"
                   type="date"
-                  id="doj"
+                  id="dop"
                   className="form-control"
                   onChange={this.onChange}
                 />

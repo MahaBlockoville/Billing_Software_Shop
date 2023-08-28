@@ -9,6 +9,8 @@ let SalaryReceipt = require("../models/salaryReceipt.model");
 const { json } = require("express");
 const TeamAndRole = require("../models/teams.and.roles.model");
 const Loan = require("../models/loan.model");
+const Branch = require("../models/branch.model");
+const InWard = require("../models/inward.model");
 
 // @desc: register a user
 router.post("/register", async (req, res) => {
@@ -126,7 +128,7 @@ router.get("/", auth, async (req, res) => {
 // @desc: add employee by admin
 router.post("/addEmployee", async (req, res) => {
   try {
-    let { email, name, address, phoneNo, role, team, doj, gender } = req.body;
+    let { email, name, address, phoneNo, role, team, branch, doj, gender } = req.body;
 
     // validation
     if (
@@ -134,8 +136,7 @@ router.post("/addEmployee", async (req, res) => {
       !name ||
       !address ||
       !phoneNo ||
-      !role ||
-      !team ||
+      !branch ||
       !doj ||
       gender === "Select Value"
     ) {
@@ -165,6 +166,7 @@ router.post("/addEmployee", async (req, res) => {
       address,
       role,
       doj,
+      branch,
       notification: [],
       alert: [],
     });
@@ -200,6 +202,66 @@ router.post("/addEmployee", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// @desc: add branch by admin
+router.post("/addBranch", async (req, res) => {
+  try {
+    let { name, address, phoneNo, dop } = req.body;
+    console.log(req.body, 'body');
+    // validation
+    if (
+      !name ||
+      !address ||
+      !phoneNo ||
+      !dop) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    const newBranch = new Branch({
+      name,
+      phoneNo,
+      address,
+      dop,
+    });
+    const savedBranch = await newBranch.save();
+    res.json(savedBranch);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// @desc: add addInWard by admin
+router.post("/addInWard", async (req, res) => {
+  try {
+    let { name, imei_number, model, variant, color, purchase_value, selling_value, 
+      discount, branch, category, doi } = req.body;
+    console.log(req.body, 'body');
+    // validation
+    if (
+      !name ||
+      !imei_number ||
+      !model ||
+      !variant||
+      !color ||
+      !purchase_value||
+      !selling_value ||
+      !discount ||
+      !branch ||
+      !category ||
+      !doi) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    const newInward = new InWard({
+      name, imei_number, model, variant, color, purchase_value, selling_value, 
+        discount, branch, category, doi
+    });
+    const savedInWard = await newInward.save();
+    res.json(savedInWard);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // @desc: approve/reject requests
 router.put("/takeAction", async (req, res) => {
@@ -369,6 +431,19 @@ router.get("/getEmpList", async (req, res) => {
   res.send(empList);
 });
 
+// @desc: get list of all emp
+router.get("/getBranchList", async (req, res) => {
+  const empList = await Branch.find({});
+  res.send(empList);
+});
+
+// @desc: get list of all inward
+router.get("/getInWardList", async (req, res) => {
+  const empList = await InWard.find({});
+  res.send(empList);
+});
+
+
 // @desc: delete a user account
 router.delete("/delete/:id", async (req, res) => {
   try {
@@ -437,16 +512,16 @@ router.get("/getUserData/:id", async (req, res) => {
 router.post("/search", async (req, res) => {
   let name = req.body.name;
   let role = req.body.role;
-  let team = req.body.team;
+  let branch = req.body.branch;
   let email = req.body.email;
   let doj = req.body.doj;
 
-  console.log(name, role, team, email, doj);
+  console.log(name, role, branch, email, doj);
 
   // if fields are empty, match everything
   if (name === "") name = new RegExp(/.+/s);
   if (role === "") role = new RegExp(/.+/s);
-  if (team === "") team = new RegExp(/.+/s);
+  if (branch === "") branch = new RegExp(/.+/s);
   if (email === "") email = new RegExp(/.+/s);
   if (doj === "") doj = new RegExp(/.+/s);
 
@@ -455,9 +530,47 @@ router.post("/search", async (req, res) => {
   User.find({
     name: new RegExp(name, "i"),
     role: new RegExp(role, "i"),
-    team: new RegExp(team, "i"),
+    branch: new RegExp(branch, "i"),
     email: new RegExp(email, "i"),
     doj: new RegExp(doj, "i"),
+  })
+    .then((emp) => {
+      res.json(emp);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// @desc: search branch component
+router.post("/searchBranch", async (req, res) => {
+  let name = req.body.name;
+  let dop = req.body.dop;
+  console.log(name, dop);
+  // if fields are empty, match everything
+  if (name === "") name = new RegExp(/.+/s);
+  if (dop === "") dop = new RegExp(/.+/s);
+  // console.log(l, s, i, d);
+  Branch.find({
+    name: new RegExp(name, "i"),
+    dop: new RegExp(dop, "i"),
+  })
+    .then((emp) => {
+      res.json(emp);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// @desc: search searchInward component
+router.post("/searchInward", async (req, res) => {
+  let name = req.body.name;
+  let doi = req.body.doi;
+  console.log(name, doi);
+  // if fields are empty, match everything
+  if (name === "") name = new RegExp(/.+/s);
+  if (doi === "") doi = new RegExp(/.+/s);
+  // console.log(l, s, i, d);
+  Branch.find({
+    name: new RegExp(name, "i"),
+    doi: new RegExp(doi, "i"),
   })
     .then((emp) => {
       res.json(emp);
@@ -580,19 +693,27 @@ router.get("/getTeamsAndRoles", async (req, res) => {
 router.post("/addNewTeam", async (req, res) => {
   const teamName = req.body.teamName;
   const teamObj = await TeamAndRole.find({});
-
-  let teamList = teamObj[0].teamNames;
+  console.log(teamObj, 'teamObj')
+  let teamList = teamObj.length > 0 ? teamObj[0].teamNames : [];
+  console.log(teamList, 'teamList')
 
   teamList.push(teamName);
-
-  const updatedTeamObj = await TeamAndRole.findOneAndUpdate(
-    {},
-    {
-      teamNames: teamList,
-    },
-    { new: true }
-  );
-
+  let updatedTeamObj;
+  if(teamObj.length > 0) {
+    updatedTeamObj = await TeamAndRole.findOneAndUpdate(
+      {},
+      {
+        teamNames: teamList,
+      },
+      { new: true }
+    );
+  }else {
+    updatedTeamObj = await TeamAndRole.create(
+      {
+        teamNames: teamList,
+      }
+    );
+  }
   res.json(updatedTeamObj);
 });
 

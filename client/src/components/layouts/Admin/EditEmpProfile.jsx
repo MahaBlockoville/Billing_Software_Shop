@@ -20,10 +20,12 @@ export default class EditEmpProfile extends Component {
       address: "",
       role: "",
       team: "",
+      branch: '',
       doj: "",
       skills: "",
 
       // teams and roels
+      branchList: [],
       teamList: [],
       roleList: [],
 
@@ -48,6 +50,7 @@ export default class EditEmpProfile extends Component {
       `/api/admin/getUserSalDetails/${userId}`
     );
     const teamAndRoleList = await axios.get("/api/admin/getTeamsAndRoles");
+    const branchList = await axios.get("/api/admin/getBranchList");
     const empLoanHistory = await axios.get(
       `/api/admin/getEmpLoanHistory/${userId}`
     );
@@ -61,12 +64,14 @@ export default class EditEmpProfile extends Component {
       email: userData.data.email,
       role: userData.data.role,
       team: userData.data.team,
+      branch: userData.data.branch,
       phoneNo: userData.data.phoneNo,
       objective: userData.data.objective,
       doj: userData.data.doj,
       skills: userData.data.skills,
 
       // team & role
+      branchList: branchList.data,
       teamList: teamAndRoleList.data[0].teamNames,
       roleList: teamAndRoleList.data[0].roleNames,
 
@@ -118,6 +123,7 @@ export default class EditEmpProfile extends Component {
       phoneNo: this.state.phoneNo,
       team: this.state.team,
       objective: this.state.objective,
+      branch: this.state.branch,
       doj: this.state.doj,
       skills: this.state.skills,
     };
@@ -165,6 +171,8 @@ export default class EditEmpProfile extends Component {
   onSelectGender = (gender) => this.setState({ gender });
 
   onTeamSelect = (team) => this.setState({ team });
+
+  onBranchSelect = (branch) => this.setState({ branch });
 
   onRoleSelect = (role) => this.setState({ role });
 
@@ -325,7 +333,7 @@ export default class EditEmpProfile extends Component {
                             <div className="row">
                               {/* team */}
                               <div className="col">
-                                <label htmlFor="team">Team</label>
+                                <label htmlFor="team">Branch</label>
                                 <div className="dropdown">
                                   <button
                                     className="btn btn-light dropdown-toggle"
@@ -335,21 +343,21 @@ export default class EditEmpProfile extends Component {
                                     aria-haspopup="true"
                                     aria-expanded="false"
                                   >
-                                    {this.state.team}
+                                    {this.state.branch}
                                   </button>
                                   <div
                                     className="dropdown-menu"
                                     aria-labelledby="dropdownMenuButton"
                                   >
-                                    {this.state.teamList.map((teamName) => (
+                                    {this.state.branchList.map((data) => (
                                       <li
-                                        key={teamName}
+                                        key={data._id}
                                         className="dropdown-item"
                                         onClick={() =>
-                                          this.onTeamSelect(teamName)
+                                          this.onBranchSelect(data.name)
                                         }
                                       >
-                                        {teamName}
+                                        {data.name}
                                       </li>
                                     ))}
                                   </div>

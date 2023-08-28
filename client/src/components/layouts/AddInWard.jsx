@@ -8,52 +8,37 @@ import AdminSidePanel from "./Admin/AdminSidePanel";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
-class AddEmployee extends Component {
+class AddInWard extends Component {
   constructor() {
     super();
 
     this.state = {
-      email: "",
-      name: "",
-      address: "",
-      phoneNo: "",
-      role: "Select Role",
-      team: "Select Team",
-      branch: "Select Branch",
-      gender: "Select Value",
-      doj: "",
+      categories: [{name: 'Smart Phone'}, {name: 'Featured Phone'}, {name: 'Accessories'}],
+      category: "Select Category",
       disabled: false,
-
+      name: '',
+    imei_number: '', 
+    model: '', 
+    variant: '', 
+    color: '', 
+    purchase_value: '', 
+    selling_value: '', 
+    discount: '',
+    doi: '', 
+    branch: 'Select Branch', 
+    branchList: [],
       // error
       error: "",
-
-      // teams and roels
-      branchList: [],
-      teamList: [],
-      roleList: [],
     };
   }
 
   componentDidMount = async () => {
-    const teamAndRoleList = await axios.get("/api/admin/getTeamsAndRoles");
     const branchList = await axios.get("/api/admin/getBranchList");
     this.setState({
       branchList: branchList.data,
-      teamList: teamAndRoleList.data[0].teamNames,
-      team: teamAndRoleList.data[0]?.teamNames[0],
-      role: teamAndRoleList.data[0]?.roleNames[0],
-      roleList: teamAndRoleList.data[0].roleNames,
     });
   };
-
-  onSelectGender = (gender) => this.setState({ gender });
-
-  onTeamSelect = (team) => this.setState({ team });
-
   onBranchSelect = (branch) => this.setState({ branch });
-
-  onRoleSelect = (role) => this.setState({ role });
-
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
 
@@ -63,36 +48,22 @@ class AddEmployee extends Component {
     });
 
     const {
-      email,
-      name,
-      address,
-      phoneNo,
-      role,
-      team,
-      branch,
-      doj,
-      gender,
+        name, imei_number, model, variant, color, purchase_value, selling_value, 
+        discount, branch, category, doi
     } = this.state;
 
     try {
-      const newUser = await axios.post("/api/admin/addEmployee", {
-        email,
-        name,
-        address,
-        gender,
-        phoneNo,
-        role,
-        branch,
-        team,
-        doj,
+      const newUser = await axios.post("/api/admin/addInWard", {
+        name, imei_number, model, variant, color, purchase_value, selling_value, 
+        discount, branch, category, doi
       });
 
-      toast.notify("Added new employee", {
+      toast.notify("Added new item", {
         position: "top-right",
       });
 
       console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/editEmpProfile/${newUser.data._id}`);
+      //this.props.history.push(`/viewInWards`);
     } catch (err) {
       // enable signup btn
       this.setState({
@@ -103,6 +74,9 @@ class AddEmployee extends Component {
       this.setState({ error: err.response.data.msg });
     }
   };
+
+  onCategorySelect = (category) => this.setState({ category });
+
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
@@ -141,7 +115,7 @@ class AddEmployee extends Component {
                       <div
                         className="col"
                         style={{
-                         // display: "flex ",
+                          //display: "flex ",
                           flexDirection: "row",
                           justifyContent: "center",
                         }}
@@ -157,30 +131,66 @@ class AddEmployee extends Component {
                             className="addEmpForm"
                             onSubmit={this.onSubmit.bind(this, dispatch)}
                           >
-                            <h3 className="">ADD EMPLOYEE</h3>
+                            <h3 className="">IN WARD</h3>
                             <hr />
 
                             <div className="row">
                               <div className="col">
+                              <label htmlFor="category">Category</label>
+                              <div className="dropdown">
+                                  <button
+                                    className="btn btn-light dropdown-toggle"
+                                    type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                  >
+                                    {this.state.category}
+                                  </button>
+                                  <div
+                                    className="dropdown-menu"
+                                    aria-labelledby="dropdownMenuButton"
+                                  >
+                                    {this.state.categories.map((data) => (
+                                      <li
+                                        style={{ cursor: "pointer" }}
+                                        key={data.name}
+                                        className="dropdown-item"
+                                        onClick={() =>
+                                          this.onCategorySelect(data.name)
+                                        }
+                                      >
+                                        {data.name}
+                                      </li>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {this.state.category !== "Select Category" && 
+                            <>
+                            <div className="row">
+                              <div className="col">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Brand</label>
                                 <input
                                   type="text"
                                   name="name"
                                   className="form-control"
-                                  placeholder="Joey Tribbiani"
+                                  placeholder="Brand"
                                   onChange={this.onChange}
                                   required
                                 />
                               </div>
                               <div className="col">
                                 {/* email */}
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="imei_number">IMEI Number</label>
                                 <input
-                                  type="email"
-                                  name="email"
+                                  type="number"
+                                  name="imei_number"
                                   className="form-control mb-3 "
-                                  placeholder="joey@gmail.com"
+                                  placeholder="IMEI Number"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -189,27 +199,27 @@ class AddEmployee extends Component {
 
                             <div className="row">
                               <div className="col">
-                                {/* address */}
-                                <label htmlFor="address">Address</label>
+                                {/* model */}
+                                <label htmlFor="model">Model</label>
                                 <textarea
-                                  name="address"
-                                  id="address"
+                                  name="model"
+                                  id="model"
                                   // cols="20"
                                   rows="1"
                                   className="form-control mb-3 "
-                                  placeholder="Mapusa, Goa"
+                                  placeholder="Model"
                                   onChange={this.onChange}
                                   required
                                 />
                               </div>
                               <div className="col">
                                 {/* phone no */}
-                                <label htmlFor="phoneNo">Phone No.</label>
+                                <label htmlFor="variant">Variant</label>
                                 <input
-                                  type="number"
-                                  name="phoneNo"
+                                  type="text"
+                                  name="variant"
                                   className="form-control mb-3 "
-                                  placeholder="1234567890"
+                                  placeholder="Variant"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -252,93 +262,71 @@ class AddEmployee extends Component {
                               </div>
                               {/* role */}
                               <div className="col">
-                                <label htmlFor="role">Position</label>
-                                <div className="dropdown mb-3">
-                                  <button
-                                    className="btn btn-light dropdown-toggle"
-                                    type="button"
-                                    id="dropdownMenuButton"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                  >
-                                    {this.state.role}
-                                  </button>
-                                  <div
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton"
-                                  >
-                                    {this.state.roleList.map((roleName) => (
-                                      <li
-                                        style={{ cursor: "pointer" }}
-                                        key={roleName}
-                                        className="dropdown-item"
-                                        onClick={() =>
-                                          this.onRoleSelect(roleName)
-                                        }
-                                      >
-                                        {roleName}
-                                      </li>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="row">
-                              {/* doj */}
-                              <div className="col">
-                                <label htmlFor="doj">Date Of Joining</label>
+                                <label htmlFor="discount">Discount</label>
                                 <input
-                                  type="date"
-                                  name="doj"
+                                  type="number"
+                                  name="discount"
                                   className="form-control mb-3 "
-                                  placeholder="doj"
+                                  placeholder="Discount"
                                   onChange={this.onChange}
                                   required
                                 />
                               </div>
+                            </div>
 
-                              {/* gender */}
-                              <div className="col">
-                                <label>Gender</label>
-                                <div className="dropdown">
-                                  <button
-                                    className="btn btn-light dropdown-toggle"
-                                    type="button"
-                                    id="dropdownMenuButton"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                  >
-                                    {this.state.gender}
-                                  </button>
-                                  <div
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton"
-                                  >
-                                    <li
-                                      style={{ cursor: "pointer" }}
-                                      className="dropdown-item"
-                                      onClick={() =>
-                                        this.onSelectGender("Male")
-                                      }
-                                    >
-                                      Male
-                                    </li>
-                                    <li
-                                      style={{ cursor: "pointer" }}
-                                      className="dropdown-item"
-                                      onClick={() =>
-                                        this.onSelectGender("Female")
-                                      }
-                                    >
-                                      Female
-                                    </li>
-                                  </div>
+                            <div className="row">
+                            <div className="col-md-6">
+
+                              {/* doj */}
+                                <label htmlFor="doj">Date Of In Ward</label>
+                                <input
+                                  type="date"
+                                  name="doi"
+                                  className="form-control mb-3 "
+                                  placeholder="doi"
+                                  onChange={this.onChange}
+                                  required
+                                />
                                 </div>
+                                <div className="col-md-6">
+                                <label htmlFor="doj">Color</label>
+                                <input
+                                  type="text"
+                                  name="color"
+                                  className="form-control mb-3 "
+                                  placeholder="color"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                                </div>
+                            </div>
+                            <div className="row">
+                            {/* gender */}
+                              <div className="col">
+                                <label>Purchase Value</label>
+                                <input
+                                  type="number"
+                                  name="purchase_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type purchase value"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              <div className="col">
+                                <label>Selling Value</label>
+                                <input
+                                  type="number"
+                                  name="selling_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type selling value"
+                                  onChange={this.onChange}
+                                  required
+                                />
                               </div>
                             </div>
+                            </>}
+                            <br />
                             <input
                               disabled={this.state.disabled}
                               type="submit"
@@ -362,4 +350,4 @@ class AddEmployee extends Component {
   }
 }
 
-export default AddEmployee;
+export default AddInWard;

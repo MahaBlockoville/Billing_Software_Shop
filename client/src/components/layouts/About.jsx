@@ -16,7 +16,7 @@ export default function About() {
             <div style={props}>
               <div className="col-12 col-sm-12 ">
                 <h1 style={{ fontWeight: "lighter mt-5" }}>
-                  <span className="font-italic">About HRMS</span>
+                  <span className="font-italic">About GetEasyTech</span>
                 </h1>
                 <p className="lead font-italic">
                   One stop software to manage your employees

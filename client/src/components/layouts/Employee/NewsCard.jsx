@@ -17,6 +17,7 @@ export default class NewsCard extends Component {
 
         <a
           href={article_url}
+          // eslint-disable-next-line react/jsx-no-target-blank
           target="_blank"
           style={{
             color: "#FF4500",

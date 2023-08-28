@@ -53,6 +53,32 @@ export default class SidePanel extends Component {
           </li>
         </Link>
 
+        {/* add branch */}
+        <Link to="/addBranch" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-user-plus mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "addBranch" ? <b>Add Branch</b> : "Add Branch"}
+            </li>
+          </Link>
+
+          {/* view branch */}
+          <Link to="/viewBranches" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-search mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "viewBranches" ? (
+                <b>View Branch</b>
+              ) : (
+                "View Branch"
+              )}
+            </li>
+          </Link>
+
         {/* add emp */}
         <ul className="list-group">
           <Link to="/add" style={{ textDecoration: "none" }}>
@@ -80,7 +106,29 @@ export default class SidePanel extends Component {
             </li>
           </Link>
 
-          {/* view req*/}
+        {/* add in ward */}
+          <Link to="/addInWard" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-user-plus mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "addInWard" ? <b>In-Ward</b> : "In-Ward"}
+            </li>
+          </Link>
+
+        {/* add in ward */}
+        <Link to="/viewInWards" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-search mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "viewInWards" ? <b>In-Ward Report</b> : "In-Ward Report"}
+            </li>
+          </Link>
+
+          {/* view req
           <Link to="/viewRequests" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -106,7 +154,7 @@ export default class SidePanel extends Component {
               ) : null}
             </li>
           </Link>
-
+          */}
           {/* payroll */}
           <Link to="/payroll" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
@@ -118,7 +166,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
 
-          {/* Active loans */}
+          {/* Active loans 
           <Link to="/activeLoans" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -132,7 +180,7 @@ export default class SidePanel extends Component {
               )}
             </li>
           </Link>
-
+          */}
           {/* options */}
           <Link to="/options" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">

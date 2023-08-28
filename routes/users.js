@@ -77,6 +77,7 @@ router.route("/updateProfile").post((req, res) => {
       team: req.body.user.team,
       role: req.body.user.role,
       skills: req.body.user.skills,
+      branch: req.body.user.branch,
       doj: req.body.user.doj,
       objective: req.body.user.objective,
     },
