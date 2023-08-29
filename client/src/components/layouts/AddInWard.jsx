@@ -63,7 +63,7 @@ class AddInWard extends Component {
       });
 
       console.log("created acc successfully: ", newUser.data);
-      //this.props.history.push(`/viewInWards`);
+      this.props.history.push(`/viewInWards`);
     } catch (err) {
       // enable signup btn
       this.setState({

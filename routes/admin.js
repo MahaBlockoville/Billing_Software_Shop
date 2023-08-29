@@ -207,7 +207,6 @@ router.post("/addEmployee", async (req, res) => {
 router.post("/addBranch", async (req, res) => {
   try {
     let { name, address, phoneNo, dop } = req.body;
-    console.log(req.body, 'body');
     // validation
     if (
       !name ||
@@ -235,7 +234,6 @@ router.post("/addInWard", async (req, res) => {
   try {
     let { name, imei_number, model, variant, color, purchase_value, selling_value, 
       discount, branch, category, doi } = req.body;
-    console.log(req.body, 'body');
     // validation
     if (
       !name ||
@@ -251,12 +249,30 @@ router.post("/addInWard", async (req, res) => {
       !doi) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
+    if(!req.body.inward_id) {
     const newInward = new InWard({
       name, imei_number, model, variant, color, purchase_value, selling_value, 
         discount, branch, category, doi
     });
     const savedInWard = await newInward.save();
     res.json(savedInWard);
+    }else {
+      InWard.findOneAndUpdate(
+        { _id: req.body.inward_id },
+        {
+          name, imei_number, model, variant, color, purchase_value, selling_value, 
+            discount, branch, category, doi
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -267,8 +283,6 @@ router.post("/addInWard", async (req, res) => {
 router.put("/takeAction", async (req, res) => {
   const user = await User.findOne({ _id: req.body.userReq.empId });
   if (!user) return res.status(400).json({ msg: "user not found" });
-
-  // console.log("req: ", req.body.userReq);
 
   let isApproved = false;
 
@@ -508,6 +522,16 @@ router.get("/getUserData/:id", async (req, res) => {
   }
 });
 
+// @desc: get a particular inward data
+router.get("/getInWardData/:id", async (req, res) => {
+  try {
+    const user = await InWard.findById(req.params.id);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // @desc: search component
 router.post("/search", async (req, res) => {
   let name = req.body.name;
@@ -516,7 +540,6 @@ router.post("/search", async (req, res) => {
   let email = req.body.email;
   let doj = req.body.doj;
 
-  console.log(name, role, branch, email, doj);
 
   // if fields are empty, match everything
   if (name === "") name = new RegExp(/.+/s);
@@ -525,7 +548,6 @@ router.post("/search", async (req, res) => {
   if (email === "") email = new RegExp(/.+/s);
   if (doj === "") doj = new RegExp(/.+/s);
 
-  // console.log(l, s, i, d);
 
   User.find({
     name: new RegExp(name, "i"),
@@ -544,11 +566,9 @@ router.post("/search", async (req, res) => {
 router.post("/searchBranch", async (req, res) => {
   let name = req.body.name;
   let dop = req.body.dop;
-  console.log(name, dop);
   // if fields are empty, match everything
   if (name === "") name = new RegExp(/.+/s);
   if (dop === "") dop = new RegExp(/.+/s);
-  // console.log(l, s, i, d);
   Branch.find({
     name: new RegExp(name, "i"),
     dop: new RegExp(dop, "i"),
@@ -563,15 +583,66 @@ router.post("/searchBranch", async (req, res) => {
 router.post("/searchInward", async (req, res) => {
   let name = req.body.name;
   let doi = req.body.doi;
-  console.log(name, doi);
+  let smart_phone = req.body.smart_phone; 
+  let branch = req.body.branch; 
+  let feature_phone = req.body.feature_phone; 
+  let accessory = req.body.accessory;
   // if fields are empty, match everything
-  if (name === "") name = new RegExp(/.+/s);
+  //if (name === "") name = new RegExp(/.+/s);
   if (doi === "") doi = new RegExp(/.+/s);
-  // console.log(l, s, i, d);
-  Branch.find({
-    name: new RegExp(name, "i"),
-    doi: new RegExp(doi, "i"),
-  })
+  if (branch === "All") branch = new RegExp(/.+/s);
+  let filter = {
+    $and: [
+      { branch: new RegExp(branch, "i") },
+      { doi: new RegExp(doi, "i") }
+    ]
+  };
+  if(name !== "") {
+    filter.$or =  [ 
+      { name: new RegExp(name, "i") }, 
+      { imei_number: new RegExp(name, "i") },
+      { color: new RegExp(name, "i") }, 
+      { model: new RegExp(name, "i") }, 
+      { variant: new RegExp(name, "i") }, 
+    ];
+  }
+  if(smart_phone && smart_phone !== 'All' && smart_phone !== 'None'){
+    filter.$and.push({name: new RegExp(smart_phone, 'i')});
+  }
+  if(feature_phone && feature_phone !== 'All' && feature_phone !== 'None'){
+    filter.$and.push({name: new RegExp(feature_phone, 'i')});
+  }
+  if(accessory && accessory !== 'All' && accessory !== 'None'){
+    filter.$and.push({name: new RegExp(accessory, 'i')});
+  }
+  if(smart_phone && smart_phone === 'None') {
+    filter.$and.push({category: {$ne: 'Smart Phone'}});
+  }
+  if(feature_phone && feature_phone === 'None') {
+    filter.$and.push({category: {$ne: 'Featured Phone'}});
+  }
+  if(accessory && accessory === 'None') {
+    filter.$and.push({category: {$ne: 'Accessories'}});
+  }
+  if(smart_phone === 'All' && feature_phone === 'All' && accessory === 'All'){
+    category = new RegExp(/.+/s);
+    filter.$and.push({category: new RegExp(category, 'i')});
+  }
+  if(smart_phone === 'None' && feature_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Smart Phone', 'Featured Phone']}});
+  }
+  if(feature_phone === 'None' && accessory === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Featured Phone']}});
+  }
+  if(accessory === 'None' && smart_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone']}});
+  }
+  if(accessory === 'None' && smart_phone === 'None' && feature_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone', 'Featured Phone']}});
+  }
+  
+  console.log(filter);
+  InWard.find(filter)
     .then((emp) => {
       res.json(emp);
     })
@@ -693,9 +764,7 @@ router.get("/getTeamsAndRoles", async (req, res) => {
 router.post("/addNewTeam", async (req, res) => {
   const teamName = req.body.teamName;
   const teamObj = await TeamAndRole.find({});
-  console.log(teamObj, 'teamObj')
   let teamList = teamObj.length > 0 ? teamObj[0].teamNames : [];
-  console.log(teamList, 'teamList')
 
   teamList.push(teamName);
   let updatedTeamObj;

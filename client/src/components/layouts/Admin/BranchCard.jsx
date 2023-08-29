@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import maleProfilePic from "../../../assets/view-emp/maleUserPic.png";
-import femaleProfilePic from "../../../assets/view-emp/femaleUserPic.png";
+import branchPic from "../../../assets/view-emp/shopBranch.png";
 import "../../../assets/search-emp/empCard.css";
 
 export default class BranchCard extends Component {
@@ -21,7 +20,7 @@ export default class BranchCard extends Component {
             style={{ display: "flex", justifyContent: "center" }}
           >
             <img
-              src={data.gender === "Male" ? maleProfilePic : femaleProfilePic}
+              src={branchPic}
               alt="profile pic"
               width="100px"
             />

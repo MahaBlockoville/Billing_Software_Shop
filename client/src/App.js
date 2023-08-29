@@ -30,6 +30,7 @@ import AddBranch from "./components/layouts/Admin/AddBranch";
 import ViewBranches from "./components/layouts/Admin/View Requests/ViewBranches";
 import AddInWard from "./components/layouts/AddInWard";
 import ViewInWards from "./components/layouts/Admin/View Requests/ViewInWards";
+import EditInWard from "./components/layouts/Admin/EditInWard";
 
 export default class App extends Component {
   render() {
@@ -78,6 +79,12 @@ export default class App extends Component {
                 path="/editEmpProfile/:id"
                 component={EditEmpProfile}
               />
+              <Route
+                exact
+                path="/editInWard/:id"
+                component={EditInWard}
+              />
+              
               <Route component={PageNotFound} />
             </Switch>
           </div>

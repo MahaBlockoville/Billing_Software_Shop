@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import maleProfilePic from "../../../assets/view-emp/maleUserPic.png";
-import femaleProfilePic from "../../../assets/view-emp/femaleUserPic.png";
+import featuredPhonePic from "../../../assets/view-emp/featuredPhone.png";
+import smartPhonePic from "../../../assets/view-emp/smartPhone.png";
+import accessoriesPic from "../../../assets/view-emp/accessories.png";
 import "../../../assets/search-emp/empCard.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+//import { MDBDataTable, MDBBtn } from 'mdbreact';
 
 export default class InWardCard extends Component {
   onGetDate = (date) => {
@@ -11,46 +14,178 @@ export default class InWardCard extends Component {
   };
 
   render() {
-    const { data } = this.props;
-
+    const { inwardList } = this.props;
+      /*const data = {
+        columns: [
+          {
+            label: 'Brand Name',
+            field: 'name',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'IMEI/Serial Number',
+            field: 'imei_number',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Variant',
+            field: 'variant',
+            sort: 'asc',
+            width: 200
+          },
+          {
+            label: 'Model',
+            field: 'model',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Color',
+            field: 'color',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Discount',
+            field: 'discount',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Purchase Value',
+            field: 'purchase_value',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Selling Value',
+            field: 'selling_value',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Date',
+            field: 'doi',
+            sort: 'asc',
+            width: 150
+          },
+        ],
+        rows: inwardList
+      }  */
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     return (
-      <div className="myCard">
-        <div className="row">
-          <div
-            className="col"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <img
-              src={data.gender === "Male" ? maleProfilePic : femaleProfilePic}
-              alt="profile pic"
-              width="100px"
-            />
-          </div>
-        </div>
+        // <MDBDataTable
+        //   striped
+        //   bordered
+        //   small
+        //   data={data}
+        // />
+        
+        <div className="table table-striped sortable">
+         <table className="inputTable searchable sortable">
+           <thead>
+             <th>Icon</th>
+            <th>Brand Name</th>
+             <th>IMEI/Serial Number</th>
+             <th>Variant</th>
+             <th>Model</th>
+             <th>Color</th>
+             <th>Discount</th>
+             <th>Purchase Value</th>
+             <th>Selling Value</th>
+             <th>Date</th>
+            <th></th>
+           </thead>
+        {inwardList.map((data, index) => (
+          <tbody>
+               <td>
+                 <img
+                   src={
+                     data.category === "Smart Phone"
+                       ? smartPhonePic
+                       : data.category === "Featured Phone"
+                       ? featuredPhonePic
+                       : accessoriesPic
+                   }
+                   alt="profile pic"
+                   width="100px"
+                 />
+               </td>
+               <td>{data.name}</td>
+               <td>{data.imei_number}</td>
+               <td>{data.variant}</td>
+               <td>{data.model}</td>
+               <td>{data.color}</td>
+               <td>{data.discount}</td>
+               <td>{data.purchase_value}</td>
+               <td>{data.selling_value}</td>
+               <td>{this.onGetDate(data.doi)}</td>
+               <td>
+                 <Link
+                    to={`/editInWard/${data._id}`}
+                    style={{
+                      textDecoration: "none",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <i className="fa fa-edit">Edit</i>
+                  </Link>
+               </td>
+            </tbody>
+           ))}
+         </table>
+         </div>
+      // <div className="myInWardCard">
 
-        <hr />
+      //   <div className="row">
+      //     <div
+      //       className="col"
+      //       style={{ display: "flex", justifyContent: "center" }}
+      //     >
+      //       <img
+      //         src={data.category === "Smart Phone" ? smartPhonePic : data.category === "Featured Phone" ? featuredPhonePic : accessoriesPic}
+      //         alt="profile pic"
+      //         width="100px"
+      //       />
+      //     </div>
+      //   </div>
 
-        <div className="row">
-          <div className="col p-0">
-            <span className="text-center">
-              <h4>{data.name.toUpperCase()}</h4>
-            </span>
-            <div className="text-center">
-              <span>
-              <span>Model: {data.model}</span> <br />
-              <span>Variant: {data.variant}</span> <br />
-              <span>Color: {data.color}</span> <br />
+      //   <hr />
 
-                <i className="fas fa-calendar-alt">
-                  {" "}
-                  {this.onGetDate(data.doi)}
-                </i>
-              </span>
-              <br />
-            </div>
-          </div>
-        </div>
-      </div>
+      //   <div className="row">
+      //     <div className="col p-0">
+      //       <span className="text-center">
+      //         <h4>{data.name.toUpperCase()}</h4>
+      //       </span>
+      //       <div className="text-center">
+      //         <span>
+      //         <span>Model: {data.model}</span> <br />
+      //         <span>Variant: {data.variant}</span> <br />
+      //         <span>Color: {data.color}</span> <br />
+
+      //           <i className="fas fa-calendar-alt">
+      //             {" "}
+      //             {this.onGetDate(data.doi)}
+      //           </i>
+      //           <br />
+      //           <Link
+      //             to={`/editInWard/${data._id}`}
+      //             style={{
+      //               textDecoration: "none",
+      //               display: "flex",
+      //               justifyContent: "center",
+      //             }}
+      //           >
+      //             <i className="fa fa-edit">Edit</i>
+      //           </Link>
+      //         </span>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
     );
   }
 }

@@ -65,8 +65,6 @@ export default class ViewInWards extends Component {
                         <SearchInWard onFilter={this.onFilter} />
                       </div>
 
-                      <hr />
-
                       {/* branch list */}
                       {this.state.loading ? (
                         <h1 className="text-center">Loading...</h1>
@@ -78,9 +76,7 @@ export default class ViewInWards extends Component {
                               display: "flex",
                             }}
                           >
-                            {this.state.inwardList.map((branch, index) => {
-                              return <InWardCard key={index} data={branch} />;
-                            })}
+                            <InWardCard inwardList={this.state.inwardList}  />
                           </div>
                         </div>
                       ) : (
