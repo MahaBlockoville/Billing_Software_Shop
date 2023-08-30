@@ -31,6 +31,9 @@ import ViewBranches from "./components/layouts/Admin/View Requests/ViewBranches"
 import AddInWard from "./components/layouts/AddInWard";
 import ViewInWards from "./components/layouts/Admin/View Requests/ViewInWards";
 import EditInWard from "./components/layouts/Admin/EditInWard";
+import AddSales from "./components/layouts/AddSales";
+import ViewSales from "./components/layouts/Admin/View Requests/ViewSales";
+import EditSales from "./components/layouts/Admin/EditSales";
 
 export default class App extends Component {
   render() {
@@ -67,6 +70,8 @@ export default class App extends Component {
               <Route exact path="/viewRequests" component={ViewRequests} />
               <Route exact path="/addBranch" component={AddBranch} />
               <Route exact path="/addInWard" component={AddInWard} />
+              <Route exact path="/addSales" component={AddSales} />
+              <Route exact path="/viewSales" component={ViewSales} />
               <Route exact path="/viewInWards" component={ViewInWards} />
               <Route exact path="/viewBranches" component={ViewBranches} />
               <Route exact path="/statistics" component={Statistics} />
@@ -83,6 +88,11 @@ export default class App extends Component {
                 exact
                 path="/editInWard/:id"
                 component={EditInWard}
+              />
+              <Route
+                exact
+                path="/editSales/:id"
+                component={EditSales}
               />
               
               <Route component={PageNotFound} />

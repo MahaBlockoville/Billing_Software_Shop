@@ -5,31 +5,31 @@ import { Consumer } from "../../../../context";
 import AdminSidePanel from "../AdminSidePanel";
 import { Spring } from "react-spring/renderprops";
 import noEmp from "../../../../assets/images/noEmp.png";
-import SearchInWard from "../SearchInWard";
-import InWardCard from "../InWardCard";
+import SearchSale from "../SearchSale";
+import SaleCard from "../SaleCard";
 
-export default class ViewInWards extends Component {
+export default class ViewSales extends Component {
   constructor() {
     super();
 
     this.state = {
-      inwardList: [],
+      salesList: [],
       loading: true,
     };
   }
 
   componentDidMount = async () => {
-    const inwardList = await axios.get("/api/admin/getInWardList");
-    console.log("List: ", inwardList.data);
+    const salesList = await axios.get("/api/admin/getSalesList");
+    console.log("List: ", salesList.data);
     this.setState({
-      inwardList: inwardList.data,
+      salesList: salesList.data,
       loading: false,
     });
   };
 
   // to filter data according to search criteria
-  onFilter = (inwardList) => {
-    this.setState({ inwardList });
+  onFilter = (salesList) => {
+    this.setState({ salesList });
   };
 
   render() {
@@ -61,13 +61,13 @@ export default class ViewInWards extends Component {
                     {/* right part */}
                     <div className="col " style={props}>
                       <div className="row">
-                        <SearchInWard onFilter={this.onFilter} />
+                        <SearchSale onFilter={this.onFilter} />
                       </div>
 
                       {/* branch list */}
                       {this.state.loading ? (
                         <h1 className="text-center">Loading...</h1>
-                      ) : this.state.inwardList.length ? (
+                      ) : this.state.salesList.length ? (
                         <div className="container">
                           <div
                             className="row"
@@ -75,7 +75,7 @@ export default class ViewInWards extends Component {
                               display: "flex",
                             }}
                           >
-                            <InWardCard inwardList={this.state.inwardList}  />
+                          <SaleCard salesList={this.state.salesList}  />
                           </div>
                         </div>
                       ) : (
@@ -86,7 +86,7 @@ export default class ViewInWards extends Component {
                             height="200px"
                             className="mt-5"
                           />
-                          <h1 className="mt-4">No Employees found...</h1>
+                          <h1 className="mt-4">Not found...</h1>
                         </div>
                       )}
                     </div>

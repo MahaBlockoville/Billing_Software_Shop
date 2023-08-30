@@ -117,7 +117,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
 
-        {/* add in ward */}
+        {/* view in ward */}
         <Link to="/viewInWards" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -125,6 +125,28 @@ export default class SidePanel extends Component {
                 style={{ fontSize: "20px" }}
               ></i>
               {currLocation === "viewInWards" ? <b>In-Ward Report</b> : "In-Ward Report"}
+            </li>
+          </Link>
+
+          {/* add sale */}
+          <Link to="/addSales" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-user-plus mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "addSales" ? <b>Sale</b> : "Sale"}
+            </li>
+          </Link>
+
+        {/* view sale */}
+        <Link to="/viewSales" style={{ textDecoration: "none" }}>
+            <li className="list-group-item text-dark border-0 my-1 myList">
+              <i
+                className="fas fa-search mr-4"
+                style={{ fontSize: "20px" }}
+              ></i>
+              {currLocation === "viewSales" ? <b>Sales Report</b> : "Sales Report"}
             </li>
           </Link>
 

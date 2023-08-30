@@ -11,6 +11,7 @@ const TeamAndRole = require("../models/teams.and.roles.model");
 const Loan = require("../models/loan.model");
 const Branch = require("../models/branch.model");
 const InWard = require("../models/inward.model");
+const Sale = require("../models/sale.model");
 
 // @desc: register a user
 router.post("/register", async (req, res) => {
@@ -279,6 +280,57 @@ router.post("/addInWard", async (req, res) => {
 });
 
 
+// @desc: add addSale by admin
+router.post("/addSale", async (req, res) => {
+  try {
+    let {name, imei_number, phone, address, email, selling_value, 
+      tenure, branch, payment_type, dos, gst_number, gst_percentage } = req.body;
+    // validation
+    if (
+      !name ||
+      !imei_number ||
+      !phone ||
+      !address||
+      !email ||
+      !selling_value ||
+      !branch ||
+      !payment_type ||
+      !dos) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    const inward_value = await InWard.findOne({imei_number: imei_number});
+    if(!req.body.sale_id) {
+    const newSaleItem = new Sale({
+      name, imei_number, phone, address, email, selling_value, 
+      tenure, branch, payment_type, dos, gst_number, gst_percentage,
+      category: inward_value.category,
+      inward: inward_value
+    });
+    const savedSaleItem = await newSaleItem.save();
+    res.json(savedSaleItem);
+    }else {
+      Sale.findOneAndUpdate(
+        { _id: req.body.sale_id },
+        {
+          name, imei_number, phone, address, email, selling_value, 
+          tenure, branch, payment_type, dos, gst_number, gst_percentage,
+          category: inward_value.category, inward: inward_value
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // @desc: approve/reject requests
 router.put("/takeAction", async (req, res) => {
   const user = await User.findOne({ _id: req.body.userReq.empId });
@@ -447,14 +499,20 @@ router.get("/getEmpList", async (req, res) => {
 
 // @desc: get list of all emp
 router.get("/getBranchList", async (req, res) => {
-  const empList = await Branch.find({});
-  res.send(empList);
+  const branchList = await Branch.find({});
+  res.send(branchList);
 });
 
 // @desc: get list of all inward
 router.get("/getInWardList", async (req, res) => {
-  const empList = await InWard.find({});
-  res.send(empList);
+  const inwardList = await InWard.find({});
+  res.send(inwardList);
+});
+
+// @desc: get list of all sales
+router.get("/getSalesList", async (req, res) => {
+  const salesList = await Sale.find({});
+  res.send(salesList);
 });
 
 
@@ -525,12 +583,23 @@ router.get("/getUserData/:id", async (req, res) => {
 // @desc: get a particular inward data
 router.get("/getInWardData/:id", async (req, res) => {
   try {
-    const user = await InWard.findById(req.params.id);
-    res.json(user);
+    const inward = await InWard.findById(req.params.id);
+    res.json(inward);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+// @desc: get a particular sales data
+router.get("/getSaleData/:id", async (req, res) => {
+  try {
+    const sale = await Sale.findById(req.params.id);
+    res.json(sale);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 // @desc: search component
 router.post("/search", async (req, res) => {
@@ -643,6 +712,75 @@ router.post("/searchInward", async (req, res) => {
   
   console.log(filter);
   InWard.find(filter)
+    .then((emp) => {
+      res.json(emp);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// @desc: search sale component
+router.post("/searchSale", async (req, res) => {
+  let name = req.body.name;
+  let dos = req.body.dos;
+  let smart_phone = req.body.smart_phone; 
+  let branch = req.body.branch; 
+  let feature_phone = req.body.feature_phone; 
+  let accessory = req.body.accessory;
+  // if fields are empty, match everything
+  //if (name === "") name = new RegExp(/.+/s);
+  if (dos === "") dos = new RegExp(/.+/s);
+  if (branch === "All") branch = new RegExp(/.+/s);
+  let filter = {
+    $and: [
+      { branch: new RegExp(branch, "i") },
+      { dos: new RegExp(dos, "i") }
+    ]
+  };
+  if(name !== "") {
+    filter.$or =  [ 
+      { name: new RegExp(name, "i") }, 
+      { imei_number: new RegExp(name, "i") },
+      { phone: new RegExp(name, "i") }, 
+      { email: new RegExp(name, "i") },
+    ];
+  }
+  if(smart_phone && smart_phone !== 'All' && smart_phone !== 'None'){
+    filter.$and.push({name: new RegExp(smart_phone, 'i')});
+  }
+  if(feature_phone && feature_phone !== 'All' && feature_phone !== 'None'){
+    filter.$and.push({name: new RegExp(feature_phone, 'i')});
+  }
+  if(accessory && accessory !== 'All' && accessory !== 'None'){
+    filter.$and.push({name: new RegExp(accessory, 'i')});
+  }
+  if(smart_phone && smart_phone === 'None') {
+    filter.$and.push({category: {$ne: 'Smart Phone'}});
+  }
+  if(feature_phone && feature_phone === 'None') {
+    filter.$and.push({category: {$ne: 'Featured Phone'}});
+  }
+  if(accessory && accessory === 'None') {
+    filter.$and.push({category: {$ne: 'Accessories'}});
+  }
+  if(smart_phone === 'All' && feature_phone === 'All' && accessory === 'All'){
+    category = new RegExp(/.+/s);
+    filter.$and.push({category: new RegExp(category, 'i')});
+  }
+  if(smart_phone === 'None' && feature_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Smart Phone', 'Featured Phone']}});
+  }
+  if(feature_phone === 'None' && accessory === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Featured Phone']}});
+  }
+  if(accessory === 'None' && smart_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone']}});
+  }
+  if(accessory === 'None' && smart_phone === 'None' && feature_phone === 'None'){
+    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone', 'Featured Phone']}});
+  }
+  
+  console.log(filter);
+  Sale.find(filter)
     .then((emp) => {
       res.json(emp);
     })

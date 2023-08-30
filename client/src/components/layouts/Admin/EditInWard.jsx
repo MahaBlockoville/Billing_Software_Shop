@@ -1,11 +1,10 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import {  Redirect } from "react-router-dom";
 import { Spring } from "react-spring/renderprops";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import { Consumer } from "../../../context";
-import LoanDetailsCard from "./LoanDetailsCard";
 import "../../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "../Admin/AdminSidePanel";
 
