@@ -1,9 +1,12 @@
 {
   "name": "server",
+  "homepage": "https://MahaBlockoville.github.io/Billing_Software_Shop",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
     "start": "nodemon server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
@@ -29,5 +32,8 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.6"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
   }
 }
