@@ -1,8 +1,4 @@
 # Human Resource Management System 
-[Application Demo](https://limitless-bastion-82171.herokuapp.com/#/)
-
-One stop software to manage your employees
-
 ## Features
 
 - Login/Register feature
