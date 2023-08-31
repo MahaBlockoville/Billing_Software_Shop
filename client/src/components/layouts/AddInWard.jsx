@@ -80,6 +80,11 @@ class AddInWard extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  onCancel = (e) => {
+    e.preventDefault();
+    this.props.history.push('/viewInWards');
+  }
+
   render() {
     return (
       <Consumer>
@@ -183,7 +188,9 @@ class AddInWard extends Component {
                                   required
                                 />
                               </div>
-                              <div className="col">
+                              {
+                                this.state.category !== 'Accessories' ?
+                                <div className="col">
                                 {/* email */}
                                 <label htmlFor="imei_number">IMEI Number</label>
                                 <input
@@ -195,6 +202,20 @@ class AddInWard extends Component {
                                   required
                                 />
                               </div>
+                              :
+                              <div className="col">
+                              {/* email */}
+                              <label htmlFor="imei_number">Serial Number</label>
+                              <input
+                                type="number"
+                                name="imei_number"
+                                className="form-control mb-3 "
+                                placeholder="Serial Number"
+                                onChange={this.onChange}
+                                required
+                              />
+                            </div>
+                            }
                             </div>
 
                             <div className="row">
@@ -333,6 +354,13 @@ class AddInWard extends Component {
                               value="Submit"
                               className="btn btn-primary"
                             />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input
+                                  onClick={this.onCancel}
+                                  type="button"
+                                  value="Back"
+                                  className="btn btn-primary"
+                                />
                           </form>
                         </div>
                       </div>

@@ -7,13 +7,13 @@ export default class PieChart extends Component {
     super();
 
     this.state = {
-      empList: [],
+      inwardList: [],
 
       // pie chart
-      labels: ["Male", "Female"],
+      labels: ["Smart Phone", "Featured Phone", "Accessories"],
       datasets: [
         {
-          label: "Gender",
+          label: "InWard",
           backgroundColor: ["#cbb4ca", "#A8DCD9"],
           borderColor: "white",
           data: [],
@@ -23,23 +23,25 @@ export default class PieChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getEmpList").then((empList) => {
-      this.setState({ empList: empList.data }, () => {
+    axios.get("/api/admin/getInWardList").then((inwardList) => {
+      this.setState({ inwardList: inwardList.data }, () => {
         this.onFilterGender();
       });
     });
   };
 
   onFilterGender = () => {
-    let maleCount = 0;
-    let femaleCount = 0;
-    this.state.empList.forEach((emp) => {
-      if (emp.gender === "Male") maleCount = parseInt(maleCount) + 1;
-      else femaleCount = parseInt(femaleCount) + 1;
+    let smartPhoneCount = 0;
+    let featurePhoneCount = 0;
+    let accessoryCount = 0;
+    this.state.inwardList.forEach((emp) => {
+      if (emp.category === "Smart Phone") smartPhoneCount = parseInt(smartPhoneCount) + 1;
+      else if (emp.category === "Featured Phone") featurePhoneCount = parseInt(featurePhoneCount) + 1;
+      else accessoryCount = parseInt(accessoryCount) + 1;
     });
 
     let datasets = [...this.state.datasets];
-    datasets[0].data = [maleCount, femaleCount];
+    datasets[0].data = [smartPhoneCount, featurePhoneCount, accessoryCount];
 
     this.setState({ datasets });
   };
@@ -55,7 +57,7 @@ export default class PieChart extends Component {
           options={{
             title: {
               display: true,
-              text: "Male to Female ratio",
+              text: "Inward product ratio",
               fontSize: 20,
               position: "bottom",
             },

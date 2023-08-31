@@ -8,11 +8,12 @@ export default class BarChart2 extends Component {
 
     this.state = {
       // for chart
-      leaveReqCount: 0,
-      bonusReqCount: 0,
-      loanReqCount: 0,
+      smartPhoneCount: 0,
+      featurePhoneCount: 0,
+      accessoryCount: 0,
+      saleList: [],
 
-      labels: ["Leave Request", "Bonus Request", "Loan Request"],
+      labels: ["Smart Phone", "Featured Phone", "Accessories"],
       datasets: [
         {
           label: "Request count",
@@ -26,33 +27,35 @@ export default class BarChart2 extends Component {
   }
 
   componentDidMount = async () => {
-    const token = localStorage.getItem("auth-token");
-    const adminRes = await axios.get("/api/admin", {
-      headers: { "x-auth-token": token },
+    axios.get("/api/admin/getSalesList").then((saleList) => {
+      let smartPhoneCount = 0;
+      let featurePhoneCount = 0;
+      let accessoryCount = 0;
+      saleList.data.forEach((emp) => {
+        if (emp.category === "Smart Phone") smartPhoneCount = parseInt(smartPhoneCount) + 1;
+        else if (emp.category === "Featured Phone") featurePhoneCount = parseInt(featurePhoneCount) + 1;
+        else accessoryCount = parseInt(accessoryCount) + 1;
+      });
+      this.setState(
+        {
+          smartPhoneCount,
+          featurePhoneCount,
+          accessoryCount,
+        },
+        () => {
+          this.onPopulateBarChart();
+        }
+      );
     });
 
-    let leaveReqCount = adminRes.data.user.leaveRequests.length;
-    let bonusReqCount = adminRes.data.user.bonusRequests.length;
-    let loanReqCount = adminRes.data.user.loanRequests.length;
-
-    this.setState(
-      {
-        leaveReqCount,
-        bonusReqCount,
-        loanReqCount,
-      },
-      () => {
-        this.onPopulateBarChart();
-      }
-    );
   };
 
   onPopulateBarChart = () => {
     let datasets = this.state.datasets;
     let data = [
-      this.state.leaveReqCount,
-      this.state.bonusReqCount,
-      this.state.loanReqCount,
+      this.state.smartPhoneCount,
+      this.state.featurePhoneCount,
+      this.state.accessoryCount,
     ];
 
     datasets[0].data = data;
@@ -80,7 +83,7 @@ export default class BarChart2 extends Component {
             },
             title: {
               display: true,
-              text: "No. of requests per subject",
+              text: "No. of sales per product",
               fontSize: 20,
               position: "bottom",
             },

@@ -16,8 +16,8 @@ export default class Statistics extends Component {
 
     this.state = {
       empList: [],
-      empSalList: [],
-      loanList: [],
+      salesList: [],
+      inwardList: [],
       totalExpenses: 0,
       loanExpenses: 0,
     };
@@ -25,14 +25,14 @@ export default class Statistics extends Component {
 
   componentDidMount = async () => {
     const empList = await axios.get("/api/admin/getEmpList");
-    const empSalList = await axios.get("/api/admin/getEmpSalList");
-    const loanList = await axios.get("/api/admin/getLoanList");
+    const salesList = await axios.get("/api/admin/getSalesList");
+    const inwardList = await axios.get("/api/admin/getInWardList");
 
     this.setState(
       {
         empList: empList.data,
-        empSalList: empSalList.data,
-        loanList: loanList.data,
+        salesList: salesList.data,
+        inwardList: inwardList.data,
       },
       () => {
         this.calTotalExpenses();
@@ -44,10 +44,11 @@ export default class Statistics extends Component {
   calLoanExpenses = () => {
     let totalLoan = 0;
 
-    console.log("emp loan list: ", this.state.loanList);
+    console.log("emp loan list: ", this.state.inwardList);
 
-    this.state.loanList.forEach((loan) => {
-      if (!loan.loanRepaid) totalLoan += parseInt(loan.amount);
+    this.state.inwardList.forEach((loan) => {
+      //if (!loan.loanRepaid) 
+      totalLoan += parseInt(loan.selling_value);
     });
 
     this.setState({ loanExpenses: totalLoan });
@@ -55,9 +56,9 @@ export default class Statistics extends Component {
 
   calTotalExpenses = () => {
     let totalExpenses = 0;
-    console.log("emp sal list: ", this.state.empSalList);
-    this.state.empSalList.forEach((emp) => {
-      totalExpenses += parseInt(emp.salary);
+    console.log("emp sal list: ", this.state.salesList);
+    this.state.salesList.forEach((emp) => {
+      totalExpenses += parseInt(emp.selling_value);
     });
 
     this.setState({ totalExpenses });
@@ -95,13 +96,13 @@ export default class Statistics extends Component {
                       <div className="row mt-5">
                         <div className="col ">
                           <Card
-                            label="Salary Expenses"
+                            label="Total Sales"
                             data={`₹ ${this.state.totalExpenses}`}
                           />
                         </div>
                         <div className="col ">
                           <Card
-                            label="Loan Expenses"
+                            label="InWard worth"
                             data={`₹ ${this.state.loanExpenses}`}
                           />
                         </div>

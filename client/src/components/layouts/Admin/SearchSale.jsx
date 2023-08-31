@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { Component } from "react";
 import "../../../assets/search-emp/searchEmp.css";
+import { createHashHistory } from 'history'
+export const history = createHashHistory()
 
 export default class SearchSale extends Component {
   constructor() {
@@ -57,6 +59,11 @@ export default class SearchSale extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  onClickAdd = (e) => {
+    e.preventDefault();
+    history.push('/addSales');
+  }
+
   onSubmit = async (e) => {
     e.preventDefault();
 
@@ -82,6 +89,7 @@ export default class SearchSale extends Component {
   render() {
     return (
       <div className="container mt-3">
+        <h3>Sales List</h3>
         <form onSubmit={this.onSubmit}>
           <div className="row mt-3 px-3">
             <div className="col">
@@ -243,6 +251,13 @@ export default class SearchSale extends Component {
                 <button className="btn btn-primary">
                   <i
                     className="fas fa-search p-2"
+                    style={{ cursor: "pointer", fontSize: "20px" }}
+                  ></i>
+                </button>
+                <br/>
+                <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '12px'}}>
+                  <i
+                    className="fas fa-user-plus p-2"
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>

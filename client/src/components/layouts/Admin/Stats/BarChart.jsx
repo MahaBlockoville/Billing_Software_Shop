@@ -7,11 +7,11 @@ export default class BarChart extends Component {
     super();
 
     this.state = {
-      empList: [],
+      saleList: [],
       labels: [],
       datasets: [
         {
-          label: "emp count",
+          label: "sale count",
           backgroundColor: "#b3d1ff",
           borderColor: "#0066ff",
           borderWidth: 2,
@@ -22,8 +22,8 @@ export default class BarChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getEmpList").then((empList) => {
-      this.setState({ empList: empList.data }, () => {
+    axios.get("/api/admin/getSalesList").then((saleList) => {
+      this.setState({ saleList: saleList.data }, () => {
         this.onPopulateBarChart();
       });
     });
@@ -33,11 +33,11 @@ export default class BarChart extends Component {
     //   no of emp per team
     let teamDict = {};
 
-    this.state.empList.forEach((emp) => {
-      if (!teamDict[emp.team]) {
-        teamDict[emp.team] = 1;
+    this.state.saleList.forEach((emp) => {
+      if (!teamDict[emp.branch]) {
+        teamDict[emp.branch] = 1;
       } else {
-        teamDict[emp.team]++;
+        teamDict[emp.branch]++;
       }
     });
 
@@ -79,7 +79,7 @@ export default class BarChart extends Component {
             },
             title: {
               display: true,
-              text: "No. of employees per team",
+              text: "No. of sales per team",
               fontSize: 20,
               position: "bottom",
             },

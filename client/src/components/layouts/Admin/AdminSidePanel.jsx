@@ -46,14 +46,14 @@ export default class SidePanel extends Component {
               style={{ fontSize: "20px" }}
             ></i>{" "}
             {currLocation === "statistics" || currLocation === "" ? (
-              <b>Statistics</b>
+              <b>Dashboard</b>
             ) : (
-              "Statistics"
+              "Dashboard"
             )}
           </li>
         </Link>
 
-        {/* add branch */}
+        {/* add branch 
         <Link to="/addBranch" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -63,7 +63,7 @@ export default class SidePanel extends Component {
               {currLocation === "addBranch" ? <b>Add Branch</b> : "Add Branch"}
             </li>
           </Link>
-
+      */}
           {/* view branch */}
           <Link to="/viewBranches" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
@@ -81,6 +81,7 @@ export default class SidePanel extends Component {
 
         {/* add emp */}
         <ul className="list-group">
+          {/*
           <Link to="/add" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -90,6 +91,7 @@ export default class SidePanel extends Component {
               {currLocation === "add" ? <b>Add Employee</b> : "Add Employee"}
             </li>
           </Link>
+          */}
 
           {/* view emp */}
           <Link to="/viewEmployees" style={{ textDecoration: "none" }}>
@@ -106,7 +108,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
 
-        {/* add in ward */}
+        {/* add in ward 
           <Link to="/addInWard" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -116,7 +118,7 @@ export default class SidePanel extends Component {
               {currLocation === "addInWard" ? <b>In-Ward</b> : "In-Ward"}
             </li>
           </Link>
-
+        */}
         {/* view in ward */}
         <Link to="/viewInWards" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
@@ -128,7 +130,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
 
-          {/* add sale */}
+          {/* add sale 
           <Link to="/addSales" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -138,7 +140,7 @@ export default class SidePanel extends Component {
               {currLocation === "addSales" ? <b>Sale</b> : "Sale"}
             </li>
           </Link>
-
+        */}
         {/* view sale */}
         <Link to="/viewSales" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
@@ -177,7 +179,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
           */}
-          {/* payroll */}
+          {/* payroll 
           <Link to="/payroll" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -187,7 +189,7 @@ export default class SidePanel extends Component {
               {currLocation === "payroll" ? <b>Payroll</b> : "Payroll"}
             </li>
           </Link>
-
+        */}
           {/* Active loans 
           <Link to="/activeLoans" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
@@ -203,7 +205,7 @@ export default class SidePanel extends Component {
             </li>
           </Link>
           */}
-          {/* options */}
+          {/* options 
           <Link to="/options" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">
               <i
@@ -213,6 +215,7 @@ export default class SidePanel extends Component {
               {currLocation === "options" ? <b>Options</b> : "Options"}
             </li>
           </Link>
+          */}
         </ul>
       </div>
     );

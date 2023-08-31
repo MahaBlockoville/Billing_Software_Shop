@@ -106,6 +106,11 @@ class AddEmployee extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  onCancel = (e) => {
+    e.preventDefault();
+    this.props.history.push('/viewEmployees');
+  }
+
   render() {
     return (
       <Consumer>
@@ -345,6 +350,13 @@ class AddEmployee extends Component {
                               value="Submit"
                               className="btn btn-primary"
                             />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input
+                                  onClick={this.onCancel}
+                                  type="button"
+                                  value="Back"
+                                  className="btn btn-primary"
+                                />
                           </form>
                         </div>
                       </div>

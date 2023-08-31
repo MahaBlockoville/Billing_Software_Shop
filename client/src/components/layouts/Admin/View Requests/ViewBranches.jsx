@@ -7,6 +7,7 @@ import { Spring } from "react-spring/renderprops";
 import noEmp from "../../../../assets/images/noEmp.png";
 import SearchBranch from "../SearchBranch";
 import BranchCard from "../BranchCard";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default class ViewBranches extends Component {
   constructor() {

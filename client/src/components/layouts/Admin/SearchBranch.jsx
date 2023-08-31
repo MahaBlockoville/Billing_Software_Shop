@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { Component } from "react";
 import "../../../assets/search-emp/searchEmp.css";
+import { createHashHistory } from 'history'
+export const history = createHashHistory()
 
 export default class SearchBranch extends Component {
   constructor() {
@@ -16,6 +18,10 @@ export default class SearchBranch extends Component {
   toggleDateRange = () => this.setState({ dopCheck: !this.state.dopCheck });
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onClickAdd = (e) => {
+    e.preventDefault();
+    history.push('/addBranch');
+  }
 
   onSubmit = async (e) => {
     e.preventDefault();
@@ -39,6 +45,7 @@ export default class SearchBranch extends Component {
     return (
       <div className="container mt-3">
         <form onSubmit={this.onSubmit}>
+          <h3>Branch List</h3>
           <div className="row mt-3 px-3">
             <div className="col">
               <label htmlFor="name">Name</label>
@@ -79,6 +86,13 @@ export default class SearchBranch extends Component {
                 <button className="btn btn-primary">
                   <i
                     className="fas fa-search p-2"
+                    style={{ cursor: "pointer", fontSize: "20px" }}
+                  ></i>
+                </button>
+                &nbsp;&nbsp;
+                <button className="btn btn-primary" onClick={this.onClickAdd}>
+                  <i
+                    className="fas fa-user-plus p-2"
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>

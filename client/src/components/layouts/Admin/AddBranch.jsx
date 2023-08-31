@@ -76,6 +76,11 @@ class AddBranch extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  onCancel = (e) => {
+    e.preventDefault();
+    this.props.history.push('/viewBranches');
+  }
+
   render() {
     return (
       <Consumer>
@@ -199,6 +204,13 @@ class AddBranch extends Component {
                               value="Submit"
                               className="btn btn-primary align-center"
                             />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input
+                                  onClick={this.onCancel}
+                                  type="button"
+                                  value="Back"
+                                  className="btn btn-primary"
+                                />
                             </div>
                             </div>
                           </form>
