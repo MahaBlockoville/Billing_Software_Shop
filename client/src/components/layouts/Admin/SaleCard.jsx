@@ -99,7 +99,6 @@ export default class SaleCard extends Component {
             <th></th>
            </thead>
         {salesList.map((data, index) => (
-          console.log('sales data:', data.inward.variant, data.inward.color, data.inward.model),
           <tbody>
                <td>
                  <img
