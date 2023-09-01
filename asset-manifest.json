@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Billing_Software_Shop/static/css/main.0fca3e3c.css",
+    "main.js": "/Billing_Software_Shop/static/js/main.0d71133b.js",
+    "static/js/787.44e022fc.chunk.js": "/Billing_Software_Shop/static/js/787.44e022fc.chunk.js",
+    "static/media/smartPhone.png": "/Billing_Software_Shop/static/media/smartPhone.a677611b1e467b6d138a.png",
+    "static/media/empty.png": "/Billing_Software_Shop/static/media/empty.93a149295a019cb314f4.png",
+    "static/media/featuredPhone.png": "/Billing_Software_Shop/static/media/featuredPhone.5b335b587df37de25d02.png",
+    "static/media/authentication.png": "/Billing_Software_Shop/static/media/authentication.f0629e13b63da25d1af3.png",
+    "static/media/contactUs.png": "/Billing_Software_Shop/static/media/contactUs.2af89bd373a17925fd59.png",
+    "static/media/femaleUserPic.png": "/Billing_Software_Shop/static/media/femaleUserPic.cda67374ea93b044eff7.png",
+    "static/media/maleUserPic.png": "/Billing_Software_Shop/static/media/maleUserPic.34a2f804acadf727a004.png",
+    "static/media/noEmp.png": "/Billing_Software_Shop/static/media/noEmp.10cf423367de1ee448c2.png",
+    "static/media/pageNotFound.svg": "/Billing_Software_Shop/static/media/pageNotFound.4861ae776b44868dd600a76fba88073d.svg",
+    "static/media/login.png": "/Billing_Software_Shop/static/media/login.0dcf40a9ba305f8b9099.png",
+    "static/media/accessories.png": "/Billing_Software_Shop/static/media/accessories.72dc7ab90d3abfacedd8.png",
+    "static/media/checklist.svg": "/Billing_Software_Shop/static/media/checklist.35b62159b0d5737d0512279ddd6402bc.svg",
+    "index.html": "/Billing_Software_Shop/index.html",
+    "main.0fca3e3c.css.map": "/Billing_Software_Shop/static/css/main.0fca3e3c.css.map",
+    "main.0d71133b.js.map": "/Billing_Software_Shop/static/js/main.0d71133b.js.map",
+    "787.44e022fc.chunk.js.map": "/Billing_Software_Shop/static/js/787.44e022fc.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0fca3e3c.css",
+    "static/js/main.0d71133b.js"
+  ]
+}
