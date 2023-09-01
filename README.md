@@ -1,4 +1,4 @@
-# Human Resource Management System 
+# Get Easy Tech Billing software 
 ## Features
 
 - Login/Register feature
