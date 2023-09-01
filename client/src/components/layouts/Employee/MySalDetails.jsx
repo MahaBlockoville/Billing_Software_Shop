@@ -45,7 +45,7 @@ export default class MySalReciept extends Component {
   async componentDidMount() {
     try {
       const userId = localStorage.getItem("userId");
-      const userSalData = await axios.get(
+      const userSalData = await axios.get(process.env.REACT_APP_API_URL +
         `/api/admin/getUserSalDetails/${userId}`
       );
 
@@ -72,7 +72,7 @@ export default class MySalReciept extends Component {
 
   onFindSalReceipt = async () => {
     const userId = localStorage.getItem("userId");
-    const empSalReceipts = await axios.get(
+    const empSalReceipts = await axios.get(process.env.REACT_APP_API_URL +
       `/api/admin/getSingleEmpSalReceipts/${userId}`
     );
 

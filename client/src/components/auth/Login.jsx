@@ -36,12 +36,12 @@ class Login extends Component {
       let loggedInUser;
 
       try {
-        loggedInUser = await axios.post(`/api/admin/login`, {
+        loggedInUser = await axios.post(`${process.env.REACT_APP_API_URL}/api/admin/login`, {
           email,
           password,
         });
       } catch (e) {
-        loggedInUser = await axios.post(`/api/users/login`, {
+        loggedInUser = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, {
           email,
           password,
         });

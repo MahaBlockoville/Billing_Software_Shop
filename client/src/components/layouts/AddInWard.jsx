@@ -33,7 +33,7 @@ class AddInWard extends Component {
   }
 
   componentDidMount = async () => {
-    const branchList = await axios.get("/api/admin/getBranchList");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     this.setState({
       branchList: branchList.data,
     });
@@ -53,7 +53,7 @@ class AddInWard extends Component {
     } = this.state;
 
     try {
-      const newUser = await axios.post("/api/admin/addInWard", {
+      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addInWard", {
         name, imei_number, model, variant, color, purchase_value, selling_value, 
         discount, branch, category, doi
       });

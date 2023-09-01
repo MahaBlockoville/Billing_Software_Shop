@@ -15,7 +15,7 @@
     "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
+    "react-scripts": "^5.0.1",
     "react-spring": "^8.0.27",
     "react-tooltip": "^4.2.13",
     "toasted-notes": "^3.2.0",
@@ -34,6 +34,10 @@
       "react-app/jest"
     ]
   },
+  "resolutions": {
+    "browserslist": "4.6.2",
+    "caniuse-lite": "1.0.30000974"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -45,6 +49,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://127.0.0.1:5000"
+  }
 }

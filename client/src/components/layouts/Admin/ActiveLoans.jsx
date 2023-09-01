@@ -16,7 +16,7 @@ export default class ActiveLoans extends Component {
   }
 
   componentDidMount = async () => {
-    const loanList = await axios.get("/api/admin/getLoanList");
+    const loanList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getLoanList");
     let activeLoanList = loanList.data.filter(
       (loan) => loan.loanRepaid === false
     );

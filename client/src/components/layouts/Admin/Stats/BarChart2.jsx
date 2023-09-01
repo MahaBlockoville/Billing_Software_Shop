@@ -27,7 +27,7 @@ export default class BarChart2 extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getSalesList").then((saleList) => {
+    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList").then((saleList) => {
       let smartPhoneCount = 0;
       let featurePhoneCount = 0;
       let accessoryCount = 0;

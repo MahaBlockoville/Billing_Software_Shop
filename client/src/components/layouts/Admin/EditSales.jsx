@@ -35,11 +35,11 @@ class EditSales extends Component {
   }
 
   componentDidMount = async () => {
-    const branchList = await axios.get("/api/admin/getBranchList");
-    const inwardList = await axios.get("/api/admin/getInWardList");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
-    const salesData = await axios.get(`/api/admin/getSaleData/${saleId}`);
+    const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
     const imeiNumberList = this.state.imeiNumberList;
     inwardList.data.map(async (data) => {
       imeiNumberList.push(
@@ -85,7 +85,7 @@ class EditSales extends Component {
     } = this.state;
 
     try {
-      const newUser = await axios.post("/api/admin/addSale", {
+      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
         name,
         imei_number,
         phone,

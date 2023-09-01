@@ -19,7 +19,7 @@ export default class ViewEmployees extends Component {
   }
 
   componentDidMount = async () => {
-    const empList = await axios.get("/api/admin/getEmpList");
+    const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
     console.log("List: ", empList.data);
     this.setState({
       empList: empList.data,

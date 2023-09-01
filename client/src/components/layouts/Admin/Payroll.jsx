@@ -38,7 +38,7 @@ export default class Payroll extends Component {
   }
 
   onMonthClick = async (month) => {
-    const empSalReceipts = await axios.get("/api/admin/getAllEmpsSalReceipt");
+    const empSalReceipts = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getAllEmpsSalReceipt");
     console.log(empSalReceipts.data);
     let monthlyData = [];
 
@@ -71,7 +71,7 @@ export default class Payroll extends Component {
   onGenerateSalReceipt = async (emp) => {
     try {
       // 1. get sal details
-      const salDetails = await axios.get(
+      const salDetails = await axios.get(process.env.REACT_APP_API_URL +
         `/api/admin/getUserSalDetails/${emp.empId}`
       );
       const res = await axios.put("/api/admin/generateSalReceipt", {

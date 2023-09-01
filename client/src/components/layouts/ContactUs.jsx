@@ -40,7 +40,7 @@ class ContactUs extends Component {
         message,
       };
       try {
-        axios.post("/api/email/contactUs", contactMessage).then((res) => {
+        axios.post(process.env.REACT_APP_API_URL +"/api/email/contactUs", contactMessage).then((res) => {
           this.setState({
             name: "",
             email: "",

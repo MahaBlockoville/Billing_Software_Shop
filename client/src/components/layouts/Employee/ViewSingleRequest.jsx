@@ -21,7 +21,7 @@ export default class ViewSingleRequest extends Component {
     const { reqId } = this.props.match.params;
     const userId = localStorage.getItem("userId");
 
-    const reqDetails = await axios.get(
+    const reqDetails = await axios.get(process.env.REACT_APP_API_URL +
       `/api/users/getSingleReqDetails/${userId}/${reqId}`
     );
     this.setState({

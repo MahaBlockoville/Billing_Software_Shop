@@ -35,8 +35,8 @@ class AddEmployee extends Component {
   }
 
   componentDidMount = async () => {
-    const teamAndRoleList = await axios.get("/api/admin/getTeamsAndRoles");
-    const branchList = await axios.get("/api/admin/getBranchList");
+    const teamAndRoleList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getTeamsAndRoles");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     this.setState({
       branchList: branchList.data,
       teamList: teamAndRoleList.data[0].teamNames,
@@ -75,7 +75,7 @@ class AddEmployee extends Component {
     } = this.state;
 
     try {
-      const newUser = await axios.post("/api/admin/addEmployee", {
+      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addEmployee", {
         email,
         name,
         address,

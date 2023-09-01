@@ -29,7 +29,7 @@ export default class Options extends Component {
   }
 
   componentDidMount = async () => {
-    const teamList = await axios.get("/api/admin/getTeamsAndRoles");
+    const teamList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getTeamsAndRoles");
     console.log(teamList.data[0]);
 
     this.setState({
@@ -56,7 +56,7 @@ export default class Options extends Component {
       });
     } else {
       // save the new team
-      const newTeam = await axios.post("/api/admin/addNewTeam", {
+      const newTeam = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addNewTeam", {
         teamName: this.state.teamName,
       });
 
@@ -85,7 +85,7 @@ export default class Options extends Component {
       });
     } else {
       // save the new Role
-      const newRole = await axios.post("/api/admin/addNewRole", {
+      const newRole = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addNewRole", {
         roleName: this.state.roleName,
       });
 

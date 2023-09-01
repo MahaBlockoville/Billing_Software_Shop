@@ -24,9 +24,9 @@ export default class Statistics extends Component {
   }
 
   componentDidMount = async () => {
-    const empList = await axios.get("/api/admin/getEmpList");
-    const salesList = await axios.get("/api/admin/getSalesList");
-    const inwardList = await axios.get("/api/admin/getInWardList");
+    const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
+    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList");
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
 
     this.setState(
       {

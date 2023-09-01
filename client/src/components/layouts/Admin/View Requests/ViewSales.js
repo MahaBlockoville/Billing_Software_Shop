@@ -19,7 +19,7 @@ export default class ViewSales extends Component {
   }
 
   componentDidMount = async () => {
-    const salesList = await axios.get("/api/admin/getSalesList");
+    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList");
     console.log("List: ", salesList.data);
     this.setState({
       salesList: salesList.data,

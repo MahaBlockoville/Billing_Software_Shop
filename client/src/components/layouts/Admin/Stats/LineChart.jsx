@@ -24,7 +24,7 @@ export default class LineChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getEmpList").then((empList) => {
+    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList").then((empList) => {
       this.setState({ empList: empList.data }, () => {
         this.onPopulateLineChart();
       });

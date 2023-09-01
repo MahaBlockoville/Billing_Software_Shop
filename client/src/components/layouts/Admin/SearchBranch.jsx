@@ -29,7 +29,7 @@ export default class SearchBranch extends Component {
     let { name, dop } = this.state;
 
     try {
-      const res = await axios.post("/api/admin/searchBranch", {
+      const res = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/searchBranch", {
         name,
         dop,
       });

@@ -25,13 +25,13 @@ export default class ViewRequests extends Component {
   componentDidMount = async () => {
     try {
       const token = localStorage.getItem("auth-token");
-      const tokenRes = await axios.post("/api/admin/tokenIsValid", null, {
+      const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
         headers: { "x-auth-token": token },
       });
 
       if (tokenRes.data) {
         //logged in
-        const adminRes = await axios.get("/api/admin", {
+        const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
           headers: { "x-auth-token": token },
         });
         console.log("admin profile: ", adminRes.data.user);

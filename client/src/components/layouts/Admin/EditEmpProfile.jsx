@@ -45,13 +45,13 @@ export default class EditEmpProfile extends Component {
   componentDidMount = async () => {
     const userId = this.props.match.params.id;
 
-    const userData = await axios.get(`/api/admin/getUserData/${userId}`);
-    const userSalData = await axios.get(
+    const userData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getUserData/${userId}`);
+    const userSalData = await axios.get(process.env.REACT_APP_API_URL +
       `/api/admin/getUserSalDetails/${userId}`
     );
-    const teamAndRoleList = await axios.get("/api/admin/getTeamsAndRoles");
-    const branchList = await axios.get("/api/admin/getBranchList");
-    const empLoanHistory = await axios.get(
+    const teamAndRoleList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getTeamsAndRoles");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
+    const empLoanHistory = await axios.get(process.env.REACT_APP_API_URL +
       `/api/admin/getEmpLoanHistory/${userId}`
     );
 
@@ -129,7 +129,7 @@ export default class EditEmpProfile extends Component {
     };
 
     try {
-      const res = await axios.post("/api/users/updateProfile", {
+      const res = await axios.post(process.env.REACT_APP_API_URL +"/api/users/updateProfile", {
         user: updatedUser,
         id: this.state.id,
       });

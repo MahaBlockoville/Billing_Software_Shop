@@ -78,12 +78,12 @@ export class Provider extends Component {
 
     try {
       // first check in admin model
-      const tokenRes = await axios.post("/api/admin/tokenIsValid", null, {
+      const tokenRes = await axios.post(`${process.env.REACT_APP_API_URL}/api/admin/tokenIsValid`, null, {
         headers: { "x-auth-token": token },
       });
       if (tokenRes.data) {
         //logged in
-        const adminRes = await axios.get("/api/admin", {
+        const adminRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/admin`, {
           headers: { "x-auth-token": token },
         });
         this.setState({
@@ -92,14 +92,14 @@ export class Provider extends Component {
         });
       } else {
         // now check in users model
-        const tokenRes = await axios.post("/api/users/tokenIsValid", null, {
+        const tokenRes = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/tokenIsValid`, null, {
           headers: { "x-auth-token": token },
         });
         if (tokenRes.data) {
           // console.log("emp logged in");
 
           //logged in
-          const userRes = await axios.get("/api/users", {
+          const userRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
             headers: { "x-auth-token": token },
           });
           this.setState({

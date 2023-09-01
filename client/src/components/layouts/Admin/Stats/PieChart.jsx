@@ -23,7 +23,7 @@ export default class PieChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getInWardList").then((inwardList) => {
+    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList").then((inwardList) => {
       this.setState({ inwardList: inwardList.data }, () => {
         this.onFilterGender();
       });

@@ -24,9 +24,9 @@ export default class SearchInWard extends Component {
   }
 
   componentDidMount = async () => {
-    const branchList = await axios.get("/api/admin/getBranchList");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     const updatedData = [...this.state.branchList, ...branchList.data];
-    const inwardList = await axios.get("/api/admin/getInWardList");
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     const smart_phones = this.state.smart_phones;
     const feature_phones = this.state.feature_phones;
     const accessories = this.state.accessories;
@@ -71,7 +71,7 @@ export default class SearchInWard extends Component {
     let { name, doi, smart_phone, branch, feature_phone, accessory } = this.state;
 
     try {
-      const res = await axios.post("/api/admin/searchInward", {
+      const res = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/searchInward", {
         name,
         doi,
         smart_phone, 

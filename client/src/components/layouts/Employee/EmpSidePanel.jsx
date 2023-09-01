@@ -15,7 +15,7 @@ export default class EmpSidePanel extends Component {
 
   componentDidMount = async () => {
     const id = localStorage.getItem("userId");
-    const alerts = await axios.get(`/api/users/getAlerts/${id}`);
+    const alerts = await axios.get(process.env.REACT_APP_API_URL +`/api/users/getAlerts/${id}`);
 
     // console.log(alerts.data);
 

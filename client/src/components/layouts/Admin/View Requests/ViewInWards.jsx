@@ -19,7 +19,7 @@ export default class ViewInWards extends Component {
   }
 
   componentDidMount = async () => {
-    const inwardList = await axios.get("/api/admin/getInWardList");
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     console.log("List: ", inwardList.data);
     this.setState({
       inwardList: inwardList.data,

@@ -22,7 +22,7 @@ export default class BarChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get("/api/admin/getSalesList").then((saleList) => {
+    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList").then((saleList) => {
       this.setState({ saleList: saleList.data }, () => {
         this.onPopulateBarChart();
       });

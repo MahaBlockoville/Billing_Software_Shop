@@ -38,7 +38,7 @@ class Signup extends Component {
     const { email, password, passwordCheck, name } = this.state;
 
     try {
-      const newUser = await axios.post("/api/admin/register", {
+      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/register", {
         email,
         password,
         passwordCheck,
@@ -46,7 +46,7 @@ class Signup extends Component {
       });
       console.log("created acc successfully: ", newUser.data);
       // now login the user
-      const loggedInUser = await axios.post("/api/admin/login", {
+      const loggedInUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/login", {
         email,
         password,
       });

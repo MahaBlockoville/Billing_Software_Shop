@@ -49,7 +49,7 @@ export default class otherRequest extends Component {
       };
 
       try {
-        const fileUploadRes = await axios.post(
+        const fileUploadRes = await axios.post(process.env.REACT_APP_API_URL +
           "/api/users/uploadfile",
           data,
           config

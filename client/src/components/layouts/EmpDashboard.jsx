@@ -22,7 +22,7 @@ export default class EmpDashboard extends Component {
   }
 
   componentDidMount = async () => {
-    const news = await axios.get("/api/users/getNews");
+    const news = await axios.get(process.env.REACT_APP_API_URL +"/api/users/getNews");
     let firstCol = [];
     let secondCol = [];
     let ThirdCol = [];

@@ -50,17 +50,17 @@ export default class Profile extends Component {
     const userId = localStorage.getItem("userId");
 
     // getting user data
-    const res = await Axios.get("/api/users", {
+    const res = await Axios.get(process.env.REACT_APP_API_URL +"/api/users", {
       headers: { "x-auth-token": token },
     });
 
     // getting user sal data to get total leaves used
-    const userSalData = await axios.get(
+    const userSalData = await axios.get(process.env.REACT_APP_API_URL +
       `/api/admin/getUserSalDetails/${userId}`
     );
 
     // getting emp loan history
-    const empLoanHistory = await axios.get(
+    const empLoanHistory = await axios.get(process.env.REACT_APP_API_URL +
       `/api/admin/getEmpLoanHistory/${userId}`
     );
 
@@ -117,7 +117,7 @@ export default class Profile extends Component {
         gender: this.state.gender,
       };
 
-      const res = await Axios.post("/api/users/updateProfile", {
+      const res = await Axios.post(process.env.REACT_APP_API_URL +"/api/users/updateProfile", {
         user: updatedUser,
         id: this.state.id,
       });

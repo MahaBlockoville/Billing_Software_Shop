@@ -19,7 +19,7 @@ export default class ViewBranches extends Component {
   }
 
   componentDidMount = async () => {
-    const branchList = await axios.get("/api/admin/getBranchList");
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     console.log("List: ", branchList.data);
     this.setState({
       branchList: branchList.data,

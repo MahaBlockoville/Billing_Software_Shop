@@ -33,7 +33,7 @@ export default class SearchEmp extends Component {
     let { name, role, branch, email, doj } = this.state;
 
     try {
-      const res = await axios.post("/api/admin/search", {
+      const res = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/search", {
         name,
         role,
         branch,

@@ -41,7 +41,7 @@ export default class MyRequests extends Component {
 
   componentDidMount = async () => {
     const token = localStorage.getItem("auth-token");
-    const userRes = await axios.get("/api/users", {
+    const userRes = await axios.get(process.env.REACT_APP_API_URL +"/api/users", {
       headers: { "x-auth-token": token },
     });
 

@@ -5,15 +5,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run build",
     "start": "nodemon server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "build": "npm install --prefix client && npm run build --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "server": "nodemon server.js"
   },
   "author": "rohit",
   "license": "ISC",
@@ -36,16 +29,8 @@
   "devDependencies": {
     "gh-pages": "^6.0.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "resolutions": {
+    "browserslist": "4.6.2",
+    "caniuse-lite": "1.0.30000974"
   }
 }
