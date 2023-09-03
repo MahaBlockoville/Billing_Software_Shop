@@ -34,6 +34,8 @@ class AddSales extends Component {
   }
 
   componentDidMount = async () => {
+    const type = this.props.match.params.type;
+    this.setState({type: type});
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     const imeiNumberList = this.state.imeiNumberList;
@@ -73,6 +75,7 @@ class AddSales extends Component {
       dos,
       gst_number,
       gst_percentage,
+      type
     } = this.state;
 
     try {
@@ -89,6 +92,7 @@ class AddSales extends Component {
         dos,
         gst_number,
         gst_percentage,
+        type
       });
 
       toast.notify("Added new item", {
@@ -96,7 +100,7 @@ class AddSales extends Component {
       });
 
       console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewSales`);
+      this.props.history.push(`/viewSales/${type}`);
     } catch (err) {
       // enable signup btn
       this.setState({

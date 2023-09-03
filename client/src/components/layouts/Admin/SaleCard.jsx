@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import featuredPhonePic from "../../../assets/view-emp/featuredPhone.png";
-import smartPhonePic from "../../../assets/view-emp/smartPhone.png";
-import accessoriesPic from "../../../assets/view-emp/accessories.png";
 import "../../../assets/search-emp/empCard.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import toast from "toasted-notes";
+import "toasted-notes/src/styles.css";
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
 export default class SaleCard extends Component {
@@ -11,6 +11,19 @@ export default class SaleCard extends Component {
     const d = new Date(date);
     let returnDate = d.toLocaleDateString("en-GB");
     return returnDate;
+  };
+
+  onClickDelete = async (e, sale_id) => {
+    e.preventDefault();
+    try {
+      await axios.delete(process.env.REACT_APP_API_URL +"/api/admin/deleteSale/"+ sale_id);
+      toast.notify("Deleted sale", {
+        position: "top-right",
+      });
+      window.location.reload();
+    } catch (err) {
+      console.log("Error", e);
+    }
   };
 
   render() {
@@ -86,10 +99,10 @@ export default class SaleCard extends Component {
         <div className="table table-striped sortable">
          <table className="inputTable searchable sortable">
            <thead>
-             <th>Icon</th>
             <th>Name</th>
             <th>Phone</th>
              <th>IMEI/Serial Number</th>
+             <th>Brand Name</th>
               <th>Variant</th>
              <th>Model</th>
              <th>Color</th>
@@ -97,28 +110,18 @@ export default class SaleCard extends Component {
              <th>Selling Value</th>
              <th>Date</th>
             <th></th>
+            <th></th>
+            <th></th>
            </thead>
         {salesList.map((data, index) => (
           <tbody>
-               <td>
-                 <img
-                   src={
-                     data.category === "Smart Phone"
-                       ? smartPhonePic
-                       : data.category === "Featured Phone"
-                       ? featuredPhonePic
-                       : accessoriesPic
-                   }
-                   alt="profile pic"
-                   width="100px"
-                 />
-               </td>
                <td>{data.name}</td>
                <td>{data.phone}</td>
                <td>{data.imei_number}</td>
-                <td>{data.inward.variant}</td>
-               <td>{data.inward.model}</td>
-               <td>{data.inward.color}</td>
+               <td>{data.inward.product.name}</td>
+                <td>{data.inward.product.variant}</td>
+               <td>{data.inward.product.model}</td>
+               <td>{data.inward.product.color}</td>
                <td>{data.payment_type}</td>
                <td>{data.selling_value}</td>
                <td>{this.onGetDate(data.dos)}</td>
@@ -131,8 +134,26 @@ export default class SaleCard extends Component {
                       justifyContent: "center",
                     }}
                   >
-                    <i className="fa fa-edit">Edit</i>
+                    <i className="fa fa-edit"></i>
                   </Link>
+               </td>
+               <td>
+               <Link
+                    onClick={(e) => {
+                      this.onClickDelete(e, data._id)
+                    }}
+                    to='viewProduct'
+                    style={{
+                      textDecoration: "none",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <i className="fa fa-trash"></i>
+                  </Link>
+               </td>
+               <td>
+                
                </td>
             </tbody>
            ))}

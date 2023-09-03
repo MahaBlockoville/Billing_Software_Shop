@@ -298,7 +298,7 @@ router.post("/addInWard", async (req, res) => {
 router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage } = req.body;
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type } = req.body;
     // validation
     if (
       !name ||
@@ -316,7 +316,7 @@ router.post("/addSale", async (req, res) => {
     if(!req.body.sale_id) {
     const newSaleItem = new Sale({
       name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage,
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
       category: inward_value.category,
       inward: inward_value
     });
@@ -327,7 +327,7 @@ router.post("/addSale", async (req, res) => {
         { _id: req.body.sale_id },
         {
           name, imei_number, phone, address, email, selling_value, 
-          tenure, branch, payment_type, dos, gst_number, gst_percentage,
+          tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
           category: inward_value.category, inward: inward_value
         },
         { new: true },
@@ -580,6 +580,15 @@ router.delete("/deleteStock/:id", async (req, res) => {
   }
 });
 
+// @desc: delete a user stock
+router.delete("/deleteSale/:id", async (req, res) => {
+  try {
+    const deleteSale = await Sale.findByIdAndDelete(req.params.id);
+    res.json(deleteSale);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
 // @desc: delete a user category
 router.delete("/deleteCategory/:id", async (req, res) => {
   try {
@@ -755,7 +764,19 @@ router.get("/getInWardList", async (req, res) => {
 
 // @desc: get list of all sales
 router.get("/getSalesList", async (req, res) => {
-  const salesList = await Sale.find({});
+  const query = {}
+  if(req.query.type) {
+    if(req.query.type === 'wgst') {
+      query.type = 'wgst'
+    }
+    if(req.query.type === 'wogst') {
+      query.type = 'wogst'
+    }
+    if(req.query.type === 'return') {
+      query.type = 'return'
+    }
+  }
+  const salesList = await Sale.find(query);
   res.send(salesList);
 });
 

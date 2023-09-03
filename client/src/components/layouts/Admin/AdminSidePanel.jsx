@@ -177,29 +177,29 @@ export default class SidePanel extends Component {
             </a>
             <div className="collapse" id="submenu3" aria-expanded="false">
               <ul className="flex-column pl-2 nav list-group">
-                <Link to="/viewSales" style={{ textDecoration: "none" }}>
+                <Link to="/viewSales/wgst" style={{ textDecoration: "none" }}>
                 <li className="list-group-item text-dark border-0 my-1 myList nav-item">
                 <i class="fas fa-cart-arrow-down mr-4"
                 style={{ fontSize: "13px" }}></i>
-                {currLocation === "viewSales" ? (
+                {currLocation === "viewSales/wgst" ? (
                     <b>Bill W GST</b>
                   ) : (
                     "Bill W GST"
                   )}
                 </li>
               </Link>
-                <Link to="#" style={{ textDecoration: "none" }}>
+                <Link to="/viewSales/wogst" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fas fa-cart-plus mr-2"
                 style={{ fontSize: "11px" }}></i>
-                {currLocation === "#" ? <b>Bill WO GST</b> : "Bill WO GST"}
+                {currLocation === "viewSales/wogst" ? <b>Bill WO GST</b> : "Bill WO GST"}
                 </li>
               </Link>
-              <Link to="#" style={{ textDecoration: "none" }}>
+              <Link to="/viewSales/return" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fas fa-undo mr-2"
                 style={{ fontSize: "11px" }}></i>
-                  {currLocation === "#" ? <b>Sale Return</b> : "Sale Return"}
+                  {currLocation === "viewSales/return" ? <b>Sale Return</b> : "Sale Return"}
                 </li>
               </Link>
               <Link to="#" style={{ textDecoration: "none" }}>
@@ -247,104 +247,6 @@ export default class SidePanel extends Component {
             </div>
           </li>
         </ul>
-
-        {/* add branch 
-        <Link to="/addBranch" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-user-plus mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "addBranch" ? <b>Add Branch</b> : "Add Branch"}
-            </li>
-          </Link>
-      */}
-
-        {/* add emp s
-        <ul className="list-group">*/}
-          {/*
-          <Link to="/add" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-user-plus mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "add" ? <b>Add Employee</b> : "Add Employee"}
-            </li>
-          </Link>
-          */}
-
-        {/* add in ward 
-          <Link to="/addInWard" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-user-plus mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "addInWard" ? <b>In-Ward</b> : "In-Ward"}
-            </li>
-          </Link>
-        */}
-        {/* view in ward
-        <Link to="/viewInWards" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-search mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "viewInWards" ? <b>In-Ward Report</b> : "In-Ward Report"}
-            </li>
-          </Link>
- */}
-          {/* add sale 
-          <Link to="/addSales" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-user-plus mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "addSales" ? <b>Sale</b> : "Sale"}
-            </li>
-          </Link>
-        */}
-        {/* view sale 
-        <Link to="/viewSales" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-search mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "viewSales" ? <b>Sales Report</b> : "Sales Report"}
-            </li>
-          </Link>
-*/}
-          {/* view req
-          <Link to="/viewRequests" style={{ textDecoration: "none" }}>
-            <li className="list-group-item text-dark border-0 my-1 myList">
-              <i
-                className="fas fa-comments mr-4"
-                style={{ fontSize: "20px" }}
-              ></i>
-              {currLocation === "viewRequests" ? (
-                <b>View Requests</b>
-              ) : (
-                "View Requests"
-              )}
-              {this.state.admin &&
-              (this.state.admin.leaveRequests.length ||
-                this.state.admin.bonusRequests.length ||
-                this.state.admin.loanRequests.length) ? (
-                <div
-                  className="fas fa-circle ml-2"
-                  style={{
-                    color: "#FF1D15",
-                    fontSize: "8px",
-                  }}
-                ></div>
-              ) : null}
-            </li>
-          </Link>
-          */}
           {/* payroll 
           <Link to="/payroll" style={{ textDecoration: "none" }}>
             <li className="list-group-item text-dark border-0 my-1 myList">

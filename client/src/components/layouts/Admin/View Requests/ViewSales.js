@@ -19,13 +19,31 @@ export default class ViewSales extends Component {
   }
 
   componentDidMount = async () => {
-    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList");
+    const type = this.props.match.params.type;
+    this.setState({type: type});
+    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type=" + type);
     console.log("List: ", salesList.data);
     this.setState({
       salesList: salesList.data,
       loading: false,
     });
   };
+
+
+  componentDidUpdate = async (prevProps, prevState) => {
+    if(prevProps.match.params !== undefined && 
+      this.props.match.params !== undefined &&
+      prevProps.match.params.type !==  this.props.match.params.type) {
+      const type = this.props.match.params.type;
+      this.setState({type: type});
+      const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type="+ type);
+      console.log("List: ", salesList.data);
+      this.setState({
+        salesList: salesList.data,
+        loading: false,
+      });
+    }
+  }
 
   // to filter data according to search criteria
   onFilter = (salesList) => {
@@ -61,7 +79,7 @@ export default class ViewSales extends Component {
                     {/* right part */}
                     <div className="col " style={props}>
                       <div className="row">
-                        <SearchSale onFilter={this.onFilter} />
+                        <SearchSale onFilter={this.onFilter} type={this.state.type} />
                       </div>
 
                       {/* branch list */}

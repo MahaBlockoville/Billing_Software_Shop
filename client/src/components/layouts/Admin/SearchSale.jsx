@@ -20,30 +20,17 @@ export default class SearchSale extends Component {
       name: "",
       dos: "",
       dopCheck: false,
+      type: this.props !== undefined && this.props.type ? this.props.type : "",
     };
   }
 
   componentDidMount = async () => {
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     const updatedData = [...this.state.branchList, ...branchList.data];
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
-    const smart_phones = this.state.smart_phones;
-    const feature_phones = this.state.feature_phones;
-    const accessories = this.state.accessories;
-    inwardList.data.map(async (data) => {
-      if(data.category === 'Smart Phone') {
-        smart_phones.push(data.name)
-      }
-      if(data.category === 'Featured Phone') {
-        feature_phones.push(data.name)
-      }
-      if(data.category === 'Accessories') {
-        accessories.push(data.name)
-      }
-    });
-
+    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type="+ this.props.type);
     this.setState({
       branchList: updatedData,
+      salesList: salesList.data,
     });
   };
 
@@ -61,7 +48,7 @@ export default class SearchSale extends Component {
 
   onClickAdd = (e) => {
     e.preventDefault();
-    history.push('/addSales');
+    history.push('/addSales/' + this.props.type);
   }
 
   onSubmit = async (e) => {
@@ -89,7 +76,18 @@ export default class SearchSale extends Component {
   render() {
     return (
       <div className="container mt-3">
-        <h3>Sales List</h3>
+        {
+          this.props.type === 'wgst' && 
+          <h3>Sales Bill With GST</h3>
+        }
+        {
+          this.props.type === 'wost' && 
+          <h3>Sales Bill Wihout GST</h3>
+        }
+        {
+          this.props.type === 'return' && 
+          <h3>Sales Bill return</h3>
+        }
         <form onSubmit={this.onSubmit}>
           <div className="row mt-3 px-3">
             <div className="col">

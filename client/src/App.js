@@ -44,6 +44,7 @@ import ViewProduct from "./components/layouts/Admin/ViewProduct";
 import AddProduct from "./components/layouts/Admin/AddProduct";
 import EditProduct from "./components/layouts/Admin/EditProduct";
 import StockReport from "./components/layouts/Admin/StockReport";
+import GenerateSalesReport from "./components/layouts/Admin/GenerateSaleReport";
 
 export default class App extends Component {
   render() {
@@ -79,8 +80,11 @@ export default class App extends Component {
               <Route exact path="/add" component={AddEmployee} />
               <Route exact path="/viewRequests" component={ViewRequests} />
               <Route exact path="/addBranch" component={AddBranch} />
-              <Route exact path="/addSales" component={AddSales} />
-              <Route exact path="/viewSales" component={ViewSales} />
+              <Route exact path="/addSales/:type" component={AddSales} />
+              <Route exact path="/viewSales/:type" component={ViewSales} />
+              <Route exact path="/salesBill/:id" component={GenerateSalesReport} />
+
+              
               <Route exact path="/viewBranches" component={ViewBranches} />
 
               <Route exact path="/viewCategory" component={ViewCategory} />

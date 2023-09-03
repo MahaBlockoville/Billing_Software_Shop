@@ -125,8 +125,13 @@ class EditSales extends Component {
 
   onCancel = (e) => {
     e.preventDefault();
-    this.props.history.push('/viewSales');
+    this.props.history.push('/viewSales/' + this.state.type);
   }
+
+  onBill = (e) => {
+    e.preventDefault();
+    this.props.history.push('/salesBill/' + this.state.sale_id);
+  };
 
   render() {
     return (
@@ -363,6 +368,14 @@ class EditSales extends Component {
                                   onClick={this.onCancel}
                                   type="button"
                                   value="Back"
+                                  className="btn btn-primary"
+                                />
+                                
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input
+                                  onClick={this.onBill}
+                                  type="button"
+                                  value="Bill"
                                   className="btn btn-primary"
                                 />
                           </form>
