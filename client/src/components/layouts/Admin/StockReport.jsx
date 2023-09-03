@@ -1,15 +1,14 @@
 import axios from "axios";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Consumer } from "../../../../context";
-import AdminSidePanel from "../AdminSidePanel";
+import { Consumer } from "../../../context";
+import AdminSidePanel from "./AdminSidePanel";
 import { Spring } from "react-spring/renderprops";
-import noEmp from "../../../../assets/images/noEmp.png";
-import SearchInWard from "../SearchInWard";
-import InWardCard from "../InWardCard";
-let count = 0;
+import noEmp from "../../../assets/images/noEmp.png";
+import SearchStockReport from "./SearchStockReport";
+import { MDBDataTable } from "mdbreact";
 
-export default class ViewInWards extends Component {
+export default class StockReport extends Component {
   constructor() {
     super();
 
@@ -21,53 +20,90 @@ export default class ViewInWards extends Component {
   }
 
   componentDidMount = async () => {
-    const type = this.props.match.params.type;
-    this.setState({type: type});
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?type="+ type);
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     console.log("List: ", inwardList.data);
+    inwardList.data.map(async (item) => { 
+        item.name = item.product.name;
+        item.color = item.product.color;
+        item.variant = item.product.variant;
+        item.model = item.product.model;
+    })
     this.setState({
       inwardList: inwardList.data,
       loading: false,
     });
   };
-
-  componentDidUpdate = async (prevProps, prevState) => {
-    console.log(prevProps.match,  this.props.match, 'componentDidUpdate',
-    prevState.type, this.state.type);
-    if(prevProps.match.params !== undefined && 
-      this.props.match.params !== undefined &&
-      prevProps.match.params.type !==  this.props.match.params.type) {
-      console.log('componentDidUpdate within')
-      const type = this.props.match.params.type;
-      this.setState({type: type});
-      count = count + 1;
-      const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?type="+ type);
-      console.log("List: ", inwardList.data);
-      this.setState({
-        inwardList: inwardList.data,
-        loading: false,
-      });
-    }
-  }
   // to filter data according to search criteria
   onFilter = (inwardList) => {
     this.setState({ inwardList });
   };
 
-  handleCallback = async (callback) => {
-    if(callback.status === "deleted") {
-      const type = this.props.match.params.type;
-    this.setState({type: type});
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?type="+ type);
-    console.log("List: ", inwardList.data);
-    this.setState({
-      inwardList: inwardList.data,
-      loading: false,
-    });
-    }
-  };
-
   render() {
+    const data = {
+        columns: [
+          {
+            label: 'Brand Name',
+            field: 'name',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'IMEI/Serial Number',
+            field: 'imei_number',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Variant',
+            field: 'variant',
+            sort: 'asc',
+            width: 200
+          },
+          {
+            label: 'Model',
+            field: 'model',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Color',
+            field: 'color',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'GST',
+            field: 'gst_percentage',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Purchase Value',
+            field: 'purchase_value',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Selling Value',
+            field: 'selling_value',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'Type',
+            field: 'type',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Date',
+            field: 'doi',
+            sort: 'asc',
+            width: 150
+          },
+        ],
+        rows: this.state.inwardList
+      }
     return (
       <Consumer>
         {(value) => {
@@ -96,7 +132,7 @@ export default class ViewInWards extends Component {
                     {/* right part */}
                     <div className="col " style={props}>
                       <div className="row">
-                        <SearchInWard onFilter={this.onFilter} type={this.state.type} />
+                        <SearchStockReport onFilter={this.onFilter} />
                       </div>
 
                       {/* branch list */}
@@ -110,7 +146,14 @@ export default class ViewInWards extends Component {
                               display: "flex",
                             }}
                           >
-                            <InWardCard inwardList={this.state.inwardList} parentCallback={this.handleCallback} />
+                            <MDBDataTable
+                            striped
+                            bordered
+                            small
+                            hover
+                            exportToCSV
+                            data={data}
+                            />
                           </div>
                         </div>
                       ) : (

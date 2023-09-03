@@ -12,6 +12,9 @@ const Loan = require("../models/loan.model");
 const Branch = require("../models/branch.model");
 const InWard = require("../models/inward.model");
 const Sale = require("../models/sale.model");
+const Category = require("../models/category.model");
+const Supplier = require("../models/supplier.mode");
+const Product = require("../models/product.model");
 
 // @desc: register a user
 router.post("/register", async (req, res) => {
@@ -233,27 +236,38 @@ router.post("/addBranch", async (req, res) => {
 // @desc: add addInWard by admin
 router.post("/addInWard", async (req, res) => {
   try {
-    let { name, imei_number, model, variant, color, purchase_value, selling_value, 
-      discount, branch, category, doi } = req.body;
+    let {  imei_number, purchase_value, selling_value, 
+      gst_percentage, branch, product, doi } = req.body;
     // validation
     if (
-      !name ||
       !imei_number ||
-      !model ||
-      !variant||
-      !color ||
       !purchase_value||
       !selling_value ||
-      !discount ||
+      !gst_percentage ||
       !branch ||
-      !category ||
+      !product ||
       !doi) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
+    const product_value = await Product.findOne({_id: product});
+
+    if(req.body.type === 'firstPurchase') {
+      type = 'first'
+    }
+    if(req.body.type === 'secondPurchase') {
+      type = 'second'
+    }
+    if(req.body.type === 'secondReturn') {
+      type = 'secondReturn'
+    }
+    if(req.body.type === 'purchaseReturn') {
+      type = 'firstReturn'
+    }
+
     if(!req.body.inward_id) {
     const newInward = new InWard({
-      name, imei_number, model, variant, color, purchase_value, selling_value, 
-        discount, branch, category, doi
+      imei_number, purchase_value, selling_value, 
+      gst_percentage, branch, product: product_value, doi, type
     });
     const savedInWard = await newInward.save();
     res.json(savedInWard);
@@ -261,8 +275,8 @@ router.post("/addInWard", async (req, res) => {
       InWard.findOneAndUpdate(
         { _id: req.body.inward_id },
         {
-          name, imei_number, model, variant, color, purchase_value, selling_value, 
-            discount, branch, category, doi
+          imei_number, purchase_value, selling_value, 
+          gst_percentage, branch, product: product_value, doi, type
         },
         { new: true },
         function (err, result) {
@@ -503,9 +517,239 @@ router.get("/getBranchList", async (req, res) => {
   res.send(branchList);
 });
 
+// @desc: add category by admin
+router.post("/addCategory", async (req, res) => {
+  try {
+    let { name } = req.body;
+    // validation
+    if (
+      !name ) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    if(!req.body.category_id) {
+      const newCategory = new Category({
+        name
+      });
+      const savedCategory = await newCategory.save();
+      res.json(savedCategory);
+    }else {
+      Category.findOneAndUpdate(
+        { _id: req.body.category_id },
+        {
+          name
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @desc: get a particular category data
+router.get("/getCategoryData/:id", async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    res.json(category);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+// @desc: get list of all category
+router.get("/getCategoryList", async (req, res) => {
+  const categoryList = await Category.find({});
+  res.send(categoryList);
+});
+
+// @desc: delete a user stock
+router.delete("/deleteStock/:id", async (req, res) => {
+  try {
+    const deleteStock = await InWard.findByIdAndDelete(req.params.id);
+    res.json(deleteStock);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
+// @desc: delete a user category
+router.delete("/deleteCategory/:id", async (req, res) => {
+  try {
+    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+    res.json(deletedCategory);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
+// @desc: add supplier by admin
+router.post("/addSupplier", async (req, res) => {
+  try {
+
+    let { name, company_name, contact_person, contact_number, gst_number, address } = req.body;
+    // validation
+    if (
+      !name ||
+      !company_name ||
+      !contact_person ||
+      !contact_number ||
+      !gst_number ||
+      !address) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    if(!req.body.supplier_id) {
+      const newSupplier = new Supplier({
+        name, company_name, contact_person, contact_number, gst_number, address
+      });
+      const savedSupplier = await newSupplier.save();
+      res.json(savedSupplier);
+    }else {
+      Supplier.findOneAndUpdate(
+        { _id: req.body.supplier_id },
+        {
+          name, company_name, contact_person, contact_number, gst_number, address
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @desc: get a particular supplier data
+router.get("/getSupplierData/:id", async (req, res) => {
+  try {
+    const supplier = await Supplier.findById(req.params.id);
+    res.json(supplier);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+// @desc: get list of all supplier
+router.get("/getSupplierList", async (req, res) => {
+  const supplierList = await Supplier.find({});
+  res.send(supplierList);
+});
+
+
+// @desc: delete a supplier
+router.delete("/deleteSupplier/:id", async (req, res) => {
+  try {
+    const deletedSupplier = await Supplier.findByIdAndDelete(req.params.id);
+    res.json(deletedSupplier);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
+// @desc: add product by admin
+router.post("/addProduct", async (req, res) => {
+  try {
+
+    let { name, variant, model, color, supplier, category } = req.body;
+    // validation
+    if (
+      !name ||
+      !variant ||
+      !model ||
+      !color ||
+      !supplier ||
+      !category) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    const supplier_value = await Supplier.findOne({name: supplier});
+    const category_value = await Category.findOne({name: category});
+    if(!req.body.product_id) {
+      const newProduct = new Product({
+        name, variant, model, color, supplier: supplier_value, category: category_value
+      });
+      const savedProduct = await newProduct.save();
+      res.json(savedProduct);
+    }else {
+      Product.findOneAndUpdate(
+        { _id: req.body.product_id },
+        {
+          name, variant, model, color, supplier: supplier_value, category: category_value
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @desc: get a particular product data
+router.get("/getProductData/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.json(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+// @desc: get list of all product
+router.get("/getProductList", async (req, res) => {
+  const productList = await Product.find({});
+  res.send(productList);
+});
+
+
+// @desc: delete a product
+router.delete("/deleteProduct/:id", async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    res.json(deletedProduct);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
 // @desc: get list of all inward
 router.get("/getInWardList", async (req, res) => {
-  const inwardList = await InWard.find({});
+  const query = {}
+  if(req.query.type) {
+    if(req.query.type === 'firstPurchase') {
+      query.type = 'first'
+    }
+    if(req.query.type === 'secondPurchase') {
+      query.type = 'second'
+    }
+    if(req.query.type === 'secondReturn') {
+      query.type = 'secondReturn'
+    }
+    if(req.query.type === 'purchaseReturn') {
+      query.type = 'firstReturn'
+    }
+  }
+  const inwardList = await InWard.find(query);
   res.send(inwardList);
 });
 

@@ -7,6 +7,8 @@ import SearchEmp from "./SearchEmp";
 import AdminSidePanel from "./AdminSidePanel";
 import noEmp from "../../../assets/images/noEmp.png";
 import { Spring } from "react-spring/renderprops";
+import { createHashHistory } from 'history'
+export const history = createHashHistory()
 
 export default class ViewEmployees extends Component {
   constructor() {
@@ -31,6 +33,11 @@ export default class ViewEmployees extends Component {
   onFilter = (empList) => {
     this.setState({ empList });
   };
+
+  onClickAdd = (e) => {
+    e.preventDefault();
+    history.push('/add');
+  }
 
   render() {
     return (
@@ -71,6 +78,13 @@ export default class ViewEmployees extends Component {
                         <h1 className="text-center">Loading...</h1>
                       ) : this.state.empList.length ? (
                         <div className="container">
+                        <button className="btn btn-primary pull-right" style={{marginLeft: '912px'}} onClick={this.onClickAdd}>
+                          <i
+                            className="fas fa-user-plus p-2"
+                            style={{ cursor: "pointer", fontSize: "20px" }}
+                          ></i>
+                          Create
+                        </button>
                           <div
                             className="row"
                             style={{

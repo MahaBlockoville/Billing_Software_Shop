@@ -4,6 +4,7 @@ import {  Redirect } from "react-router-dom";
 import { Spring } from "react-spring/renderprops";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
+import Select from 'react-select'
 import { Consumer } from "../../../context";
 import "../../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "../Admin/AdminSidePanel";
@@ -13,21 +14,18 @@ export default class EditInWard extends Component {
         super();
     
         this.state = {
-          categories: [{name: 'Smart Phone'}, {name: 'Featured Phone'}, {name: 'Accessories'}],
-          category: "Select Category",
           disabled: false,
-          name: '',
         imei_number: '', 
         inward_id: '',
-        model: '', 
-        variant: '', 
-        color: '', 
         purchase_value: '', 
         selling_value: '', 
-        discount: '',
-        doi: '', 
+        gst_percentage: '', 
+        product: "",
         branch: 'Select Branch', 
         branchList: [],
+        productList: [],
+        selectionOption: {},
+        options: [], 
           // error
           error: "",
         };
@@ -38,12 +36,53 @@ export default class EditInWard extends Component {
         this.setState({inward_id: inWardId});
         const inWardData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getInWardData/${inWardId}`);
         const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
+        const productList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getProductList");
+        const options = [];
+        productList.data.map(async (data) => {
+          options.push({
+            value: data._id,
+            label: data.name + ' - ' + data.model + ' - ' + data.variant + ' - ' + data.color
+          })
+        })
+        const product_id = inWardData.data.product._id;
+        const currentProduct = productList.data.filter(product => product_id === product._id);
+        this.setState({ 
+          product: product_id,
+          name: currentProduct[0].name,
+          model: currentProduct[0].model,
+          variant: currentProduct[0].variant,
+          color: currentProduct[0].color,
+          category: currentProduct[0].category.name,
+          selectionOption: {
+            value: product_id,
+            label: currentProduct[0].name + ' - ' + currentProduct[0].model + ' - ' + currentProduct[0].variant + ' - ' + currentProduct[0].color
+          }
+        })
         this.setState({
+          options: options,
           branchList: branchList.data,
           ...inWardData.data
         });
       };
       onBranchSelect = (branch) => this.setState({ branch });
+
+      onProductSelect = (product_id) => {
+        const currentProduct = this.state.productList.filter(product => product_id === product._id);
+        console.log(currentProduct, 'currentProduct', this.state.productList, product_id);
+        this.setState({ 
+          product: product_id,
+          name: currentProduct[0].name,
+          model: currentProduct[0].model,
+          variant: currentProduct[0].variant,
+          color: currentProduct[0].color,
+          category: currentProduct[0].category.name,
+          selectionOption: {
+            value: product_id,
+            label: currentProduct[0].name + ' - ' + currentProduct[0].model + ' - ' + currentProduct[0].variant + ' - ' + currentProduct[0].color
+          }
+        })
+      };
+    
 
       onSubmit = async (dispatch, e) => {
         e.preventDefault();
@@ -54,15 +93,16 @@ export default class EditInWard extends Component {
         });
     
         const {
-            name, imei_number, model, variant, color, purchase_value, selling_value, 
-            discount, branch, category, doi, inward_id
-        } = this.state;
-    
-        try {
-          const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addInWard", {
-            name, imei_number, model, variant, color, purchase_value, selling_value, 
-            discount, branch, category, doi, inward_id
-          });
+          imei_number, purchase_value, selling_value, 
+          gst_percentage, branch, product, doi, inward_id
+      } = this.state;
+  
+      try {
+        const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addInWard", {
+          imei_number, purchase_value, selling_value, 
+          gst_percentage, branch, product, doi, inward_id
+        });
+  
     
           toast.notify("Added new item", {
             position: "top-right",
@@ -146,41 +186,32 @@ export default class EditInWard extends Component {
                                 <hr />
     
                                 <div className="row">
-                                  <div className="col">
-                                  <label htmlFor="category">Category</label>
-                                  <div className="dropdown">
-                                      <button
-                                        className="btn btn-light dropdown-toggle"
-                                        type="button"
-                                        id="dropdownMenuButton"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                      >
-                                        {this.state.category}
-                                      </button>
-                                      <div
-                                        className="dropdown-menu"
-                                        aria-labelledby="dropdownMenuButton"
-                                      >
-                                        {this.state.categories.map((data) => (
-                                          <li
-                                            style={{ cursor: "pointer" }}
-                                            key={data.name}
-                                            className="dropdown-item"
-                                            onClick={() =>
-                                              this.onCategorySelect(data.name)
-                                            }
-                                          >
-                                            {data.name}
-                                          </li>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                {this.state.category !== "Select Category" && 
-                                <>
+                            <div className="col">
+                            <label className="product">Product</label>
+                            <Select
+                            value={this.state.selectionOption}
+                            options={this.state.options} 
+                            onChange={(e) =>
+                              this.onProductSelect(e.value)
+                            }
+                            />
+                            </div>
+                            </div>
+                            <div className="row">
+                              <div className="col">
+                              <label htmlFor="category">Category</label>
+                              <input
+                                  type="text"
+                                  name="category"
+                                  className="form-control mb-3 "
+                                  value={this.state.category}
+                                  placeholder="Category"
+                                  onChange={this.onChange}
+                                  readOnly={true}
+                                />
+                              </div>
+                            </div>
+                          
                                 <div className="row">
                                   <div className="col">
                                     {/* name */}
@@ -192,7 +223,7 @@ export default class EditInWard extends Component {
                                       className="form-control"
                                       placeholder="Brand"
                                       onChange={this.onChange}
-                                      required
+                                      readOnly={true}
                                     />
                                   </div>
                                   <div className="col">
@@ -223,7 +254,7 @@ export default class EditInWard extends Component {
                                       className="form-control mb-3 "
                                       placeholder="Model"
                                       onChange={this.onChange}
-                                      required
+                                      readOnly={true}
                                     />
                                   </div>
                                   <div className="col">
@@ -236,7 +267,7 @@ export default class EditInWard extends Component {
                                       className="form-control mb-3 "
                                       placeholder="Variant"
                                       onChange={this.onChange}
-                                      required
+                                      readOnly={true}
                                     />
                                   </div>
                                 </div>
@@ -277,13 +308,13 @@ export default class EditInWard extends Component {
                                   </div>
                                   {/* role */}
                                   <div className="col">
-                                    <label htmlFor="discount">Discount</label>
+                                    <label htmlFor="gst_percentage">GST Percentage</label>
                                     <input
                                       type="number"
-                                      name="discount"
-                                      value={this.state.discount}
+                                      name="gst_percentage"
+                                      value={this.state.gst_percentage}
                                       className="form-control mb-3 "
-                                      placeholder="Discount"
+                                      placeholder="GST Percentage"
                                       onChange={this.onChange}
                                       required
                                     />
@@ -314,7 +345,7 @@ export default class EditInWard extends Component {
                                       className="form-control mb-3 "
                                       placeholder="color"
                                       onChange={this.onChange}
-                                      required
+                                      readOnly={true}
                                     />
                                     </div>
                                 </div>
@@ -345,7 +376,7 @@ export default class EditInWard extends Component {
                                     />
                                   </div>
                                 </div>
-                                </>}
+                                
                                 <br />
                                 <input
                                   disabled={this.state.disabled}

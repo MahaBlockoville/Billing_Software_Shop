@@ -34,6 +34,16 @@ import EditInWard from "./components/layouts/Admin/EditInWard";
 import AddSales from "./components/layouts/AddSales";
 import ViewSales from "./components/layouts/Admin/View Requests/ViewSales";
 import EditSales from "./components/layouts/Admin/EditSales";
+import ViewCategory from "./components/layouts/Admin/ViewCategory";
+import AddCategory from "./components/layouts/Admin/AddCategory";
+import EditCategory from "./components/layouts/Admin/EditCategory";
+import ViewSupplier from "./components/layouts/Admin/ViewSupplier";
+import AddSupplier from "./components/layouts/Admin/AddSupplier";
+import EditSupplier from "./components/layouts/Admin/EditSupplier";
+import ViewProduct from "./components/layouts/Admin/ViewProduct";
+import AddProduct from "./components/layouts/Admin/AddProduct";
+import EditProduct from "./components/layouts/Admin/EditProduct";
+import StockReport from "./components/layouts/Admin/StockReport";
 
 export default class App extends Component {
   render() {
@@ -69,11 +79,30 @@ export default class App extends Component {
               <Route exact path="/add" component={AddEmployee} />
               <Route exact path="/viewRequests" component={ViewRequests} />
               <Route exact path="/addBranch" component={AddBranch} />
-              <Route exact path="/addInWard" component={AddInWard} />
               <Route exact path="/addSales" component={AddSales} />
               <Route exact path="/viewSales" component={ViewSales} />
-              <Route exact path="/viewInWards" component={ViewInWards} />
               <Route exact path="/viewBranches" component={ViewBranches} />
+
+              <Route exact path="/viewCategory" component={ViewCategory} />
+              <Route exact path="/addCategory" component={AddCategory} />
+              <Route exact path="/editCategory/:id" component={EditCategory} />
+              
+              <Route exact path="/viewSupplier" component={ViewSupplier} />
+              <Route exact path="/addSupplier" component={AddSupplier} />
+              <Route exact path="/editSupplier/:id" component={EditSupplier} />
+
+              <Route exact path="/viewInWards/:type" component={ViewInWards} />
+
+              <Route exact path="/addInWard/:type" component={AddInWard} />
+
+              <Route exact path="/stockReport" component={StockReport} />
+
+              
+              <Route exact path="/viewProduct" component={ViewProduct} />
+              <Route exact path="/addProduct" component={AddProduct} />
+              <Route exact path="/editProduct/:id" component={EditProduct} />
+              
+              
               <Route exact path="/statistics" component={Statistics} />
               <Route exact path="/options" component={Options} />
               <Route exact path="/payroll" component={Payroll} />

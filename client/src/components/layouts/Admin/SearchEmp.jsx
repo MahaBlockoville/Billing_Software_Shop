@@ -22,11 +22,6 @@ export default class SearchEmp extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  onClickAdd = (e) => {
-    e.preventDefault();
-    history.push('/add');
-  }
-
   onSubmit = async (e) => {
     e.preventDefault();
 
@@ -136,13 +131,6 @@ export default class SearchEmp extends Component {
                 <button className="btn btn-primary">
                   <i
                     className="fas fa-search p-2"
-                    style={{ cursor: "pointer", fontSize: "20px" }}
-                  ></i>
-                </button>
-                &nbsp;&nbsp;
-                <button className="btn btn-primary" onClick={this.onClickAdd}>
-                  <i
-                    className="fas fa-user-plus p-2"
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>

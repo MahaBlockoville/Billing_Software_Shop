@@ -90,7 +90,7 @@ export default class ViewBranches extends Component {
                             height="200px"
                             className="mt-5"
                           />
-                          <h1 className="mt-4">No Employees found...</h1>
+                          <h1 className="mt-4">No Branches found...</h1>
                         </div>
                       )}
                     </div>

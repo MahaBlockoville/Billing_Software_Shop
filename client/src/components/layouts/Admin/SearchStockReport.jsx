@@ -4,7 +4,7 @@ import "../../../assets/search-emp/searchEmp.css";
 import { createHashHistory } from 'history'
 export const history = createHashHistory()
 
-export default class SearchInWard extends Component {
+export default class SearchStockReport extends Component {
   constructor() {
     super();
 
@@ -17,7 +17,6 @@ export default class SearchInWard extends Component {
       accessory: 'All',
       branch: 'All',
       branchList: [{name: "All"}],
-      name: "",
       doi: "",
       dopCheck: false,
       type: this.props !== undefined && this.props.type ? this.props.type : "",
@@ -28,7 +27,7 @@ export default class SearchInWard extends Component {
 
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     const updatedData = [...this.state.branchList, ...branchList.data];
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?type="+ this.props.type);
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
     const smart_phones = this.state.smart_phones;
     const feature_phones = this.state.feature_phones;
     const accessories = this.state.accessories;
@@ -61,20 +60,13 @@ export default class SearchInWard extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  onClickAdd = (e) => {
-    e.preventDefault();
-    history.push('/addInWard/' + this.props.type);
-  }
-
-
   onSubmit = async (e) => {
     e.preventDefault();
 
-    let { name, doi, smart_phone, branch, feature_phone, accessory } = this.state;
+    let { doi, smart_phone, branch, feature_phone, accessory } = this.state;
 
     try {
       const res = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/searchInward", {
-        name,
         doi,
         smart_phone, 
         branch, 
@@ -92,22 +84,7 @@ export default class SearchInWard extends Component {
   render() {
     return (
       <div className="container mt-3">
-        {
-          this.props.type === 'firstPurchase' && 
-          <h3>Purchase List</h3>
-        }
-        {
-          this.props.type === 'secondPurchase' && 
-          <h3>Second Purchase List</h3>
-        }
-        {
-          this.props.type === 'purchaseReturn' && 
-          <h3>Purchase Return List</h3>
-        }
-        {
-          this.props.type === 'secondReturn' && 
-          <h3>Second Return List</h3>
-        }
+        <h3>Stock Report</h3>
         <form onSubmit={this.onSubmit}>
           <div className="row mt-3 px-3">
             <div className="col">
@@ -231,19 +208,6 @@ export default class SearchInWard extends Component {
               </div>
             </div>
             <div className="col">
-              <label htmlFor="name">Search</label>
-              <div className="form-group">
-                <input
-                  name="name"
-                  placeholder="Type here..."
-                  type="text"
-                  id="name"
-                  className="form-control"
-                  onChange={this.onChange}
-                />
-              </div>
-            </div>
-            <div className="col">
               <label htmlFor="doj">Date</label>
               <div className="form-group">
                 <input
@@ -269,13 +233,6 @@ export default class SearchInWard extends Component {
                 <button className="btn btn-primary">
                   <i
                     className="fas fa-search p-2"
-                    style={{ cursor: "pointer", fontSize: "20px" }}
-                  ></i>
-                </button>
-                <br/>
-                <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '12px'}}>
-                  <i
-                    className="fas fa-user-plus p-2"
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>
