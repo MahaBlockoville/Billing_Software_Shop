@@ -225,11 +225,11 @@ export default class SidePanel extends Component {
             </a>
             <div className="collapse" id="submenu4" aria-expanded="false">
               <ul className="flex-column pl-2 nav list-group">
-                <Link to="#" style={{ textDecoration: "none" }}>
+                <Link to="/dayBook" style={{ textDecoration: "none" }}>
                 <li className="list-group-item text-dark border-0 my-1 myList nav-item">
                 <i class="fas fa-cart-arrow-down mr-4"
                 style={{ fontSize: "13px" }}></i>
-                {currLocation === "#" ? (
+                {currLocation === "dayBook" ? (
                     <b>Day Book</b>
                   ) : (
                     "Day Book"

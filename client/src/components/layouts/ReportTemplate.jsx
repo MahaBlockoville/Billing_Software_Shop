@@ -1,131 +1,101 @@
 import React, { Component } from "react";
 import "toasted-notes/src/styles.css";
+import "../../assets/billTemplate.css";
 
 class ReportTemplate extends Component {
   constructor() {
     super();
     this.state = {
-        ...this.props
-    }
-};
+      ...this.props,
+    };
+  }
 
-
-render() {
+  render() {
     const styles = {
-		page: {
-			marginLeft: '5rem',
-			marginRight: '5rem',
-			'page-break-after': 'always',
-		},
+      page: {
+        marginLeft: "2rem",
+        marginRight: "2rem",
+        "page-break-after": "always",
+        width: "30%",
+      },
 
-		columnLayout: {
-			display: 'flex',
-			justifyContent: 'space-between',
-			margin: '3rem 0 5rem 0',
-			gap: '2rem',
-		},
+      columnLayout: {
+        display: "flex",
+        justifyContent: "space-between",
+      },
 
-		column: {
-			display: 'flex',
-			flexDirection: 'column',
-		},
+      column: {
+        display: "flex",
+        flexDirection: "column",
+      },
 
-		spacer2: {
-			height: '2rem',
-		},
+      spacer2: {
+        height: "1rem",
+      },
 
-		fullWidth: {
-			width: '100%',
-		},
+      fullWidth: {
+        width: "30%",
+      },
 
-		marginb0: {
-			marginBottom: 0,
-		},
-	};
-	return (
-		<>
-			<div style={styles.page}>
-				<div>
-					<h1 style={styles.introText}>
-						Sales Bill
-					</h1>
-				</div>
+      marginb0: {
+        marginBottom: 0,
+      },
+    };
+    return (
+      <>
+        <div style={styles.page}>
+          <div>
+            <h1 style={styles.introText}>{this.props.branch}</h1>
+          </div>
+        </div>
 
-				<div style={styles.spacer2}></div>
-
-			</div>
-
-			<div style={styles.page}>
-
-				<div style={styles.columnLayout}>
-					<div style={styles.column}>
-						<h4 style={styles.marginb0}>Customer Name</h4>
-						<p>
-                            {this.props.name}
-						</p>
-					</div>
-
-					<div style={styles.column}>
-						<h4 style={styles.marginb0}>Customer Email</h4>
-						<p>
-                            {this.props.email}
-						</p>
-					</div>
-                    <div style={styles.column}>
-						<h4 style={styles.marginb0}>Customer Address</h4>
-						<p>
-                            {this.props.address}
-						</p>
-					</div>
-                    <div style={styles.column}>
-						<h4 style={styles.marginb0}>Customer Phone</h4>
-						<p>
-                            {this.props.phone}
-						</p>
-					</div>
-                    <div style={styles.column}>
-						<h4 style={styles.marginb0}>Branch Name</h4>
-						<p>
-                            {this.props.branch}
-						</p>
-					</div>
-				</div>
-
-				<div style={styles.columnLayout}>
-                    {
-                        this.props.inward !== undefined && this.props.inward.product !== undefined && 
-                        <div style={styles.column}>
-						<h4 style={styles.marginb0}>Brand Detail</h4>
-						<p>
-                            {this.props.inward.product.name}  - {this.props.inward.product.model} 
-                            - {this.props.inward.product.variant} - {this.props.inward.product.color}
-						</p>
-					</div>
-                    }
-
-					<div style={styles.column}>
-						<h4 style={styles.marginb0}>IMEI Number</h4>
-						<p>
-                            {this.props.imei_number}
-						</p>
-					</div>
-                    <div style={styles.column}>
-						<h4 style={styles.marginb0}>Payment Type</h4>
-						<p>
-                            {this.props.payment_type}
-						</p>
-					</div>
-					<div style={styles.column}>
-						<h4 style={styles.marginb0}>Amount</h4>
-						<p>
-                            {this.props.selling_value}
-						</p>
-					</div>
-				</div>
-			</div>
-		</>
-	);
-};
-};
+        <table className="table table_bill" style={styles.page}>
+          <thead>
+            <th>Bill Statement</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Customer Name</td>
+              <td>{this.props.name}</td>
+            </tr>
+            <tr>
+              <td>Customer Email</td>
+              <td>{this.props.email}</td>
+            </tr>
+            <tr>
+              <td>Customer Phone</td>
+              <td>{this.props.phone}</td>
+            </tr>
+            {this.props.inward !== undefined &&
+              this.props.inward.product !== undefined && (
+                <tr>
+                  <td>Brand Detail</td>
+                  <td>
+                    {this.props.inward.product.name} -{" "}
+                    {this.props.inward.product.model}-{" "}
+                    {this.props.inward.product.variant} -{" "}
+                    {this.props.inward.product.color}
+                  </td>
+                </tr>
+              )}
+            <tr>
+              <td>IMEI Number</td>
+              <td>{this.props.imei_number}</td>
+            </tr>
+            <tr>
+              <td>Payment Type</td>
+              <td>{this.props.payment_type}</td>
+            </tr>
+            <tr>
+              <td>Amount</td>
+              <td>{this.props.selling_value}</td>
+            </tr>
+          </tbody>
+        </table>
+      </>
+    );
+  }
+}
 
 export default ReportTemplate;

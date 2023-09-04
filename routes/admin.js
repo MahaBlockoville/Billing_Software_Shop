@@ -7,6 +7,7 @@ let User = require("../models/user.model");
 let Salary = require("../models/salary.model");
 let SalaryReceipt = require("../models/salaryReceipt.model");
 const { json } = require("express");
+const moment  = require('moment');
 const TeamAndRole = require("../models/teams.and.roles.model");
 const Loan = require("../models/loan.model");
 const Branch = require("../models/branch.model");
@@ -778,6 +779,19 @@ router.get("/getSalesList", async (req, res) => {
   }
   const salesList = await Sale.find(query);
   res.send(salesList);
+});
+
+// @desc: get list of all inward
+router.get("/getDayBook", async (req, res) => {
+  let dayBookData;
+  const inwardList = await InWard.find({
+    doi: moment().format('Y-MM-DD'),
+  });
+  const salesList = await Sale.find({
+    dos: moment().format('Y-MM-DD'),
+  });
+  dayBookData = inwardList.concat(salesList);
+  res.send(dayBookData);
 });
 
 

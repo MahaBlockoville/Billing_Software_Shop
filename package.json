@@ -22,6 +22,7 @@
     "gapi": "0.0.3",
     "jsonwebtoken": "^9.0.2",
     "mdbreact": "^4.6.1",
+    "moment": "^2.29.4",
     "mongoose": "^5.11.8",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.17",

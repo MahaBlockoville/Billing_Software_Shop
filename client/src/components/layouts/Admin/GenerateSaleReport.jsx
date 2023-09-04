@@ -32,7 +32,8 @@ handleGeneratePdf = (e) => {
 
 		// Adding the fonts.
 		doc.setFont('Inter-Regular', 'normal');
-
+    doc.setFontSize(10);
+    doc.setLineHeightFactor(1);
 		doc.html(this.reportTemplateRef.current, {
 			async callback(doc) {
 				await doc.save('document');
