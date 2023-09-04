@@ -879,6 +879,16 @@ router.get("/getSaleData/:id", async (req, res) => {
   }
 });
 
+// @desc: get a particular sales data
+router.get("/getBranchData/:name", async (req, res) => {
+  try {
+    const sale = await Branch.findOne({name: req.params.name});
+    res.json(sale);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 // @desc: search component
 router.post("/search", async (req, res) => {
