@@ -74,17 +74,18 @@ export default class ViewEmployees extends Component {
                       <hr />
 
                       {/* emp list */}
-                      {this.state.loading ? (
-                        <h1 className="text-center">Loading...</h1>
-                      ) : this.state.empList.length ? (
-                        <div className="container">
-                        <button className="btn btn-primary pull-right" style={{marginLeft: '912px'}} onClick={this.onClickAdd}>
+                      <button className="btn btn-primary pull-right" style={{marginLeft: '912px'}} onClick={this.onClickAdd}>
                           <i
                             className="fas fa-user-plus p-2"
                             style={{ cursor: "pointer", fontSize: "20px" }}
                           ></i>
                           Create
                         </button>
+                      {this.state.loading ? (
+                        <h1 className="text-center">Loading...</h1>
+                      ) : this.state.empList.length ? (
+                        <div className="container">
+                       
                           <div
                             className="row"
                             style={{

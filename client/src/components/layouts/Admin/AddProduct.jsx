@@ -144,7 +144,7 @@ class AddProduct extends Component {
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Product Name</label>
                                 <input
                                   type="text"
                                   name="name"
@@ -218,7 +218,7 @@ class AddProduct extends Component {
                               <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Supplier</label>
+                                <label htmlFor="name">Supplier Name</label>
                                 <select className="form-control"
                                 value={this.state.supplier}
                                onChange={(e) =>
@@ -226,7 +226,7 @@ class AddProduct extends Component {
                                         }>
                                 <option>Select</option>
                                 {this.state.supplierList.map((data) => (
-                                    <option value={data.name}>{data.name}</option>
+                                    <option value={data.company_name}>{data.company_name}</option>
                                 ))
                                 }
                                 </select>

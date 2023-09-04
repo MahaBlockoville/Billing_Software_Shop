@@ -38,6 +38,8 @@ class EditProduct extends Component {
     const categoryList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getCategoryList");
     const supplierList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSupplierList");
     this.setState({
+      supplier: productData.data.supplier.company_name,
+      category: productData.data.category ? productData.data.category.name : '',
       categoryList: categoryList.data,
       supplierList: supplierList.data
     })
@@ -146,19 +148,19 @@ class EditProduct extends Component {
                             className="addEmpForm"
                             onSubmit={this.onSubmit.bind(this, dispatch)}
                           >
-                            <h3 className="">ADD PRODUCT</h3>
+                            <h3 className="">EDIT PRODUCT</h3>
                             <hr />
 
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Product Name</label>
                                 <input
                                   type="text"
                                   name="name"
                                   value={this.state.name}
                                   className="form-control"
-                                  placeholder="Joey Tribbiani"
+                                  placeholder="Product Name"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -230,7 +232,7 @@ class EditProduct extends Component {
                               <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Address</label>
+                                <label htmlFor="name">Supplier Name</label>
                                 <select className="form-control"
                                 value={this.state.supplier}
                                onChange={(e) =>
@@ -238,7 +240,7 @@ class EditProduct extends Component {
                                         }>
                                 <option>Select</option>
                                 {this.state.supplierList.map((data) => (
-                                    <option value={data.name}>{data.name}</option>
+                                    <option value={data.company_name}>{data.company_name}</option>
                                 ))
                                 }
                                 </select>

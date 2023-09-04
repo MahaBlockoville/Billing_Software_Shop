@@ -81,6 +81,9 @@ table th, table td {
 .text-right{
     text-align: end;
 }
+.text-center{
+    text-align: center;
+}
 .w-20{
     width: 20%;
 }

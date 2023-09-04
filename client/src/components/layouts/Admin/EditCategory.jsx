@@ -126,19 +126,19 @@ class EditCategory extends Component {
                             className="addEmpForm"
                             onSubmit={this.onSubmit.bind(this, dispatch)}
                           >
-                            <h3 className="">ADD CATEGORY</h3>
+                            <h3 className="">Edit CATEGORY</h3>
                             <hr />
 
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Category Name</label>
                                 <input
                                   type="text"
                                   name="name"
                                   value={this.state.name}
                                   className="form-control"
-                                  placeholder="Joey Tribbiani"
+                                  placeholder="Category Name"
                                   onChange={this.onChange}
                                   required
                                 />

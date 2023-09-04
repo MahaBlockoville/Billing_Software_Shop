@@ -121,7 +121,7 @@ export default class ViewInWards extends Component {
                             height="200px"
                             className="mt-5"
                           />
-                          <h1 className="mt-4">No InWard found...</h1>
+                          <h1 className="mt-4">Not found...</h1>
                         </div>
                       )}
                     </div>

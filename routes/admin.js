@@ -14,7 +14,7 @@ const Branch = require("../models/branch.model");
 const InWard = require("../models/inward.model");
 const Sale = require("../models/sale.model");
 const Category = require("../models/category.model");
-const Supplier = require("../models/supplier.mode");
+const Supplier = require("../models/supplier.model");
 const Product = require("../models/product.model");
 
 // @desc: register a user
@@ -208,32 +208,6 @@ router.post("/addEmployee", async (req, res) => {
   }
 });
 
-// @desc: add branch by admin
-router.post("/addBranch", async (req, res) => {
-  try {
-    let { name, address, phoneNo, dop } = req.body;
-    // validation
-    if (
-      !name ||
-      !address ||
-      !phoneNo ||
-      !dop) {
-      return res.status(400).json({ msg: "Please enter all the fields" });
-    }
-    const newBranch = new Branch({
-      name,
-      phoneNo,
-      address,
-      dop,
-    });
-    const savedBranch = await newBranch.save();
-    res.json(savedBranch);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
 // @desc: add addInWard by admin
 router.post("/addInWard", async (req, res) => {
   try {
@@ -262,7 +236,7 @@ router.post("/addInWard", async (req, res) => {
       type = 'secondReturn'
     }
     if(req.body.type === 'purchaseReturn') {
-      type = 'firstReturn'
+      type = 'purchaseReturn'
     }
 
     if(!req.body.inward_id) {
@@ -512,11 +486,78 @@ router.get("/getEmpList", async (req, res) => {
   res.send(empList);
 });
 
+
+// @desc: add branch by admin
+router.post("/addBranch", async (req, res) => {
+  try {
+    let { name, address, phoneNo, dop, branch_id } = req.body;
+    // validation
+    if (
+      !name ||
+      !address ||
+      !phoneNo ||
+      !dop) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+    if(req.body.branch_id) {
+      Branch.findOneAndUpdate(
+        { _id: req.body.branch_id },
+        {
+          name,
+          phoneNo,
+          address,
+          dop,
+        },
+        { new: true },
+        function (err, result) {
+          if (err) {
+            res.status(400).json("Error: ", err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    }else {
+      const newBranch = new Branch({
+        name,
+        phoneNo,
+        address,
+        dop,
+      });
+      const savedBranch = await newBranch.save();
+      res.json(savedBranch);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // @desc: get list of all emp
 router.get("/getBranchList", async (req, res) => {
   const branchList = await Branch.find({});
   res.send(branchList);
 });
+
+// @desc: get a particular branch data
+router.get("/getBranchData/:id", async (req, res) => {
+  try {
+    const branch = await Branch.findById(req.params.id);
+    res.json(branch);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// @desc: delete a user branch
+router.delete("/deleteBranch/:id", async (req, res) => {
+  try {
+    const deleteBranch = await Branch.findByIdAndDelete(req.params.id);
+    res.json(deleteBranch);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
 
 // @desc: add category by admin
 router.post("/addCategory", async (req, res) => {
@@ -604,10 +645,9 @@ router.delete("/deleteCategory/:id", async (req, res) => {
 router.post("/addSupplier", async (req, res) => {
   try {
 
-    let { name, company_name, contact_person, contact_number, gst_number, address } = req.body;
+    let {  company_name, contact_person, contact_number, gst_number, address } = req.body;
     // validation
     if (
-      !name ||
       !company_name ||
       !contact_person ||
       !contact_number ||
@@ -617,7 +657,7 @@ router.post("/addSupplier", async (req, res) => {
     }
     if(!req.body.supplier_id) {
       const newSupplier = new Supplier({
-        name, company_name, contact_person, contact_number, gst_number, address
+         company_name, contact_person, contact_number, gst_number, address
       });
       const savedSupplier = await newSupplier.save();
       res.json(savedSupplier);
@@ -625,7 +665,7 @@ router.post("/addSupplier", async (req, res) => {
       Supplier.findOneAndUpdate(
         { _id: req.body.supplier_id },
         {
-          name, company_name, contact_person, contact_number, gst_number, address
+           company_name, contact_person, contact_number, gst_number, address
         },
         { new: true },
         function (err, result) {
@@ -685,7 +725,7 @@ router.post("/addProduct", async (req, res) => {
       !category) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
-    const supplier_value = await Supplier.findOne({name: supplier});
+    const supplier_value = await Supplier.findOne({company_name: supplier});
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
@@ -756,7 +796,7 @@ router.get("/getInWardList", async (req, res) => {
       query.type = 'secondReturn'
     }
     if(req.query.type === 'purchaseReturn') {
-      query.type = 'firstReturn'
+      query.type = 'purchaseReturn'
     }
   }
   const inwardList = await InWard.find(query);
@@ -796,52 +836,20 @@ router.get("/getDayBook", async (req, res) => {
 
 
 // @desc: delete a user account
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/deleteUser/:id", async (req, res) => {
+  console.log(req.params.id, 'deletedUser');
+
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
-
+console.log(deletedUser, 'deletedUser');
     // delete corresponding SALARY DETAILS too
     const deletedSalDetails = await Salary.findOneAndDelete({
       empId: req.params.id,
     });
-
     // delete corresponding SALARYRECEIPT DETAILS too
     const deletedSalReceipt = await SalaryReceipt.findOneAndDelete({
       empId: req.params.id,
     });
-
-    // delete corresponding LOAN DETAILS too
-    await Loan.deleteMany({ empId: req.params.id });
-
-    // delete req's if sent by this user
-    const admin = await Admin.findById(req.body.adminId);
-
-    const empId = req.params.id;
-
-    let updatedLeaveRequests = [];
-    let updatedBonusRequests = [];
-    let updatedLoanRequests = [];
-
-    updatedLeaveRequests = admin.leaveRequests.filter(
-      (req) => req.empId !== empId
-    );
-
-    updatedBonusRequests = admin.bonusRequests.filter(
-      (req) => req.empId !== empId
-    );
-
-    updatedLoanRequests = admin.loanRequests.filter(
-      (req) => req.empId !== empId
-    );
-
-    await Admin.findOneAndUpdate(
-      {},
-      {
-        leaveRequests: updatedLeaveRequests,
-        bonusRequests: updatedBonusRequests,
-        loanRequests: updatedLoanRequests,
-      }
-    );
 
     res.json(deletedUser);
   } catch (err) {
@@ -863,6 +871,26 @@ router.get("/getUserData/:id", async (req, res) => {
 router.get("/getInWardData/:id", async (req, res) => {
   try {
     const inward = await InWard.findById(req.params.id);
+    res.json(inward);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// @desc: get a particular inward data
+router.get("/returnStock/:id/:type", async (req, res) => {
+  console.log(req.params, 'req.params');
+  try {
+    if(req.query.type === 'first') {
+      var type = 'purchaseReturn'
+    }
+    if(req.query.type === 'second') {
+      var type = 'secondReturn'
+    }
+    const inward = await InWard.findOneAndUpdate(
+      { _id: req.params.id },
+      { type: type }
+    );
     res.json(inward);
   } catch (err) {
     res.status(500).json(err);

@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 //- name, company_name, contact_person, contact_number, gst_number, address
 
 const supplierSchema = new Schema({
-  name: { type: String },
   company_name: { type: String },
   contact_person: { type: String },
   contact_number: { type: String },

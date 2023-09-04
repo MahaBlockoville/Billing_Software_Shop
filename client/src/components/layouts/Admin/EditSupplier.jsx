@@ -13,7 +13,6 @@ class EditSupplier extends Component {
     super();
 
     this.state = {
-      name: "",
       company_name: "",
       contact_person: "", 
       contact_number: "", 
@@ -44,14 +43,12 @@ class EditSupplier extends Component {
     });
 
     const {
-      name,
       company_name, contact_person, contact_number, gst_number, address,
       supplier_id
     } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSupplier", {
-        name,
         company_name, contact_person, contact_number, gst_number, address, supplier_id
       });
 
@@ -132,34 +129,19 @@ class EditSupplier extends Component {
                             className="addEmpForm"
                             onSubmit={this.onSubmit.bind(this, dispatch)}
                           >
-                            <h3 className="">ADD SUPPLIER</h3>
+                            <h3 className="">EDIT SUPPLIER</h3>
                             <hr />
 
-                            <div className="row">
-                              <div className="col-sm-6 mx-auto">
-                                {/* name */}
-                                <label htmlFor="name">Name</label>
-                                <input
-                                  type="text"
-                                  name="name"
-                                  value={this.state.name}
-                                  className="form-control"
-                                  placeholder="Joey Tribbiani"
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
-                              </div>
                               <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Company Name</label>
+                                <label htmlFor="name">Supplier Name</label>
                                 <input
                                   type="text"
                                   name="company_name"
                                   value={this.state.company_name}
                                   className="form-control"
-                                  placeholder="Company Name"
+                                  placeholder="Supplier Name"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -200,7 +182,7 @@ class EditSupplier extends Component {
                                 {/* name */}
                                 <label htmlFor="name">GST Number</label>
                                 <input
-                                  type="number"
+                                  type="text"
                                   name="gst_number"
                                   value={this.state.gst_number}
                                   className="form-control"

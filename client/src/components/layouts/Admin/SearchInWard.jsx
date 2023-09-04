@@ -273,12 +273,16 @@ export default class SearchInWard extends Component {
                   ></i>
                 </button>
                 <br/>
+                {
+                  (this.props.type === 'firstPurchase' || 
+                  this.props.type === 'secondPurchase') &&
                 <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '12px'}}>
                   <i
                     className="fas fa-user-plus p-2"
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>
+                }
               </div>
             </div>
           </div>

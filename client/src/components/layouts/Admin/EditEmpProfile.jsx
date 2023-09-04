@@ -90,20 +90,12 @@ export default class EditEmpProfile extends Component {
 
   onDelete = async () => {
     try {
-      const adminId = localStorage.getItem("userId");
       const deletedEmp = await axios.delete(
-        `/api/admin/delete/${this.state.id}`,
-        {
-          data: {
-            adminId: adminId,
-          },
-        }
+        process.env.REACT_APP_API_URL + `/api/admin/deleteUser/${this.state.id}`,
       );
-
       toast.notify("Deleted profile successfully", {
         position: "top-right",
       });
-
       console.log("deleted: ", deletedEmp.data);
       this.props.history.push("/viewEmployees");
     } catch (e) {

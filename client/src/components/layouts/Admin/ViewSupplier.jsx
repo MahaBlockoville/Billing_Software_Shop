@@ -123,8 +123,7 @@ export default class ViewSupplier extends Component {
         <div className="table table-striped sortable">
          <table className="inputTable searchable sortable">
            <thead>
-            <th>Name</th>
-            <th>Company Name</th>
+            <th>Supplier Name</th>
             <th>Contact Person</th>
             <th>Contact Number</th>
             <th>Gst Number</th>
@@ -135,7 +134,6 @@ export default class ViewSupplier extends Component {
            </thead>
         {this.state.supplierList.map((data, index) => (
           <tbody>
-               <td>{data.name}</td>
                <td>{data.company_name}</td>
                <td>{data.contact_person}</td>
                <td>{data.contact_number}</td>

@@ -46,6 +46,7 @@ import EditProduct from "./components/layouts/Admin/EditProduct";
 import StockReport from "./components/layouts/Admin/StockReport";
 import GenerateSalesReport from "./components/layouts/Admin/GenerateSaleReport";
 import DayBook from "./components/layouts/Admin/DayBook";
+import EditBranch from "./components/layouts/Admin/EditBranch";
 
 export default class App extends Component {
   render() {
@@ -80,16 +81,18 @@ export default class App extends Component {
               <Route exact path="/" component={Statistics} />
               <Route exact path="/add" component={AddEmployee} />
               <Route exact path="/viewRequests" component={ViewRequests} />
-              <Route exact path="/addBranch" component={AddBranch} />
               <Route exact path="/addSales/:type" component={AddSales} />
               <Route exact path="/viewSales/:type" component={ViewSales} />
               <Route exact path="/salesBill/:id" component={GenerateSalesReport} />
               <Route exact path="/dayBook" component={DayBook} />
-              <Route exact path="/viewBranches" component={ViewBranches} />
 
               <Route exact path="/viewCategory" component={ViewCategory} />
               <Route exact path="/addCategory" component={AddCategory} />
               <Route exact path="/editCategory/:id" component={EditCategory} />
+
+              <Route exact path="/viewBranches" component={ViewBranches} />
+              <Route exact path="/addBranch" component={AddBranch} />
+              <Route exact path="/editBranch/:id" component={EditBranch} />
               
               <Route exact path="/viewSupplier" component={ViewSupplier} />
               <Route exact path="/addSupplier" component={AddSupplier} />

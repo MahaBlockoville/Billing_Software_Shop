@@ -168,12 +168,12 @@ class AddEmployee extends Component {
                             <div className="row">
                               <div className="col">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Employee Name</label>
                                 <input
                                   type="text"
                                   name="name"
                                   className="form-control"
-                                  placeholder="Joey Tribbiani"
+                                  placeholder="Employee name"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -185,7 +185,7 @@ class AddEmployee extends Component {
                                   type="email"
                                   name="email"
                                   className="form-control mb-3 "
-                                  placeholder="joey@gmail.com"
+                                  placeholder="Enter email"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -202,7 +202,7 @@ class AddEmployee extends Component {
                                   // cols="20"
                                   rows="1"
                                   className="form-control mb-3 "
-                                  placeholder="Mapusa, Goa"
+                                  placeholder="Enter address"
                                   onChange={this.onChange}
                                   required
                                 />

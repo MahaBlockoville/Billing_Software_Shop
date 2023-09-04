@@ -139,12 +139,12 @@ class AddBranch extends Component {
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Branch Name</label>
                                 <input
                                   type="text"
                                   name="name"
                                   className="form-control"
-                                  placeholder="Joey Tribbiani"
+                                  placeholder="Branch Name"
                                   onChange={this.onChange}
                                   required
                                 />
@@ -160,7 +160,7 @@ class AddBranch extends Component {
                                   // cols="20"
                                   rows="1"
                                   className="form-control mb-3 "
-                                  placeholder="Mapusa, Goa"
+                                  placeholder="Address"
                                   onChange={this.onChange}
                                   required
                                 />

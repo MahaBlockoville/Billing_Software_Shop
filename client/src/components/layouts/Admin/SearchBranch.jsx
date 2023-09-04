@@ -48,11 +48,11 @@ export default class SearchBranch extends Component {
           <h3>Branch List</h3>
           <div className="row mt-3 px-3">
             <div className="col">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Branch Name</label>
               <div className="form-group">
                 <input
                   name="name"
-                  placeholder="Joey Tribbiani"
+                  placeholder="Branch Name"
                   type="text"
                   id="name"
                   className="form-control"

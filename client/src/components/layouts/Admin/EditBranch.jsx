@@ -8,12 +8,16 @@ import AdminSidePanel from "../Admin/AdminSidePanel";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
-class AddCategory extends Component {
+class EditBranch extends Component {
   constructor() {
     super();
 
     this.state = {
       name: "",
+      address: "",
+      phoneNo: "",
+      dop: "",
+      branch_id: "",
       disabled: false,
       // error
       error: "",
@@ -21,7 +25,19 @@ class AddCategory extends Component {
   }
 
   componentDidMount = async () => {
-   
+    const teamAndRoleList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getTeamsAndRoles");
+    console.log(teamAndRoleList.data[0]);
+
+    this.setState({
+      teamList: teamAndRoleList.data[0].teamNames,
+      roleList: teamAndRoleList.data[0].roleNames,
+    });
+    const branchId = this.props.match.params.id;
+    this.setState({branch_id: branchId});
+    const inWardData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchData/${branchId}`);
+    this.setState({
+      ...inWardData.data
+    });
   };
 
   onSubmit = async (dispatch, e) => {
@@ -34,19 +50,27 @@ class AddCategory extends Component {
 
     const {
       name,
+      address,
+      phoneNo,
+      dop,
+      branch_id
     } = this.state;
 
     try {
-      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addCategory", {
+      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addBranch", {
         name,
+        address,
+        phoneNo,
+        dop,
+        branch_id
       });
 
-      toast.notify("Added new category", {
+      toast.notify("Updated new branch", {
         position: "top-right",
       });
 
       console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewCategory`);
+      this.props.history.push(`/viewBranches`);
     } catch (err) {
       // enable signup btn
       this.setState({
@@ -63,7 +87,7 @@ class AddCategory extends Component {
 
   onCancel = (e) => {
     e.preventDefault();
-    this.props.history.push('/viewCategory');
+    this.props.history.push('/viewBranches');
   }
 
   render() {
@@ -118,24 +142,72 @@ class AddCategory extends Component {
                             className="addEmpForm"
                             onSubmit={this.onSubmit.bind(this, dispatch)}
                           >
-                            <h3 className="">ADD CATEGORY</h3>
+                            <h3 className="">EDIT BRANCH</h3>
                             <hr />
 
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Category Name</label>
+                                <label htmlFor="name">Branch Name</label>
                                 <input
                                   type="text"
                                   name="name"
+                                  value={this.state.name}
                                   className="form-control"
-                                  placeholder="Category Name"
+                                  placeholder="Branch Name"
                                   onChange={this.onChange}
                                   required
                                 />
                               </div>
                               </div>
-<br/>
+                            <div className="row">
+                              <div className="col-sm-6 mx-auto">
+                                {/* address */}
+                                <label htmlFor="address">Address</label>
+                                <textarea
+                                  name="address"
+                                  id="address"
+                                  // cols="20"
+                                  rows="1"
+                                  value={this.state.address}
+                                  className="form-control mb-3 "
+                                  placeholder="Address"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              </div>
+                              <div className="row">
+                              <div className="col-sm-6 mx-auto">
+                                {/* phone no */}
+                                <label htmlFor="phoneNo">Phone No.</label>
+                                <input
+                                  type="number"
+                                  name="phoneNo"
+                                  value={this.state.phoneNo}
+                                  className="form-control mb-3 "
+                                  placeholder="1234567890"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
+
+                            <div className="row">
+                              {/* dop */}
+                              <div className="col-sm-6 mx-auto">
+                                <label htmlFor="dop">Date Of Opening</label>
+                                <input
+                                  type="date"
+                                  name="dop"
+                                  value={this.state.dop}
+                                  className="form-control mb-3 "
+                                  placeholder="dop"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
                             <div className="row">
                               {/* dop */}
                               <div className="col-sm-6 mx-auto">
@@ -171,4 +243,4 @@ class AddCategory extends Component {
   }
 }
 
-export default AddCategory;
+export default EditBranch;

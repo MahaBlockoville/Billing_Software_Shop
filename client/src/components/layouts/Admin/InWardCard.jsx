@@ -30,132 +30,102 @@ export default class InWardCard extends Component {
     }
   };
 
+  onClickReturn = async (e, inward_id, type) => {
+    e.preventDefault();
+    try {
+      await axios.get(process.env.REACT_APP_API_URL +"/api/admin/returnStock/"+ inward_id+ '/' + type);
+      toast.notify("Changed to return status", {
+        position: "top-right",
+      });
+      window.location.reload();
+    } catch (err) {
+      console.log("Error", e);
+    }
+  };
+
   render() {
     const { inwardList } = this.props;
-      /*const data = {
-        columns: [
-          {
-            label: 'Brand Name',
-            field: 'name',
-            sort: 'asc',
-            width: 150
-          },
-          {
-            label: 'IMEI/Serial Number',
-            field: 'imei_number',
-            sort: 'asc',
-            width: 270
-          },
-          {
-            label: 'Variant',
-            field: 'variant',
-            sort: 'asc',
-            width: 200
-          },
-          {
-            label: 'Model',
-            field: 'model',
-            sort: 'asc',
-            width: 100
-          },
-          {
-            label: 'Color',
-            field: 'color',
-            sort: 'asc',
-            width: 100
-          },
-          {
-            label: 'Discount',
-            field: 'discount',
-            sort: 'asc',
-            width: 100
-          },
-          {
-            label: 'Purchase Value',
-            field: 'purchase_value',
-            sort: 'asc',
-            width: 100
-          },
-          {
-            label: 'Selling Value',
-            field: 'selling_value',
-            sort: 'asc',
-            width: 100
-          },
-          {
-            label: 'Date',
-            field: 'doi',
-            sort: 'asc',
-            width: 150
-          },
-        ],
-        rows: inwardList
-      }  */
-    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     return (
-        // <MDBDataTable
-        //   striped
-        //   bordered
-        //   small
-        //   data={data}
-        // />
-        
         <div className="table table-striped sortable">
-         <table className="inputTable searchable sortable">
-           <thead>
-            <th>Brand Name</th>
-             <th>IMEI/Serial Number</th>
-             <th>Variant</th>
-             <th>Model</th>
-             <th>Color</th>
-             <th>GST Percentage</th>
-             <th>Purchase Value</th>
-             <th>Selling Value</th>
-             <th>Date</th>
-            <th></th>
-            <th></th>
-           </thead>
-        {inwardList.map((data, index) => (
-          <tbody>
-               <td>{data.product.name}</td>
-               <td>{data.imei_number}</td>
-               <td>{data.product.variant}</td>
-               <td>{data.product.model}</td>
-               <td>{data.product.color}</td>
-               <td>{data.gst_percentage}</td>
-               <td>{data.purchase_value}</td>
-               <td>{data.selling_value}</td>
-               <td>{this.onGetDate(data.doi)}</td>
-               <td>
-                 <Link
-                    to={`/editInWard/${data._id}`}
-                    style={{
-                      textDecoration: "none",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <i className="fa fa-edit"></i>
-                  </Link>
-               </td>
-               <td>
-               <Link
-                    onClick={(e) => {
-                      this.onClickDelete(e, data._id)
-                    }}
-                    to='viewProduct'
-                    style={{
-                      textDecoration: "none",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <i className="fa fa-trash"></i>
-                  </Link>
-               </td>
-            </tbody>
-           ))}
-         </table>
+          {
+            inwardList.length > 0 &&
+            <table className="inputTable searchable sortable">
+            <thead>
+             <th>Brand Name</th>
+              <th>IMEI/Serial Number</th>
+              <th>Variant</th>
+              <th>Model</th>
+              <th>Color</th>
+              <th>GST Percentage</th>
+              <th>Purchase Value</th>
+              <th>Selling Value</th>
+              <th>Date</th>
+             <th></th>
+             <th></th>
+             <th></th>
+            </thead>
+         {inwardList.map((data, index) => (
+           <tbody>
+                <td>{data.product.name}</td>
+                <td>{data.imei_number}</td>
+                <td>{data.product.variant}</td>
+                <td>{data.product.model}</td>
+                <td>{data.product.color}</td>
+                <td>{data.gst_percentage}</td>
+                <td>{data.purchase_value}</td>
+                <td>{data.selling_value}</td>
+                <td>{this.onGetDate(data.doi)}</td>
+                <td>
+                  <Link
+                     to={`/editInWard/${data._id}`}
+                     style={{
+                       textDecoration: "none",
+                       display: "flex",
+                       justifyContent: "center",
+                     }}
+                   >
+                     <i className="fa fa-edit"></i>
+                   </Link>
+                </td>
+                <td>
+                <Link
+                     onClick={(e) => {
+                       this.onClickDelete(e, data._id)
+                     }}
+                     to='viewProduct'
+                     style={{
+                       textDecoration: "none",
+                       display: "flex",
+                       justifyContent: "center",
+                     }}
+                   >
+                     <i className="fa fa-trash"></i>
+                   </Link>
+                </td>
+                {
+                   (data.type === 'first' || 
+                   data.type === 'second') && 
+                   <td>
+                   <Link
+                        onClick={(e) => {
+                          this.onClickReturn(e, data._id, data.type)
+                        }}
+                        to='viewProduct'
+                        style={{
+                          textDecoration: "none",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <i className="fa fa-undo"></i>
+                      </Link>
+                   </td>
+               }
+             </tbody>
+            ))}
+          </table>
+          }
+
          </div>
       // <div className="myInWardCard">
 

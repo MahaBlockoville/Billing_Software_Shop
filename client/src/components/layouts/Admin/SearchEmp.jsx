@@ -50,11 +50,11 @@ export default class SearchEmp extends Component {
         <form onSubmit={this.onSubmit}>
           <div className="row mt-3 px-3">
             <div className="col">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Employee Name</label>
               <div className="form-group">
                 <input
                   name="name"
-                  placeholder="Joey Tribbiani"
+                  placeholder="Employee Name"
                   type="text"
                   id="name"
                   className="form-control"
@@ -67,7 +67,7 @@ export default class SearchEmp extends Component {
               <label htmlFor="role">Role</label>
               <div className="form-group">
                 <input
-                  placeholder="Front End Developer"
+                  placeholder="Enter role"
                   name="role"
                   type="text"
                   id="role"
@@ -81,7 +81,7 @@ export default class SearchEmp extends Component {
               <label htmlFor="email">Email</label>
               <div className="form-group">
                 <input
-                  placeholder="joey@gmail.com"
+                  placeholder="Enter email"
                   name="email"
                   type="email"
                   id="email"
@@ -95,7 +95,7 @@ export default class SearchEmp extends Component {
               <label htmlFor="team">Branch</label>
               <div className="form-group">
                 <input
-                  placeholder="Development"
+                  placeholder="Enter branch"
                   name="branch"
                   type="text"
                   id="branch"
