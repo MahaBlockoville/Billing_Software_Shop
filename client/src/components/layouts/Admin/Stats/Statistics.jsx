@@ -19,14 +19,15 @@ export default class Statistics extends Component {
       salesList: [],
       inwardList: [],
       totalExpenses: 0,
-      loanExpenses: 0,
+      inwardExpenses: 0,
     };
   }
 
   componentDidMount = async () => {
     const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
     const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList");
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
+    const stock=  ['firstPurchase', 'secondPurchase'];
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
 
     this.setState(
       {
@@ -62,6 +63,13 @@ export default class Statistics extends Component {
     });
 
     this.setState({ totalExpenses });
+    let inwardExpenses = 0;
+    this.state.inwardList.forEach((emp) => {
+      inwardExpenses += parseInt(emp.selling_value);
+    });
+
+    this.setState({ inwardExpenses });
+
   };
 
   render() {
@@ -103,7 +111,7 @@ export default class Statistics extends Component {
                         <div className="col ">
                           <Card
                             label="InWard worth"
-                            data={`₹ ${this.state.loanExpenses}`}
+                            data={`₹ ${this.state.inwardExpenses}`}
                           />
                         </div>
                         <div className="col">

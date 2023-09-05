@@ -26,8 +26,10 @@ class AddSales extends Component {
       dos: "",
       gst_number: "",
       gst_percentage: "",
-      branch: "Select Branch",
+      branch: "",
       branchList: [],
+      inwardList: [],
+      purchased_value: "",
       // error
       error: "",
     };
@@ -37,7 +39,8 @@ class AddSales extends Component {
     const type = this.props.match.params.type;
     this.setState({type: type});
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
+    const stock=  ['firstPurchase', 'secondPurchase'];
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
     const imeiNumberList = this.state.imeiNumberList;
     inwardList.data.map(async (data) => {
       imeiNumberList.push(
@@ -47,21 +50,24 @@ class AddSales extends Component {
     this.setState({
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
+      inwardList: inwardList.data,
     });
   };
   onBranchSelect = (branch) => this.setState({ branch });
-  onNumberSelect = (imei_number) => this.setState({ imei_number });
+
+  onNumberSelect = (imei_number) => {
+    const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
+    console.log(currentInward);
+    this.setState({ 
+      imei_number, branch: currentInward[0].branch,
+      purchased_value: currentInward[0].selling_value,
+    });
+  } 
 
   onPaymentSelect = (payment_type) => this.setState({ payment_type });
 
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
-
-    // disable signup btn
-    this.setState({
-      disabled: true,
-    });
-
     const {
       name,
       imei_number,
@@ -78,38 +84,50 @@ class AddSales extends Component {
       type
     } = this.state;
 
-    try {
-      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
-        name,
-        imei_number,
-        phone,
-        address,
-        email,
-        selling_value,
-        tenure,
-        branch,
-        payment_type,
-        dos,
-        gst_number,
-        gst_percentage,
-        type
-      });
+    if(selling_value < this.state.purchased_value) {
+      this.setState({ error: "Amount must be less than or equal to the product selling value" });
+    }else {
+          // disable signup btn
+    this.setState({
+      disabled: true,
+    });
 
-      toast.notify("Added new item", {
-        position: "top-right",
-      });
-
-      console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewSales/${type}`);
-    } catch (err) {
-      // enable signup btn
-      this.setState({
-        disabled: false,
-      });
-
-      console.log("ERROR: ", err.response.data.msg);
-      this.setState({ error: err.response.data.msg });
+      try {
+        const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
+          name,
+          imei_number,
+          phone,
+          address,
+          email,
+          selling_value,
+          tenure,
+          branch,
+          payment_type,
+          dos,
+          gst_number,
+          gst_percentage,
+          type
+        });
+  
+        toast.notify("Added new item", {
+          position: "top-right",
+        });
+  
+        console.log("created acc successfully: ", newUser.data);
+        this.props.history.push(`/viewSales/${type}`);
+      } catch (err) {
+        // enable signup btn
+        this.setState({
+          disabled: false,
+        });
+  
+        console.log("ERROR: ", err.response.data.msg);
+        this.setState({ error: err.response.data.msg });
+      }
     }
+
+
+
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -243,15 +261,15 @@ class AddSales extends Component {
                               {/* team */}
                               <div className="col">
                               <label htmlFor="team">Branch</label>
-                              <select className="form-control" onChange={(e) =>
-                                          this.onBranchSelect(e.target.value)
-                                        }>
-                                <option>Select</option>
-                                {this.state.branchList.map((data) => (
-                                    <option value={data.name}>{data.name}</option>
-                                ))
-                                }
-                                </select>
+                              <input
+                                  type="text"
+                                  name="branch"
+                                  className="form-control mb-3 "
+                                  value={this.state.branch}
+                                  placeholder="Branch"
+                                  onChange={this.onChange}
+                                  readOnly={true}
+                                />
                               </div>
                               <div className="col">
                                 {/* dos */}
@@ -284,12 +302,12 @@ class AddSales extends Component {
                               </div>
                               {this.state.payment_type === "EMI" && (
                                 <div className="col-md-4">
-                                  <label htmlFor="doj">Tenure</label>
+                                  <label htmlFor="doj">Initial Amount</label>
                                   <input
-                                    type="text"
+                                    type="number"
                                     name="tenure"
                                     className="form-control mb-3 "
-                                    placeholder="tenure"
+                                    placeholder="Type value"
                                     onChange={this.onChange}
                                     required
                                   />
@@ -307,30 +325,34 @@ class AddSales extends Component {
                                 />
                               </div>
                             </div>
-                            <div className="row">
-                            <div className="col">
-                                <label>GST Number</label>
-                                <input
-                                  type="number"
-                                  name="gst_number"
-                                  className="form-control mb-3 "
-                                  placeholder="Type value"
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
+                            {
+                              this.state.type === 'wgst' &&
+                              <div className="row">
                               <div className="col">
-                                <label>GST Percentage</label>
-                                <input
-                                  type="number"
-                                  name="gst_percentage"
-                                  className="form-control mb-3 "
-                                  placeholder="Type value"
-                                  onChange={this.onChange}
-                                  required
-                                />
+                                  <label>GST Number</label>
+                                  <input
+                                    type="text"
+                                    name="gst_number"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                  
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>GST Percentage</label>
+                                  <input
+                                    type="number"
+                                    name="gst_percentage"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    
+                                  />
+                                </div>
                               </div>
-                            </div>
+                            }
+
                             <br />
                             <input
                               disabled={this.state.disabled}

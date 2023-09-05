@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const inWardSchema = new Schema({
-  imei_number: { type: String },
+  imei_number: { 
+    type: String, 
+    unique: true
+  },
   product: { type: Object },
   purchase_value: { type: String },
   selling_value: { type: String },
@@ -11,6 +14,7 @@ const inWardSchema = new Schema({
   branch: { type: String },
   doi: { type: String },
   type: { type: String, default: 'first' },
+  is_sale: { type: Boolean, default: false},
 });
 
 const InWard = mongoose.model("InWard", inWardSchema);

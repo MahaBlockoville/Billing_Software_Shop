@@ -93,7 +93,7 @@ export default class ViewSales extends Component {
                               display: "flex",
                             }}
                           >
-                          <SaleCard salesList={this.state.salesList}  />
+                          <SaleCard salesList={this.state.salesList}  type={this.state.type} />
                           </div>
                         </div>
                       ) : (

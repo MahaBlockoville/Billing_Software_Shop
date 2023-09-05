@@ -4,10 +4,19 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import axios from "axios";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
 export default class InWardCard extends Component {
+  constructor() {
+    super();
+    this.state = {
+      type: this.props !== undefined && this.props.type ? this.props.type : "",
+    };
+    this.exportTableRef = React.createRef();
+  }
+
   onGetDate = (date) => {
     const d = new Date(date);
     let returnDate = d.toLocaleDateString("en-GB");
@@ -45,12 +54,23 @@ export default class InWardCard extends Component {
 
   render() {
     const { inwardList } = this.props;
+    const currentdate = "stock " + this.props.type  + ' ' +  new Date().toISOString().split('T')[0];
+
     return (
         <div className="table table-striped sortable">
+        <DownloadTableExcel
+            filename={currentdate}
+            sheet="stock"
+            currentTableRef={this.exportTableRef.current}
+        >
+            <button className="btn btn-primary pull-right">
+            <i className="fa fa-download"></i>  Export excel 
+            </button>
+        </DownloadTableExcel>
           {
             inwardList.length > 0 &&
-            <table className="inputTable searchable sortable">
-            <thead>
+            <table className="inputTable searchable sortable" ref={this.exportTableRef}>
+            <tr>
              <th>Brand Name</th>
               <th>IMEI/Serial Number</th>
               <th>Variant</th>
@@ -60,12 +80,13 @@ export default class InWardCard extends Component {
               <th>Purchase Value</th>
               <th>Selling Value</th>
               <th>Date</th>
+             <th>
+             </th>
              <th></th>
              <th></th>
-             <th></th>
-            </thead>
+            </tr>
          {inwardList.map((data, index) => (
-           <tbody>
+           <tr>
                 <td>{data.product.name}</td>
                 <td>{data.imei_number}</td>
                 <td>{data.product.variant}</td>
@@ -103,8 +124,8 @@ export default class InWardCard extends Component {
                    </Link>
                 </td>
                 {
-                   (data.type === 'first' || 
-                   data.type === 'second') && 
+                   (data.type === 'firstPurchase' || 
+                   data.type === 'secondPurchase') && 
                    <td>
                    <Link
                         onClick={(e) => {
@@ -121,60 +142,12 @@ export default class InWardCard extends Component {
                       </Link>
                    </td>
                }
-             </tbody>
+             </tr>
             ))}
           </table>
           }
 
          </div>
-      // <div className="myInWardCard">
-
-      //   <div className="row">
-      //     <div
-      //       className="col"
-      //       style={{ display: "flex", justifyContent: "center" }}
-      //     >
-      //       <img
-      //         src={data.category === "Smart Phone" ? smartPhonePic : data.category === "Featured Phone" ? featuredPhonePic : accessoriesPic}
-      //         alt="profile pic"
-      //         width="100px"
-      //       />
-      //     </div>
-      //   </div>
-
-      //   <hr />
-
-      //   <div className="row">
-      //     <div className="col p-0">
-      //       <span className="text-center">
-      //         <h4>{data.name.toUpperCase()}</h4>
-      //       </span>
-      //       <div className="text-center">
-      //         <span>
-      //         <span>Model: {data.model}</span> <br />
-      //         <span>Variant: {data.variant}</span> <br />
-      //         <span>Color: {data.color}</span> <br />
-
-      //           <i className="fas fa-calendar-alt">
-      //             {" "}
-      //             {this.onGetDate(data.doi)}
-      //           </i>
-      //           <br />
-      //           <Link
-      //             to={`/editInWard/${data._id}`}
-      //             style={{
-      //               textDecoration: "none",
-      //               display: "flex",
-      //               justifyContent: "center",
-      //             }}
-      //           >
-      //             <i className="fa fa-edit">Edit</i>
-      //           </Link>
-      //         </span>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
 }

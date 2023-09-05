@@ -1,6 +1,6 @@
 .bill-template {
 .container{
-    width: 30%;
+    width: 34%;
     margin-right: auto;
     margin-left: 5px;
 }
@@ -14,15 +14,15 @@
     font-size: 13px;
    }
 .section2 {
-    height: 150px;
+    height: 160px;
     font-size: 13px;
     }
     .section3 {
-    height: 170px;
+    height: 215px;
     }
     .section4 {
-    height: 195px;
-    font-size: 11px;
+    height: 185px;
+    font-size: 10px;
     }
 .logo{
     width: 50%;

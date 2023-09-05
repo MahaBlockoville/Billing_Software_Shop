@@ -16,8 +16,11 @@ export default class SearchStockReport extends Component {
       feature_phone: 'All',
       accessory: 'All',
       branch: 'All',
-      branchList: [{name: "All"}],
+      branchList: [],
+      categoryList: [],
+      name: "",
       doi: "",
+      category: "",
       dopCheck: false,
       type: this.props !== undefined && this.props.type ? this.props.type : "",
     };
@@ -27,51 +30,41 @@ export default class SearchStockReport extends Component {
 
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
     const updatedData = [...this.state.branchList, ...branchList.data];
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
-    const smart_phones = this.state.smart_phones;
-    const feature_phones = this.state.feature_phones;
-    const accessories = this.state.accessories;
-    inwardList.data.map(async (data) => {
-      if(data.category === 'Smart Phone') {
-        smart_phones.push(data.name)
-      }
-      if(data.category === 'Featured Phone') {
-        feature_phones.push(data.name)
-      }
-      if(data.category === 'Accessories') {
-        accessories.push(data.name)
-      }
-    });
-
+    const categoryList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getCategoryList");
     this.setState({
-      branchList: updatedData
+      branchList: updatedData,
+      categoryList: [...categoryList.data, ...this.state.categoryList]
     });
   };
 
   onBranchSelect = (branch) => this.setState({ branch });
 
-  onSmartPhoneSelect = (smart_phone) => this.setState({ smart_phone });
-
-  onFeaturePhoneSelect = (feature_phone) => this.setState({ feature_phone });
-
-  onAccessorySelect = (accessory) => this.setState({ accessory });
+  onCategorySelect = (category) => {
+    this.setState({ category });
+  }
 
   toggleDateRange = () => this.setState({ dopCheck: !this.state.dopCheck });
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  onClickAdd = (e) => {
+    e.preventDefault();
+    history.push('/addInWard/' + this.props.type);
+  }
+
+
   onSubmit = async (e) => {
     e.preventDefault();
 
-    let { doi, smart_phone, branch, feature_phone, accessory } = this.state;
+    let { name, doi, category, branch } = this.state;
 
     try {
       const res = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/searchInward", {
+        name,
         doi,
-        smart_phone, 
+        category, 
         branch, 
-        feature_phone, 
-        accessory
+        stock: ['firstPurchase', 'secondPurchase']
       });
 
       this.props.onFilter(res.data);
@@ -89,122 +82,45 @@ export default class SearchStockReport extends Component {
           <div className="row mt-3 px-3">
             <div className="col">
               <label htmlFor="team">Branch</label>
-              <div className="dropdown">
-                <button
-                  className="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.branch}
-                </button>
-                <div
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  {this.state.branchList.map((data) => (
-                    <li
-                      style={{ cursor: "pointer" }}
-                      key={data._id}
-                      className="dropdown-item"
-                      onClick={() => this.onBranchSelect(data.name)}
-                    >
-                      {data.name}
-                    </li>
-                  ))}
-                </div>
-              </div>
+              <select className="form-control"
+            value={this.state.branch}
+            onChange={(e) =>
+                      this.onBranchSelect(e.target.value)
+                    }>
+            <option value={"All"}>All</option>
+            {this.state.branchList.map((data) => (
+                <option value={data.name}>{data.name}</option>
+            ))
+            }
+            <option value={"None"}>None</option>
+            </select>
             </div>
             <div className="col">
-              <label htmlFor="team">Smart Phone</label>
-              <div className="dropdown">
-                <button
-                  className="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.smart_phone}
-                </button>
-                <div
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  {this.state.smart_phones.map((data) => (
-                    <li
-                      style={{ cursor: "pointer" }}
-                      key={data}
-                      className="dropdown-item"
-                      onClick={() => this.onSmartPhoneSelect(data)}
-                    >
-                      {data}
-                    </li>
-                  ))}
-                </div>
-              </div>
+            <label htmlFor="name">Category</label>
+            <select className="form-control"
+            value={this.state.category}
+            onChange={(e) =>
+                      this.onCategorySelect(e.target.value)
+                    }>
+            <option value={"All"}>All</option>
+            {this.state.categoryList.map((data) => (
+                <option value={data.name}>{data.name}</option>
+            ))
+            }
+            <option value={"None"}>None</option>
+            </select>
             </div>
             <div className="col">
-              <label htmlFor="team">Featured Phone</label>
-              <div className="dropdown">
-                <button
-                  className="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.feature_phone}
-                </button>
-                <div
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  {this.state.feature_phones.map((data) => (
-                    <li
-                      style={{ cursor: "pointer" }}
-                      key={data}
-                      className="dropdown-item"
-                      onClick={() => this.onFeaturePhoneSelect(data)}
-                    >
-                      {data}
-                    </li>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <label htmlFor="team">Accessories</label>
-              <div className="dropdown">
-                <button
-                  className="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.accessory}
-                </button>
-                <div
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  {this.state.accessories.map((data) => (
-                    <li
-                      style={{ cursor: "pointer" }}
-                      key={data}
-                      className="dropdown-item"
-                      onClick={() => this.onAccessorySelect(data)}
-                    >
-                      {data}
-                    </li>
-                  ))}
-                </div>
+              <label htmlFor="doj">Search</label>
+              <div className="form-group">
+                <input
+                  placeholder="Enter text"
+                  name="name"
+                  type="text"
+                  id="name"
+                  className="form-control"
+                  onChange={this.onChange}
+                />
               </div>
             </div>
             <div className="col">
@@ -236,6 +152,17 @@ export default class SearchStockReport extends Component {
                     style={{ cursor: "pointer", fontSize: "20px" }}
                   ></i>
                 </button>
+                <br/>
+                {
+                  (this.props.type === 'firstPurchase' || 
+                  this.props.type === 'secondPurchase') &&
+                <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '12px'}}>
+                  <i
+                    className="fas fa-user-plus p-2"
+                    style={{ cursor: "pointer", fontSize: "20px" }}
+                  ></i>
+                </button>
+                }
               </div>
             </div>
           </div>

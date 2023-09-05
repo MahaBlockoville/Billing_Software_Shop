@@ -212,34 +212,30 @@ router.post("/addEmployee", async (req, res) => {
 router.post("/addInWard", async (req, res) => {
   try {
     let {  imei_number, purchase_value, selling_value, 
-      gst_percentage, branch, product, doi } = req.body;
+      gst_percentage, branch, product, doi, type } = req.body;
     // validation
     if (
       !imei_number ||
       !purchase_value||
       !selling_value ||
-      !gst_percentage ||
       !branch ||
       !product ||
       !doi) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
+
     const product_value = await Product.findOne({_id: product});
 
-    if(req.body.type === 'firstPurchase') {
-      type = 'first'
-    }
-    if(req.body.type === 'secondPurchase') {
-      type = 'second'
-    }
-    if(req.body.type === 'secondReturn') {
-      type = 'secondReturn'
-    }
-    if(req.body.type === 'purchaseReturn') {
-      type = 'purchaseReturn'
+    if(!req.body.inward_id) {
+    
+    const existing = await InWard.findOne({ imei_number: imei_number });
+    console.log(existing, 'existing');
+    if (existing) {
+      return res.status(400).json({
+        msg: "The imei_number is already in use by another stock.",
+      });
     }
 
-    if(!req.body.inward_id) {
     const newInward = new InWard({
       imei_number, purchase_value, selling_value, 
       gst_percentage, branch, product: product_value, doi, type
@@ -247,11 +243,21 @@ router.post("/addInWard", async (req, res) => {
     const savedInWard = await newInward.save();
     res.json(savedInWard);
     }else {
+      const existing = await InWard.findOne({ 
+        imei_number: imei_number,
+        _id: {$ne: req.body.inward_id}
+      });
+      console.log(existing, 'existing');
+      if (existing) {
+        return res.status(400).json({
+          msg: "The imei_number is already in use by another stock.",
+        });
+      }
       InWard.findOneAndUpdate(
         { _id: req.body.inward_id },
         {
           imei_number, purchase_value, selling_value, 
-          gst_percentage, branch, product: product_value, doi, type
+          gst_percentage, branch, product: product_value, doi
         },
         { new: true },
         function (err, result) {
@@ -288,6 +294,7 @@ router.post("/addSale", async (req, res) => {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
     const inward_value = await InWard.findOne({imei_number: imei_number});
+    await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
     if(!req.body.sale_id) {
     const newSaleItem = new Sale({
       name, imei_number, phone, address, email, selling_value, 
@@ -302,7 +309,7 @@ router.post("/addSale", async (req, res) => {
         { _id: req.body.sale_id },
         {
           name, imei_number, phone, address, email, selling_value, 
-          tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
+          tenure, branch, payment_type, dos, gst_number, gst_percentage,
           category: inward_value.category, inward: inward_value
         },
         { new: true },
@@ -547,6 +554,15 @@ router.get("/getBranchData/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+// @desc: get a particular branch data by name
+router.get("/getBranchDataByName/:name", async (req, res) => {
+  try {
+    const branch = await Branch.findOne({name: req.params.name});
+    res.json(branch);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // @desc: delete a user branch
 router.delete("/deleteBranch/:id", async (req, res) => {
@@ -626,9 +642,33 @@ router.delete("/deleteStock/:id", async (req, res) => {
 router.delete("/deleteSale/:id", async (req, res) => {
   try {
     const deleteSale = await Sale.findByIdAndDelete(req.params.id);
+    await InWard.findOneAndUpdate({_id: req.params.id}, {is_sale: false});
+
     res.json(deleteSale);
   } catch (err) {
     res.status(500).json({ err: err.message });
+  }
+});
+
+// @desc: get a particular inward data
+router.get("/returnSale/:id/:type", async (req, res) => {
+  console.log(req.params, 'req.params');
+  try {
+    if(req.params.type === 'wgst') {
+      var type = 'wgstReturn'
+    }
+    if(req.params.type === 'wogst') {
+      var type = 'wogstReturn'
+    }
+    const sale = await Sale.findOneAndUpdate(
+      { _id: req.params.id },
+      { type: type  },
+    );
+    await InWard.findOneAndUpdate({_id: sale.inward._id}, {is_sale: false});
+    console.log(sale);
+    res.json(sale);
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 // @desc: delete a user category
@@ -786,19 +826,14 @@ router.delete("/deleteProduct/:id", async (req, res) => {
 router.get("/getInWardList", async (req, res) => {
   const query = {}
   if(req.query.type) {
-    if(req.query.type === 'firstPurchase') {
-      query.type = 'first'
-    }
-    if(req.query.type === 'secondPurchase') {
-      query.type = 'second'
-    }
-    if(req.query.type === 'secondReturn') {
-      query.type = 'secondReturn'
-    }
-    if(req.query.type === 'purchaseReturn') {
-      query.type = 'purchaseReturn'
-    }
+    query.type = req.query.type
   }
+  
+  if(req.query.stock) {
+    query.type = {$in: req.query.stock.split(",")};
+  }
+  query.is_sale = false;
+  console.log(query);
   const inwardList = await InWard.find(query);
   res.send(inwardList);
 });
@@ -814,9 +849,10 @@ router.get("/getSalesList", async (req, res) => {
       query.type = 'wogst'
     }
     if(req.query.type === 'return') {
-      query.type = 'return'
+      query.type = {$in: ['wgstReturn', 'wogstReturn']}
     }
   }
+  console.log(query);
   const salesList = await Sale.find(query);
   res.send(salesList);
 });
@@ -881,10 +917,10 @@ router.get("/getInWardData/:id", async (req, res) => {
 router.get("/returnStock/:id/:type", async (req, res) => {
   console.log(req.params, 'req.params');
   try {
-    if(req.query.type === 'first') {
+    if(req.params.type === 'firstPurchase') {
       var type = 'purchaseReturn'
     }
-    if(req.query.type === 'second') {
+    if(req.params.type === 'secondPurchase') {
       var type = 'secondReturn'
     }
     const inward = await InWard.findOneAndUpdate(
@@ -969,64 +1005,41 @@ router.post("/searchBranch", async (req, res) => {
 router.post("/searchInward", async (req, res) => {
   let name = req.body.name;
   let doi = req.body.doi;
-  let smart_phone = req.body.smart_phone; 
   let branch = req.body.branch; 
-  let feature_phone = req.body.feature_phone; 
-  let accessory = req.body.accessory;
-  // if fields are empty, match everything
-  //if (name === "") name = new RegExp(/.+/s);
+  let category = req.body.category;
+  let type = req.body.type;
+
   if (doi === "") doi = new RegExp(/.+/s);
-  if (branch === "All") branch = new RegExp(/.+/s);
+  if(branch === "" )branch = new RegExp(/.+/s);
   let filter = {
     $and: [
-      { branch: new RegExp(branch, "i") },
       { doi: new RegExp(doi, "i") }
     ]
   };
+  
+  if(branch && branch !== 'All' && branch !== 'Select'){
+    filter.$and.push({branch: branch});
+  }
+
   if(name !== "") {
     filter.$or =  [ 
-      { name: new RegExp(name, "i") }, 
+      { 'product.name': new RegExp(name, "i") }, 
       { imei_number: new RegExp(name, "i") },
-      { color: new RegExp(name, "i") }, 
-      { model: new RegExp(name, "i") }, 
-      { variant: new RegExp(name, "i") }, 
+      { 'product.color': new RegExp(name, "i") }, 
+      { 'product.model': new RegExp(name, "i") }, 
+      { 'product.variant': new RegExp(name, "i") }, 
     ];
   }
-  if(smart_phone && smart_phone !== 'All' && smart_phone !== 'None'){
-    filter.$and.push({name: new RegExp(smart_phone, 'i')});
+  if(category && category !== 'All' && category !== 'Select'){
+    filter.$and.push({'product.category.name': category});
   }
-  if(feature_phone && feature_phone !== 'All' && feature_phone !== 'None'){
-    filter.$and.push({name: new RegExp(feature_phone, 'i')});
+  if(type){
+    filter.$and.push({type: type});
   }
-  if(accessory && accessory !== 'All' && accessory !== 'None'){
-    filter.$and.push({name: new RegExp(accessory, 'i')});
+  if(req.body.stock) {
+    filter.$and.push({type: {$in: req.body.stock}});
   }
-  if(smart_phone && smart_phone === 'None') {
-    filter.$and.push({category: {$ne: 'Smart Phone'}});
-  }
-  if(feature_phone && feature_phone === 'None') {
-    filter.$and.push({category: {$ne: 'Featured Phone'}});
-  }
-  if(accessory && accessory === 'None') {
-    filter.$and.push({category: {$ne: 'Accessories'}});
-  }
-  if(smart_phone === 'All' && feature_phone === 'All' && accessory === 'All'){
-    category = new RegExp(/.+/s);
-    filter.$and.push({category: new RegExp(category, 'i')});
-  }
-  if(smart_phone === 'None' && feature_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Smart Phone', 'Featured Phone']}});
-  }
-  if(feature_phone === 'None' && accessory === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Featured Phone']}});
-  }
-  if(accessory === 'None' && smart_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone']}});
-  }
-  if(accessory === 'None' && smart_phone === 'None' && feature_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone', 'Featured Phone']}});
-  }
-  
+  filter.$and.push({is_sale: false});
   console.log(filter);
   InWard.find(filter)
     .then((emp) => {
@@ -1039,63 +1052,36 @@ router.post("/searchInward", async (req, res) => {
 router.post("/searchSale", async (req, res) => {
   let name = req.body.name;
   let dos = req.body.dos;
-  let smart_phone = req.body.smart_phone; 
-  let branch = req.body.branch; 
-  let feature_phone = req.body.feature_phone; 
-  let accessory = req.body.accessory;
-  // if fields are empty, match everything
-  //if (name === "") name = new RegExp(/.+/s);
+  let category = req.body.category;
+  let type = req.body.type;
+
   if (dos === "") dos = new RegExp(/.+/s);
-  if (branch === "All") branch = new RegExp(/.+/s);
+  if(branch === "" )branch = new RegExp(/.+/s);
   let filter = {
     $and: [
-      { branch: new RegExp(branch, "i") },
       { dos: new RegExp(dos, "i") }
     ]
   };
+  
+  if(branch && branch !== 'All' && branch !== 'Select'){
+    filter.$and.push({branch: branch});
+  }
+
   if(name !== "") {
     filter.$or =  [ 
-      { name: new RegExp(name, "i") }, 
+      { 'inward.product.name': new RegExp(name, "i") }, 
       { imei_number: new RegExp(name, "i") },
-      { phone: new RegExp(name, "i") }, 
-      { email: new RegExp(name, "i") },
+      { 'inward.product.color': new RegExp(name, "i") }, 
+      { 'inward.product.model': new RegExp(name, "i") }, 
+      { 'inward.product.variant': new RegExp(name, "i") }, 
     ];
   }
-  if(smart_phone && smart_phone !== 'All' && smart_phone !== 'None'){
-    filter.$and.push({name: new RegExp(smart_phone, 'i')});
+  if(category && category !== 'All' && category !== 'Select'){
+    filter.$and.push({'inward.product.category.name': category});
   }
-  if(feature_phone && feature_phone !== 'All' && feature_phone !== 'None'){
-    filter.$and.push({name: new RegExp(feature_phone, 'i')});
+  if(type){
+    filter.$and.push({type: type});
   }
-  if(accessory && accessory !== 'All' && accessory !== 'None'){
-    filter.$and.push({name: new RegExp(accessory, 'i')});
-  }
-  if(smart_phone && smart_phone === 'None') {
-    filter.$and.push({category: {$ne: 'Smart Phone'}});
-  }
-  if(feature_phone && feature_phone === 'None') {
-    filter.$and.push({category: {$ne: 'Featured Phone'}});
-  }
-  if(accessory && accessory === 'None') {
-    filter.$and.push({category: {$ne: 'Accessories'}});
-  }
-  if(smart_phone === 'All' && feature_phone === 'All' && accessory === 'All'){
-    category = new RegExp(/.+/s);
-    filter.$and.push({category: new RegExp(category, 'i')});
-  }
-  if(smart_phone === 'None' && feature_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Smart Phone', 'Featured Phone']}});
-  }
-  if(feature_phone === 'None' && accessory === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Featured Phone']}});
-  }
-  if(accessory === 'None' && smart_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone']}});
-  }
-  if(accessory === 'None' && smart_phone === 'None' && feature_phone === 'None'){
-    filter.$and.push({category: {$nin: ['Accessories', 'Smart Phone', 'Featured Phone']}});
-  }
-  
   console.log(filter);
   Sale.find(filter)
     .then((emp) => {

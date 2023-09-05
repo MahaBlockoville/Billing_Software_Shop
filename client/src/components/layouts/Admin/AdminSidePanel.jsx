@@ -152,13 +152,13 @@ export default class SidePanel extends Component {
                 </li>
               </Link>
               
-              <Link to="/stockReport" style={{ textDecoration: "none" }}>
+              {/* <Link to="/stockReport" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fa fa-product-hunt mr-4"
                 style={{ fontSize: "13px" }} aria-hidden="true"></i>
                   {currLocation === "stockReport" ? <b> Report</b> : "Report"}
                 </li>
-              </Link>
+              </Link> */}
               </ul>
             </div>
           </li>

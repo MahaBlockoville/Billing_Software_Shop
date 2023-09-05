@@ -124,13 +124,13 @@ class Header extends Component {
                       // signup or sign in
                       <>
                         <li className="nav-item ">
-                          <Link
+                          {/* <Link
                             to="/signup"
                             className="nav-link text-light "
                             style={{ cursor: "pointer", fontSize: 16 }}
                           >
                             SignUp
-                          </Link>
+                          </Link> */}
                         </li>
                         <li className="nav-item ">
                           <Link

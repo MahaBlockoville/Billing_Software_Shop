@@ -10,7 +10,7 @@ export default class PieChart extends Component {
       inwardList: [],
 
       // pie chart
-      labels: ["Smart Phone", "Featured Phone", "Accessories"],
+      labels: [],
       datasets: [
         {
           label: "InWard",
@@ -23,11 +23,18 @@ export default class PieChart extends Component {
   }
 
   componentDidMount = async () => {
-    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList").then((inwardList) => {
+    const stock=  ['firstPurchase', 'secondPurchase'];
+    axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock).then((inwardList) => {
       this.setState({ inwardList: inwardList.data }, () => {
         this.onFilterGender();
       });
     });
+    const categoryList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getCategoryList");
+    const labels = [];
+    categoryList.data.map(async (category) => {
+      labels.push(category.name);
+    })
+    this.setState({ labels: labels});
   };
 
   onFilterGender = () => {

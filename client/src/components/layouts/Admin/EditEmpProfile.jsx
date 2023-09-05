@@ -1,12 +1,10 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import {  Redirect } from "react-router-dom";
 import { Spring } from "react-spring/renderprops";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import { Consumer } from "../../../context";
-import LoanDetailsCard from "./LoanDetailsCard";
-
 export default class EditEmpProfile extends Component {
   constructor() {
     super();
@@ -136,30 +134,6 @@ export default class EditEmpProfile extends Component {
     }
   };
 
-  updateSalDetails = async () => {
-    const updatedSal = {
-      basicPay: this.state.basicPay,
-      totalLeaves: this.state.totalLeaves,
-      travelAllowance: this.state.travelAllowance,
-      medicalAllowance: this.state.medicalAllowance,
-      bonus: this.state.bonus,
-      salary: this.state.salary,
-    };
-
-    const res = await axios.put(
-      `/api/admin/updateSalaryDetails/${this.state.id}`,
-      {
-        salDetails: updatedSal,
-      }
-    );
-
-    toast.notify("Updated salary details", {
-      position: "top-right",
-    });
-
-    console.log(res.data);
-  };
-
   onSelectGender = (gender) => this.setState({ gender });
 
   onTeamSelect = (team) => this.setState({ team });
@@ -233,6 +207,11 @@ export default class EditEmpProfile extends Component {
   onUpdateLoanDetails = async () => {};
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  onCancel = (e) => {
+    e.preventDefault();
+    this.props.history.push('/viewEmployees');
+  }
 
   render() {
     return (
@@ -462,149 +441,18 @@ export default class EditEmpProfile extends Component {
                               disabled={this.state.disabled}
                               type="submit"
                               value="Submit"
-                              className="btn btn-primary btn-block "
+                              className="btn btn-primary "
+                            />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input
+                              onClick={this.onCancel}
+                              type="button"
+                              value="Back"
+                              className="btn btn-primary"
                             />
                           </form>
                         </div>
                       </div>
-
-                      <div className="row mb-5">
-                        {/* emp loan history */}
-                        <div className="col">
-                          {this.state.empLoanHistory.length ? (
-                            <form
-                              className="addEmpForm"
-                              style={{ height: "460px", overflowY: "scroll" }}
-                            >
-                              <h3>Employee Loan History</h3>
-                              <hr />
-
-                              {this.state.empLoanHistory.map((loan) => (
-                                <LoanDetailsCard
-                                  key={loan.reqId}
-                                  isAdmin={
-                                    user && user.role === "admin" ? true : false
-                                  }
-                                  loanDetails={loan}
-                                  onGetDate={this.onGetDate}
-                                  onMarkAsPaid={this.onMarkAsPaid}
-                                />
-                              ))}
-                            </form>
-                          ) : // <div className="addEmpForm">
-                          //   <h3>No loan history available</h3>
-                          // </div>
-                          null}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* salary details col2 */}
-                    <div className="col">
-                      <form className="addEmpForm">
-                        <h3>Employee Salary Details</h3>
-                        <hr />
-                        <div className="form-group">
-                          <label htmlFor="basicPay">Basic Pay</label>
-                          <input
-                            name="basicPay"
-                            type="number"
-                            className="form-control"
-                            id="basicPay"
-                            value={this.state.basicPay}
-                            onChange={this.onChange}
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="travelAllowance">
-                            Travel Allowance
-                          </label>
-                          <input
-                            name="travelAllowance"
-                            type="number"
-                            className="form-control"
-                            id="travelAllowance"
-                            value={this.state.travelAllowance}
-                            onChange={this.onChange}
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="medicalAllowance">
-                            Medical Allowance
-                          </label>
-                          <input
-                            name="medicalAllowance"
-                            type="number"
-                            className="form-control"
-                            id="medicalAllowance"
-                            value={this.state.medicalAllowance}
-                            onChange={this.onChange}
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="bonus">Bonus</label>
-                          <input
-                            name="bonus"
-                            type="number"
-                            min="0"
-                            className="form-control"
-                            id="bonus"
-                            value={this.state.bonus}
-                            onChange={this.onChange}
-                          />
-                        </div>
-
-                        <p>Total leaves: {this.state.totalLeaves}</p>
-
-                        <div className="input-group mb-3">
-                          <input
-                            type="text"
-                            className="form-control"
-                            disabled={true}
-                            defaultValue={this.state.salary}
-                            aria-label="Recipient's username"
-                            aria-describedby="button-addon2"
-                          />
-                          <div className="input-group-append">
-                            <button
-                              className="btn btn-primary"
-                              type="button"
-                              id="button-addon2"
-                              onClick={this.onCalSal}
-                            >
-                              Calculate Salary
-                            </button>
-                          </div>
-                        </div>
-
-                        <input
-                          type="button"
-                          className="btn btn-primary btn-block"
-                          onClick={this.updateSalDetails}
-                          value="Update Salary Details"
-                        />
-                      </form>
-                    </div>
-
-                    {/* option col 3 */}
-                    <div className="col-1 mt-5">
-                      <input
-                        className="btn btn-danger"
-                        type="button"
-                        value="Delete profile"
-                        onClick={this.onDelete}
-                      />
-
-                      <Link to="/statistics">
-                        <input
-                          className="btn btn-primary mt-3"
-                          type="button"
-                          value="Go to Dashboard"
-                        />
-                      </Link>
                     </div>
                   </div>
                 </div>

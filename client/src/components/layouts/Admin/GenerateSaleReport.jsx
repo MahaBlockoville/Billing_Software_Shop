@@ -18,7 +18,7 @@ class GenerateSalesReport extends Component {
     const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
-    const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchData/${salesData.data.branch}`);
+    const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.branch}`);
     this.setState({
       branchAddress: branchData.data.address,
       branchPhone: branchData.data.phoneNo,

@@ -20,7 +20,7 @@ class AddEmployee extends Component {
       role: "Select Role",
       team: "Select Team",
       branch: "Select Branch",
-      gender: "Select Value",
+      gender: "Select Gender",
       doj: "",
       disabled: false,
 
@@ -92,7 +92,7 @@ class AddEmployee extends Component {
       });
 
       console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/editEmpProfile/${newUser.data._id}`);
+      this.props.history.push(`/viewEmployees`);
     } catch (err) {
       // enable signup btn
       this.setState({

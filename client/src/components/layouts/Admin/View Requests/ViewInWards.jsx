@@ -110,7 +110,7 @@ export default class ViewInWards extends Component {
                               display: "flex",
                             }}
                           >
-                            <InWardCard inwardList={this.state.inwardList} parentCallback={this.handleCallback} />
+                            <InWardCard inwardList={this.state.inwardList} type={this.state.type} parentCallback={this.handleCallback} />
                           </div>
                         </div>
                       ) : (

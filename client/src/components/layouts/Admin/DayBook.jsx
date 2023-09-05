@@ -90,6 +90,7 @@ export default class DayBook extends Component {
                                     <th>IMEI Number</th>
                                     <th>Category</th>
                                     <th>Amount</th>
+                                    <th>Type</th>
                                     <th>Date</th>
                                   <th></th>
                                   <th></th>
@@ -104,6 +105,7 @@ export default class DayBook extends Component {
                                     <td>{data.imei_number ? data.imei_number : data.inward.product.imei_number}</td>
                                     <td>{data.product && data.product.category ? data.product.category.name : data.inward.product.category.name}</td>
                                     <td>{data.selling_value }</td>
+                                    <td>{data.type}</td>
                                     <td>{data.doi ? data.doi : data.dos }</td>
                                     <td></td>
                                     <td></td>

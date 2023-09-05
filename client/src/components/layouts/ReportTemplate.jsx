@@ -60,6 +60,7 @@ class ReportTemplate extends Component {
                           this.props.inward && this.props.inward.product ?
                            this.props.inward.product.name + ' ' + this.props.inward.product.model
                            + ' ' + this.props.inward.product.variant + ' ' + this.props.inward.product.color
+                           + " " + this.props.imei_number
                            : ""
                         }</td>
                         <td className="text-center">{this.props.selling_value}</td>

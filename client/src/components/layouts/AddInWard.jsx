@@ -5,7 +5,7 @@ import axios from "axios";
 import { Spring } from "react-spring/renderprops";
 import "../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "./Admin/AdminSidePanel";
-import Select from 'react-select'
+import Select from "react-select";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
@@ -16,19 +16,19 @@ class AddInWard extends Component {
     this.state = {
       categories: [],
       disabled: false,
-      name: '',
-    imei_number: '',
-    purchase_value: '', 
-    selling_value: '', 
-    gst_percentage: '',
-    doi: '', 
-    branch: 'Select Branch', 
-    product: "",
-    branchList: [],
-    productList: [],
-    selectionOption: {},
-    location: '',
-    options: [], 
+      name: "",
+      imei_number: "",
+      purchase_value: "",
+      selling_value: "",
+      gst_percentage: "",
+      doi: "",
+      branch: "Select Branch",
+      product: "",
+      branchList: [],
+      productList: [],
+      selectionOption: {},
+      location: "",
+      options: [],
       // error
       error: "",
     };
@@ -36,29 +36,47 @@ class AddInWard extends Component {
 
   componentDidMount = async () => {
     const type = this.props.match.params.type;
-    this.setState({type: type});
-    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
-    const productList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getProductList");
+    this.setState({ type: type });
+    const branchList = await axios.get(
+      process.env.REACT_APP_API_URL + "/api/admin/getBranchList"
+    );
+    const productList = await axios.get(
+      process.env.REACT_APP_API_URL + "/api/admin/getProductList"
+    );
     const options = [];
     productList.data.map(async (data) => {
       options.push({
         value: data._id,
-        label: data.name + ' - ' + data.model + ' - ' + data.variant + ' - ' + data.color
-      })
-    })
+        label:
+          data.name +
+          " - " +
+          data.model +
+          " - " +
+          data.variant +
+          " - " +
+          data.color,
+      });
+    });
     this.setState({
       options: options,
       branchList: branchList.data,
-      productList: productList.data
+      productList: productList.data,
     });
   };
 
   onBranchSelect = (branch) => this.setState({ branch });
 
   onProductSelect = (product_id) => {
-    const currentProduct = this.state.productList.filter(product => product_id === product._id);
-    console.log(currentProduct, 'currentProduct', this.state.productList, product_id);
-    this.setState({ 
+    const currentProduct = this.state.productList.filter(
+      (product) => product_id === product._id
+    );
+    console.log(
+      currentProduct,
+      "currentProduct",
+      this.state.productList,
+      product_id
+    );
+    this.setState({
       product: product_id,
       name: currentProduct[0].name,
       model: currentProduct[0].model,
@@ -67,56 +85,85 @@ class AddInWard extends Component {
       category: currentProduct[0].category.name,
       selectionOption: {
         value: product_id,
-        label: currentProduct[0].name + ' - ' + currentProduct[0].model + ' - ' + currentProduct[0].variant + ' - ' + currentProduct[0].color
-      }
-    })
+        label:
+          currentProduct[0].name +
+          " - " +
+          currentProduct[0].model +
+          " - " +
+          currentProduct[0].variant +
+          " - " +
+          currentProduct[0].color,
+      },
+    });
   };
 
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
 
-    // disable signup btn
-    this.setState({
-      disabled: true,
-    });
-
     const {
-        imei_number, purchase_value, selling_value, 
-        gst_percentage, branch, product, doi, type
+      imei_number,
+      purchase_value,
+      selling_value,
+      gst_percentage,
+      branch,
+      product,
+      doi,
+      type,
     } = this.state;
-
-    try {
-      const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addInWard", {
-        imei_number, purchase_value, selling_value, 
-        gst_percentage, branch, product, doi, type
-      });
-
-      toast.notify("Added new item", {
-        position: "top-right",
-      });
-
-      console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewInWards/${type}`);
-    } catch (err) {
-      // enable signup btn
+    if (parseInt(selling_value) < parseInt(purchase_value)) {
       this.setState({
-        disabled: false,
+        error: "Amount must be less than or equal to the product purchase value",
       });
+    } else if (imei_number.length > 20 || imei_number.length < 16) {
+      this.setState({
+        error: "IMEI number must be with in 16 to 20 characters",
+      });
+    } else {
+      // disable signup btn
+      this.setState({
+        disabled: true,
+      });
+      try {
+        const newUser = await axios.post(
+          process.env.REACT_APP_API_URL + "/api/admin/addInWard",
+          {
+            imei_number,
+            purchase_value,
+            selling_value,
+            gst_percentage,
+            branch,
+            product,
+            doi,
+            type,
+          }
+        );
 
-      console.log("ERROR: ", err.response.data.msg);
-      this.setState({ error: err.response.data.msg });
+        toast.notify("Added new item", {
+          position: "top-right",
+        });
+
+        console.log("created acc successfully: ", newUser.data);
+        this.props.history.push(`/viewInWards/${type}`);
+      } catch (err) {
+        // enable signup btn
+        this.setState({
+          disabled: false,
+        });
+
+        console.log("ERROR: ", err.response.data.msg);
+        this.setState({ error: err.response.data.msg });
+      }
     }
   };
 
   onCategorySelect = (category) => this.setState({ category });
 
-
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   onCancel = (e) => {
     e.preventDefault();
-    this.props.history.push('/viewInWards');
-  }
+    this.props.history.push("/viewInWards/" + this.state.type);
+  };
 
   render() {
     return (
@@ -171,23 +218,22 @@ class AddInWard extends Component {
                           >
                             <h3 className="">IN WARD</h3>
                             <hr />
-
                             <div className="row">
-                            <div className="col">
-                            <label className="product">Product</label>
-                            <Select
-                            value={this.state.selectionOption}
-                            options={this.state.options} 
-                            onChange={(e) =>
-                              this.onProductSelect(e.value)
-                            }
-                            />
-                            </div>
+                              <div className="col">
+                                <label className="product">Product</label>
+                                <Select
+                                  value={this.state.selectionOption}
+                                  options={this.state.options}
+                                  onChange={(e) =>
+                                    this.onProductSelect(e.value)
+                                  }
+                                />
+                              </div>
                             </div>
                             <div className="row">
                               <div className="col">
-                              <label htmlFor="category">Category</label>
-                              <input
+                                <label htmlFor="category">Category</label>
+                                <input
                                   type="text"
                                   name="category"
                                   className="form-control mb-3 "
@@ -198,7 +244,6 @@ class AddInWard extends Component {
                                 />
                               </div>
                             </div>
-                          
                             <div className="row">
                               <div className="col">
                                 {/* name */}
@@ -214,36 +259,38 @@ class AddInWard extends Component {
                                   required
                                 />
                               </div>
-                              {
-                                this.state.category !== 'Accessories' ?
+                              {this.state.category !== "Accessories" ? (
                                 <div className="col">
-                                {/* email */}
-                                <label htmlFor="imei_number">IMEI Number</label>
-                                <input
-                                  type="number"
-                                  name="imei_number"
-                                  className="form-control mb-3 "
-                                  placeholder="IMEI Number"
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
-                              :
-                              <div className="col">
-                              {/* email */}
-                              <label htmlFor="imei_number">Serial Number</label>
-                              <input
-                                type="number"
-                                name="imei_number"
-                                className="form-control mb-3 "
-                                placeholder="Serial Number"
-                                onChange={this.onChange}
-                                required
-                              />
+                                  {/* email */}
+                                  <label htmlFor="imei_number">
+                                    IMEI Number
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="imei_number"
+                                    className="form-control mb-3 "
+                                    placeholder="IMEI Number"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              ) : (
+                                <div className="col">
+                                  {/* email */}
+                                  <label htmlFor="imei_number">
+                                    Serial Number
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="imei_number"
+                                    className="form-control mb-3 "
+                                    placeholder="Serial Number"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              )}
                             </div>
-                            }
-                            </div>
-
                             <div className="row">
                               <div className="col">
                                 {/* model */}
@@ -276,7 +323,6 @@ class AddInWard extends Component {
                                 />
                               </div>
                             </div>
-
                             <div className="row">
                               {/* team */}
                               <div className="col">
@@ -312,22 +358,24 @@ class AddInWard extends Component {
                                 </div>
                               </div>
                               {/* role */}
-                              <div className="col">
-                                <label htmlFor="gst_percentage">GST Percentage</label>
-                                <input
-                                  type="number"
-                                  name="gst_percentage"
-                                  className="form-control mb-3 "
-                                  placeholder="GST Percentage"
-                                  onChange={this.onChange}
-                                />
-                              </div>
+                              {this.state.type === "firstPurchase" && (
+                                <div className="col">
+                                  <label htmlFor="gst_percentage">
+                                    GST Percentage
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="gst_percentage"
+                                    className="form-control mb-3 "
+                                    placeholder="GST Percentage"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+                              )}
                             </div>
-
                             <div className="row">
-                            <div className="col-md-6">
-
-                              {/* doj */}
+                              <div className="col-md-6">
+                                {/* doj */}
                                 <label htmlFor="doj">Date Of In Ward</label>
                                 <input
                                   type="date"
@@ -337,8 +385,8 @@ class AddInWard extends Component {
                                   onChange={this.onChange}
                                   required
                                 />
-                                </div>
-                                <div className="col-md-6">
+                              </div>
+                              <div className="col-md-6">
                                 <label htmlFor="doj">Color</label>
                                 <input
                                   type="text"
@@ -350,10 +398,10 @@ class AddInWard extends Component {
                                   readOnly={true}
                                   required
                                 />
-                                </div>
+                              </div>
                             </div>
                             <div className="row">
-                            {/* gender */}
+                              {/* gender */}
                               <div className="col">
                                 <label>Purchase Value</label>
                                 <input
@@ -385,12 +433,12 @@ class AddInWard extends Component {
                               className="btn btn-primary"
                             />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input
-                                  onClick={this.onCancel}
-                                  type="button"
-                                  value="Back"
-                                  className="btn btn-primary"
-                                />
+                            <input
+                              onClick={this.onCancel}
+                              type="button"
+                              value="Back"
+                              className="btn btn-primary"
+                            />
                           </form>
                         </div>
                       </div>

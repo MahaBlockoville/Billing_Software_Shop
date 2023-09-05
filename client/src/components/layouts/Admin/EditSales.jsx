@@ -28,7 +28,9 @@ class EditSales extends Component {
       gst_percentage: "",
       branch: "Select Branch",
       branchList: [],
+      inwardList: [],
       sale_id: '',
+      purchased_value: '',
       // error
       error: "",
     };
@@ -36,8 +38,8 @@ class EditSales extends Component {
 
   componentDidMount = async () => {
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList");
-    const saleId = this.props.match.params.id;
+    const stock=  ['firstPurchase', 'secondPurchase'];
+    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);    const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
     const imeiNumberList = this.state.imeiNumberList;
@@ -49,6 +51,7 @@ class EditSales extends Component {
     this.setState({
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
+      inwardList: inwardList.data,
       ...salesData.data
     });
   };
@@ -56,18 +59,20 @@ class EditSales extends Component {
     console.log("onBranchSelect", branch);
     this.setState({ branch });
   }
-  onNumberSelect = (imei_number) => this.setState({ imei_number });
+  onNumberSelect = (imei_number) => {
+    const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
+    console.log(currentInward);
+    this.setState({ 
+      imei_number, 
+      branch: currentInward[0].branch,
+      purchased_value: currentInward[0].selling_value,
+    });
+  };
 
   onPaymentSelect = (payment_type) => this.setState({ payment_type });
 
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
-
-    // disable signup btn
-    this.setState({
-      disabled: true,
-    });
-
     const {
       name,
       imei_number,
@@ -84,6 +89,13 @@ class EditSales extends Component {
       sale_id
     } = this.state;
 
+    if(selling_value < this.state.purchased_value) {
+      this.setState({ error: "Amount must be less than or equal to the product selling value" });
+    }else {
+    // disable signup btn
+    this.setState({
+      disabled: true,
+    });
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
         name,
@@ -106,7 +118,7 @@ class EditSales extends Component {
       });
 
       console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewSales`);
+      this.props.history.push(`/viewSales/` + this.state.type);
     } catch (err) {
       // enable signup btn
       this.setState({
@@ -115,6 +127,7 @@ class EditSales extends Component {
 
       console.log("ERROR: ", err.response.data.msg);
       this.setState({ error: err.response.data.msg });
+    }
     }
   };
 
@@ -127,11 +140,6 @@ class EditSales extends Component {
     e.preventDefault();
     this.props.history.push('/viewSales/' + this.state.type);
   }
-
-  onBill = (e) => {
-    e.preventDefault();
-    this.props.history.push('/salesBill/' + this.state.sale_id);
-  };
 
   render() {
     return (
@@ -190,15 +198,15 @@ class EditSales extends Component {
                             <div className="row">
                               <div className="col">
                                 <label htmlFor="team">IMEI/Serial Number</label>
-                                <select className="form-control" value={this.state.imei_number} onChange={(e) =>
-                                          this.onNumberSelect(e.target.value)
-                                        }>
-                                <option>Select</option>
-                                {this.state.imeiNumberList.map((data) => (
-                                    <option value={data}>{data}</option>
-                                ))
-                                }
-                                </select>
+                                <input
+                                  type="text"
+                                  name="imei_number"
+                                  value={this.state.imei_number}
+                                  className="form-control"
+                                  placeholder="Name"
+                                  onChange={this.onChange}
+                                  required
+                                />
                               </div>
                               <div className="col">
                                 {/* name */}
@@ -261,17 +269,15 @@ class EditSales extends Component {
                               {/* team */}
                               <div className="col">
                               <label htmlFor="team">Branch</label>
-                              <select className="form-control"
-                                value={this.state.branch}
-                               onChange={(e) =>
-                                          this.onBranchSelect(e.target.value)
-                                        }>
-                                <option>Select</option>
-                                {this.state.branchList.map((data) => (
-                                    <option value={data.name}>{data.name}</option>
-                                ))
-                                }
-                                </select>
+                              <input
+                                  type="text"
+                                  name="branch"
+                                  className="form-control mb-3 "
+                                  value={this.state.branch}
+                                  placeholder="Branch"
+                                  onChange={this.onChange}
+                                  readOnly={true}
+                                />
                               </div>
                               <div className="col">
                                 {/* dos */}
@@ -305,13 +311,13 @@ class EditSales extends Component {
                               </div>
                               {this.state.payment_type === "EMI" && (
                                 <div className="col-md-4">
-                                  <label htmlFor="doj">Tenure</label>
+                                  <label htmlFor="doj">Initial Amount</label>
                                   <input
-                                    type="text"
+                                    type="number"
                                     name="tenure"
                                     value={this.state.tenure}
                                     className="form-control mb-3 "
-                                    placeholder="tenure"
+                                    placeholder="Type value"
                                     onChange={this.onChange}
                                     required
                                   />
@@ -330,17 +336,19 @@ class EditSales extends Component {
                                 />
                               </div>
                             </div>
+                            {
+                              this.state.type === 'wgst' &&
                             <div className="row">
                             <div className="col">
                                 <label>GST Number</label>
                                 <input
-                                  type="number"
+                                  type="text"
                                   name="gst_number"
                                   value={this.state.gst_number}
                                   className="form-control mb-3 "
                                   placeholder="Type value"
                                   onChange={this.onChange}
-                                  required
+                                  
                                 />
                               </div>
                               <div className="col">
@@ -352,10 +360,11 @@ class EditSales extends Component {
                                   className="form-control mb-3 "
                                   placeholder="Type value"
                                   onChange={this.onChange}
-                                  required
+                                  
                                 />
                               </div>
                             </div>
+                            }
                             <br />
                             <input
                                   disabled={this.state.disabled}
@@ -368,14 +377,6 @@ class EditSales extends Component {
                                   onClick={this.onCancel}
                                   type="button"
                                   value="Back"
-                                  className="btn btn-primary"
-                                />
-                                
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input
-                                  onClick={this.onBill}
-                                  type="button"
-                                  value="Bill"
                                   className="btn btn-primary"
                                 />
                           </form>
