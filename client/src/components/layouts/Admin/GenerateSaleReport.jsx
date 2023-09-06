@@ -20,6 +20,7 @@ class GenerateSalesReport extends Component {
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
     const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.branch}`);
     this.setState({
+      branchGst: branchData.data.gst_number,
       branchAddress: branchData.data.address,
       branchPhone: branchData.data.phoneNo,
     });
@@ -32,13 +33,13 @@ handleGeneratePdf = (e) => {
     e.preventDefault();
     const doc = new jsPDF({
 			format: 'a4',
-			unit: 'px',
+			unit: 'pt',
 		});
 
 		// Adding the fonts.
-		doc.setFont('Inter-Regular', 'normal');
-    doc.setFontSize(8);
-    doc.setLineHeightFactor(1);
+		doc.setFont('Canon', 'normal');
+    doc.setFontSize(1);
+    doc.setLineHeightFactor(0);
 		doc.html(this.reportTemplateRef.current, {
 			async callback(doc) {
 				await doc.save('document');

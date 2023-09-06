@@ -2,26 +2,26 @@
 .container{
     width: 34%;
     margin-right: auto;
-    margin-left: 5px;
+    margin-left: -5px;
 }
 .brand-section{
-   background-color: #0d1033;
-   padding: 10px 40px;
-   
+   padding: 5px;
+   border: 1px solid gray;   
 }
 .section1 {
     height: 70px;
-    font-size: 13px;
+    font-size: 8px;
    }
 .section2 {
     height: 160px;
-    font-size: 13px;
+    font-size: 12px;
     }
     .section3 {
-    height: 215px;
+    height: 370px;
+    font-size: 12px;
     }
     .section4 {
-    height: 185px;
+    height: 190px;
     font-size: 10px;
     }
 .logo{
@@ -44,7 +44,7 @@
     text-align: right;
 }
 .body-section{
-    padding: 16px;
+    padding: 10px;
     border: 1px solid gray;
 }
 .heading{

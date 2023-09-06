@@ -202,13 +202,13 @@ export default class SidePanel extends Component {
                   {currLocation === "viewSales/return" ? <b>Sale Return</b> : "Sale Return"}
                 </li>
               </Link>
-              <Link to="#" style={{ textDecoration: "none" }}>
+              {/* <Link to="#" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fa fa-undo mr-4"
                 style={{ fontSize: "13px" }} aria-hidden="true"></i>
                   {currLocation === "#" ? <b>Quotation</b> : "Quotation"}
                 </li>
-              </Link>
+              </Link> */}
               </ul>
             </div>
           </li>
@@ -236,11 +236,11 @@ export default class SidePanel extends Component {
                   )}
                 </li>
               </Link>
-                <Link to="#" style={{ textDecoration: "none" }}>
+                <Link to="/payroll" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fas fa-cart-plus mr-1"
                 style={{ fontSize: "10px" }}></i>
-                {currLocation === "#" ? <b>Profit/Loss Report</b> : "Profit/Loss Report"}
+                {currLocation === "payroll" ? <b>Profit/Loss Report</b> : "Profit/Loss Report"}
                 </li>
               </Link>
               </ul>

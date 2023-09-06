@@ -6,6 +6,7 @@ const branchSchema = new Schema({
   name: { type: String },
   address: { type: String },
   phoneNo: { type: String },
+  gst_number: { type: String },
   dop: { type: String },
 });
 

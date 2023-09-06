@@ -4,17 +4,20 @@ import AdminSidePanel from "./AdminSidePanel";
 import "../../../assets/payroll/payroll.css";
 import emptyImg from "../../../assets/payroll/empty.png";
 import { Link, Redirect } from "react-router-dom";
-import toast from "toasted-notes";
-import "toasted-notes/src/styles.css";
 import { Consumer } from "../../../context";
 import ReactTooltip from "react-tooltip";
 import { Spring } from "react-spring/renderprops";
+import noEmp from "../../../assets/images/noEmp.png";
 
 export default class Payroll extends Component {
   constructor() {
     super();
 
     this.state = {
+      itemList: [],
+      loading: true,
+      from_date: '',
+      to_date: '',
       selectedMonth: "Select Month",
       empReceiptsList: [],
     };
@@ -37,78 +40,36 @@ export default class Payroll extends Component {
     ];
   }
 
-  onMonthClick = async (month) => {
-    const empSalReceipts = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getAllEmpsSalReceipt");
-    console.log(empSalReceipts.data);
-    let monthlyData = [];
-
-    empSalReceipts.data.forEach((emp) => {
-      let eachEmp = {
-        currentSalary: emp.currentSalary,
-        empId: emp.empId,
-      };
-      eachEmp["empName"] = emp.empName;
-      emp.monthlyReceipts.forEach((m) => {
-        eachEmp[m.month] = m;
-      });
-      monthlyData.push(eachEmp);
-    });
-
+  componentDidMount = async () => {
+    const itemList = await axios.get(
+      process.env.REACT_APP_API_URL + "/api/admin/getDayBook"
+    );
+    console.log("List: ", itemList);
     this.setState({
-      selectedMonth: month,
-      empReceiptsList: monthlyData,
+      itemList: itemList.data,
+      loading: false,
     });
   };
 
-  onCheckReceiptGenerated = (monthlyReceipts) => {
-    for (let i = 0; i < monthlyReceipts.length; i++) {
-      let curMonth = monthlyReceipts[i];
-      if (curMonth.month === this.state.selectedMonth) return true;
-    }
-    return false;
-  };
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  onGenerateSalReceipt = async (emp) => {
+  onSubmit = async (e) => {
+    e.preventDefault();
+
+    let { from_date, to_date } = this.state;
+
     try {
-      // 1. get sal details
-      const salDetails = await axios.get(process.env.REACT_APP_API_URL +
-        `/api/admin/getUserSalDetails/${emp.empId}`
-      );
-      const res = await axios.put("/api/admin/generateSalReceipt", {
-        empId: emp.empId,
-        month: this.state.selectedMonth,
-        year: this.curYear,
-        salDetails: salDetails.data,
+      const itemList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getDayBook?from_date=" + from_date + "&to_date=" + to_date);
+
+      console.log("List: ", itemList);
+      this.setState({
+        itemList: itemList.data,
+        loading: false,
       });
-
-      const updatedEmpReceiptDoc = res.data.updatedEmpReceiptDoc;
-
-      let empReceiptsList = this.state.empReceiptsList;
-      empReceiptsList.forEach((emp) => {
-        if (emp.empId === updatedEmpReceiptDoc.empId) {
-          const newReceipt =
-            updatedEmpReceiptDoc.monthlyReceipts[
-              updatedEmpReceiptDoc.monthlyReceipts.length - 1
-            ];
-
-          empReceiptsList.forEach((stateEmp) => {
-            if (stateEmp.empId === emp.empId) {
-              stateEmp[this.state.selectedMonth] = newReceipt;
-            }
-          });
-        }
-      });
-
-      this.setState({ empReceiptsList });
-
-      toast.notify("Salary Receipt generated successfully", {
-        position: "top-right",
-      });
-
-      console.log("generated payslip successfully: ", res.data);
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log("Error: ", err.response.data);
     }
+
   };
 
   render() {
@@ -140,166 +101,110 @@ export default class Payroll extends Component {
                     <div className="col mt-3" style={props}>
                       <div className="container">
                         {/* select month */}
-                        <div className="dropdown" style={{ float: "left" }}>
-                          <button
-                            className="btn btn-primary dropdown-toggle"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            {this.state.selectedMonth}
-                          </button>
-                          <div
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            {this.month.map((m) => {
-                              return (
-                                <li
-                                  style={{ cursor: "pointer" }}
-                                  key={m}
-                                  className="dropdown-item btn-primary"
-                                  onClick={() => this.onMonthClick(m)}
-                                >
-                                  {m}
-                                </li>
-                              );
-                            })}
-                          </div>
-                        </div>
+                        <form onSubmit={this.onSubmit}>
 
-                        {this.state.selectedMonth !== "Select Month" ? (
-                          <>
-                            <h1 className="my-3 text-right text-secondary">
+                        <div className="row">
+                          <div className="col">
+                          <label htmlFor="doj">From Date</label>
+                        <div className="form-group">
+                          <input
+                            placeholder="Date"
+                            name="from_date"
+                            type="date"
+                            id="from_date"
+                            className="form-control"
+                            onChange={this.onChange}
+                          />
+                        </div>
+                          </div>
+                          <div className="col">
+                          <label htmlFor="doj">To Date</label>
+                        <div className="form-group">
+                          <input
+                            placeholder="Date"
+                            name="to_date"
+                            type="date"
+                            id="to_date"
+                            className="form-control"
+                            onChange={this.onChange}
+                          />
+                        </div>
+                        </div>
+                        <div className="col">
+                        <div className="form-group m-0 p-0">
+                        <button className="btn btn-primary">
+                          <i
+                            className="fas fa-search p-2"
+                            style={{ cursor: "pointer", fontSize: "20px" }}
+                          ></i>
+                        </button>
+                        </div>
+                        </div>
+                        </div>
+                        </form>
+
+                      {/* branch list */}
+                      {this.state.loading ? (
+                        <h1 className="text-center">Loading...</h1>
+                      ) : this.state.itemList.length ? (
+                        <div className="container">
+                          <h1 className="my-3 text-right text-secondary">
                               Payroll table for {this.state.selectedMonth},{" "}
                               {this.curYear}
                             </h1>
-
-                            <ReactTooltip
-                              place="bottom"
-                              delayShow={100}
-                              html={true}
-                            />
-
-                            <table className="table table-hover table-border text-center">
-                              <thead>
-                                <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">Salary</th>
-                                  <th scope="col">Status</th>
-                                  <th scope="col">
-                                    Action{" "}
-                                    <i
-                                      className="fas fa-info-circle text-secondary"
-                                      data-tip="Once salary slip is generated, <br /> bonus, total leaves of that employee will be cleared"
-                                    ></i>{" "}
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {this.state.empReceiptsList.map(
-                                  (emp, index) => {
-                                    return (
-                                      <tr key={index}>
-                                        <th scope="row">{index + 1}</th>
-                                        <td>{emp.empName}</td>
-                                        {emp[this.state.selectedMonth] ? (
-                                          <>
-                                            <td>
-                                              {
-                                                emp[this.state.selectedMonth]
-                                                  .salDetails.salary
-                                              }
-                                            </td>
-                                            <td>Generated</td>
-                                            <td>
-                                              <input
-                                                type="button"
-                                                className="btn btn-success"
-                                                value="Receipt Generated"
-                                                disabled={true}
-                                              />
-                                            </td>
-                                          </>
-                                        ) : (
-                                          <>
-                                            <td>{emp.currentSalary}</td>
-                                            <td>Pending</td>
-                                            <td>
-                                              <div className="dropdown">
-                                                <button
-                                                  className="btn btn-primary dropdown-toggle"
-                                                  type="button"
-                                                  id="dropdownMenuButton"
-                                                  data-toggle="dropdown"
-                                                  aria-haspopup="true"
-                                                  aria-expanded="false"
-                                                >
-                                                  Take action
-                                                </button>
-                                                <div
-                                                  className="dropdown-menu"
-                                                  aria-labelledby="dropdownMenuButton"
-                                                >
-                                                  <li
-                                                    style={{
-                                                      cursor: "pointer",
-                                                    }}
-                                                    className="dropdown-item btn-primary"
-                                                    onClick={() =>
-                                                      this.onGenerateSalReceipt(
-                                                        emp
-                                                      )
-                                                    }
-                                                  >
-                                                    Generate Receipt
-                                                  </li>
-                                                  <Link
-                                                    to={`/editEmpProfile/${emp.empId}`}
-                                                    style={{
-                                                      textDecoration: "none",
-                                                    }}
-                                                  >
-                                                    <li className="dropdown-item">
-                                                      View profile/Edit salary
-                                                      details
-                                                    </li>
-                                                  </Link>
-                                                </div>
-                                              </div>
-                                            </td>
-                                          </>
-                                        )}
-                                      </tr>
-                                    );
-                                  }
-                                )}
-                              </tbody>
-                            </table>
-                          </>
-                        ) : (
-                          <>
-                            <h2 className="text-center mt-3 emptyPicText text-secondary">
-                              <b>Select month to view details</b>
-                            </h2>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <img
-                                className="emptyPic"
-                                src={emptyImg}
-                                alt="login.svg"
-                              />
+                          <div
+                            className="row"
+                            style={{
+                              display: "flex",
+                            }}
+                          >
+                            <div className="table table-striped sortable">
+                              <table className="inputTable searchable sortable">
+                                <thead>
+                                  <th>Name</th>
+                                  <th>Model</th>
+                                  <th>Variant</th>
+                                  <th>Color</th>
+                                  <th>Branch</th>
+                                    <th>IMEI Number</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                  <th></th>
+                                  <th></th>
+                                </thead>
+                                {this.state.itemList.map((data, index) => (
+                                  <tbody>
+                                    <td>{data.product && data.product.name ? data.product.name : data.inward.product.name}</td>
+                                    <td>{data.product && data.product.model ? data.product.model : data.inward.product.model}</td>
+                                    <td>{data.product && data.product.variant ? data.product.variant : data.inward.product.variant}</td>
+                                    <td>{data.product && data.product.color ? data.product.color : data.inward.product.color}</td>
+                                    <td>{data.branch}</td>
+                                    <td>{data.imei_number ? data.imei_number : data.inward.product.imei_number}</td>
+                                    <td>{data.product && data.product.category ? data.product.category.name : data.inward.product.category.name}</td>
+                                    <td>{data.selling_value }</td>
+                                    <td>{data.type}</td>
+                                    <td>{data.doi ? data.doi : data.dos }</td>
+                                    <td></td>
+                                    <td></td>
+                                  </tbody>
+                                ))}
+                              </table>
                             </div>
-                          </>
-                        )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="container  text-secondary text-center mt-2">
+                          <img
+                            src={noEmp}
+                            alt=""
+                            height="200px"
+                            className="mt-5"
+                          />
+                          <h1 className="mt-4">Not found...</h1>
+                        </div>
+                      )}
                       </div>
                     </div>
                   </div>

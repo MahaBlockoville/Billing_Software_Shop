@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "toasted-notes/src/styles.css";
 import "../../assets/billTemplate.css";
-import visaka  from "../../assets/images/visaka.jpeg";
+import visaka  from "../../assets/images/visaka_icon.jpeg";
 
 class ReportTemplate extends Component {
   constructor() {
@@ -17,13 +17,17 @@ class ReportTemplate extends Component {
       <div className="container">
         <div className="brand-section section1">
             <div className="row">
-                <div className="col-6">
-                  <img src={visaka}  alt={'branch'} height={'55px'} width={'250px'}/>
+                <div className="col-4">
+                  <img src={visaka}  alt={'branch'} height={'55px'} width={'100px'}/>
+                </div>
+                <div className="col-2">
+                  <p className="sub-heading">{this.props.branch}</p>
                 </div>
                 <div className="col-6">
                     <div className="company-details">
-                    <p className="text-white">{this.props.branchAddress}</p>
-                    <p className="text-white">{this.props.branchPhone}</p>
+                    <p className="sub-heading">{this.props.branchGst}</p>
+                    <p className="sub-heading">{this.props.branchAddress}</p>
+                    <p className="sub-heading">{this.props.branchPhone}</p>
                     </div>
                 </div>
             </div>
@@ -46,7 +50,7 @@ class ReportTemplate extends Component {
         </div>
 
         <div className="body-section section3">
-            <table className="table-bordered">
+            <table className="table table">
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -69,16 +73,28 @@ class ReportTemplate extends Component {
                         <td className="text-center">{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
                     </tr>
                     <tr>
+                      <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                    <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                    <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                    <td colspan="4"></td>
+                    </tr>
+                    <tr>
                         <td colspan="3" className="text-right">CGST</td>
-                        <td className="text-center"> {((this.props.selling_value * (this.props.gst_percentage / 100))) / 2}</td>
+                        <td className="text-center"> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colspan="3" className="text-right">SGST</td>
-                        <td className="text-center"> {((this.props.selling_value * (this.props.gst_percentage / 100))) / 2}</td>
+                        <td className="text-center"> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colspan="3" className="text-right">Total</td>
-                        <td className="text-center"> {this.props.selling_value}</td>
+                        <td className="text-center"> {parseFloat(this.props.selling_value).toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>
@@ -102,6 +118,9 @@ class ReportTemplate extends Component {
                 Goods once sold cannot be returred or exchanged
               </li>
             </ul>
+            <p className="text-right">
+              Customer Signature
+            </p>
         </div>      
       </div>  
       </div>

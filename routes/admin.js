@@ -497,7 +497,7 @@ router.get("/getEmpList", async (req, res) => {
 // @desc: add branch by admin
 router.post("/addBranch", async (req, res) => {
   try {
-    let { name, address, phoneNo, dop, branch_id } = req.body;
+    let { name, address, phoneNo, dop, gst_number } = req.body;
     // validation
     if (
       !name ||
@@ -514,6 +514,7 @@ router.post("/addBranch", async (req, res) => {
           phoneNo,
           address,
           dop,
+          gst_number
         },
         { new: true },
         function (err, result) {
@@ -530,6 +531,7 @@ router.post("/addBranch", async (req, res) => {
         phoneNo,
         address,
         dop,
+        gst_number
       });
       const savedBranch = await newBranch.save();
       res.json(savedBranch);
@@ -860,14 +862,43 @@ router.get("/getSalesList", async (req, res) => {
 // @desc: get list of all inward
 router.get("/getDayBook", async (req, res) => {
   let dayBookData;
-  const inwardList = await InWard.find({
-    doi: moment().format('Y-MM-DD'),
-  });
-  const salesList = await Sale.find({
-    dos: moment().format('Y-MM-DD'),
-  });
-  dayBookData = inwardList.concat(salesList);
-  res.send(dayBookData);
+  console.log(req.query.from_date, moment().format('MMMM'));
+  if(req.query.from_date || req.query.to_date) {
+    const query = {};
+    const sales_query = {};
+    if (req.query.from_date != undefined && req.query.from_date != "") {
+      sales_query.dos = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+      query.doi = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+    }else {
+      sales_query.dos = { $gte: moment().format('Y-MM-DD') };
+      query.doi = { $gte: moment().format('Y-MM-DD') };
+    }
+    if (req.query.to_date != undefined && req.query.to_date != "") {
+      sales_query.dos = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+      query.doi = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+    }else {
+      sales_query.dos = { $lte: moment().format('Y-MM-DD') };
+      query.doi = { $lte: moment().format('Y-MM-DD') };
+    }
+    console.log(query);
+    const inwardList = await InWard.find(query);
+    console.log(inwardList);
+
+    const salesList = await Sale.find(sales_query);
+    console.log(salesList);
+
+    dayBookData = inwardList.concat(salesList);
+    res.send(dayBookData);
+  }else {
+    const inwardList = await InWard.find({
+      doi: moment().format('Y-MM-DD'),
+    });
+    const salesList = await Sale.find({
+      dos: moment().format('Y-MM-DD'),
+    });
+    dayBookData = inwardList.concat(salesList);
+    res.send(dayBookData);
+  }
 });
 
 

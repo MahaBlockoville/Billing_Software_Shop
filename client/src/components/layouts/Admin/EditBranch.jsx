@@ -19,6 +19,7 @@ class EditBranch extends Component {
       dop: "",
       branch_id: "",
       disabled: false,
+      gst_number: "",
       // error
       error: "",
     };
@@ -53,7 +54,8 @@ class EditBranch extends Component {
       address,
       phoneNo,
       dop,
-      branch_id
+      branch_id,
+      gst_number
     } = this.state;
 
     try {
@@ -62,7 +64,8 @@ class EditBranch extends Component {
         address,
         phoneNo,
         dop,
-        branch_id
+        branch_id,
+        gst_number
       });
 
       toast.notify("Updated new branch", {
@@ -205,6 +208,20 @@ class EditBranch extends Component {
                                   placeholder="dop"
                                   onChange={this.onChange}
                                   required
+                                />
+                              </div>
+                            </div>
+                            <div className="row">
+                              {/* dop */}
+                              <div className="col-sm-6 mx-auto">
+                                <label htmlFor="dop">Gst Number</label>
+                                <input
+                                  type="text"
+                                  value={this.state.gst_number}
+                                  name="gst_number"
+                                  className="form-control mb-3 "
+                                  placeholder="Gst Number"
+                                  onChange={this.onChange}
                                 />
                               </div>
                             </div>
