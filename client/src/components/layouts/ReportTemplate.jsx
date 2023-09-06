@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "toasted-notes/src/styles.css";
 import "../../assets/billTemplate.css";
+import visaka  from "../../assets/images/visaka.jpeg";
 
 class ReportTemplate extends Component {
   constructor() {
@@ -21,8 +22,7 @@ class ReportTemplate extends Component {
                 </div>
                 <div className="col-6">
                     <div className="company-details">
-                        <p className="text-white">{this.props.branchAddress}</p>
-                        <p className="text-white">{this.props.branchPhone}</p>
+                      <img src={visaka}  height={'50px'} width={'200px'}/>
                     </div>
                 </div>
             </div>
