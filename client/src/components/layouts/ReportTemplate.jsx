@@ -18,11 +18,12 @@ class ReportTemplate extends Component {
         <div className="brand-section section1">
             <div className="row">
                 <div className="col-6">
-                    <h4 className="text-white">{this.props.branch}</h4>
+                  <img src={visaka}  alt={'branch'} height={'55px'} width={'250px'}/>
                 </div>
                 <div className="col-6">
                     <div className="company-details">
-                      <img src={visaka}  height={'50px'} width={'200px'}/>
+                    <p className="text-white">{this.props.branchAddress}</p>
+                    <p className="text-white">{this.props.branchPhone}</p>
                     </div>
                 </div>
             </div>
