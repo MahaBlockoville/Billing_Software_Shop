@@ -37,6 +37,7 @@ class ReportTemplate extends Component {
             <div className="row">
                 <div className="col-6">
                     <h2 class="heading">Buyer Details</h2>
+                    <p className="sub-heading"> Invoice No: {this.props._id} </p>
                     <p className="sub-heading"> {this.props.name} </p>
                     <p className="sub-heading"> {this.props.email} </p>
                     <p className="sub-heading"> {this.props.phone} </p>
