@@ -31,6 +31,8 @@ class EditSales extends Component {
       inwardList: [],
       sale_id: '',
       purchased_value: '',
+      sales_person: '',
+      empList: [],
       // error
       error: "",
     };
@@ -48,12 +50,16 @@ class EditSales extends Component {
         data.imei_number,
       );
     });
+    const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
+
     this.setState({
+      empList: empList.data,
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
       inwardList: inwardList.data,
       ...salesData.data
     });
+    
   };
   onBranchSelect = (branch) => {
     console.log("onBranchSelect", branch);
@@ -135,6 +141,8 @@ class EditSales extends Component {
     console.log("onChange", e.target);
     this.setState({ [e.target.name]: e.target.value });
   }
+  onEmpSelect = (sales_person) => this.setState({ sales_person });
+
 
   onCancel = (e) => {
     e.preventDefault();
@@ -278,6 +286,18 @@ class EditSales extends Component {
                                   onChange={this.onChange}
                                   readOnly={true}
                                 />
+                              </div>
+                              <div className="col">
+                              <label htmlFor="team">Sales Person</label>
+                              <select className="form-control" value={this.state.sales_person} onChange={(e) =>
+                                          this.onEmpSelect(e.target.value)
+                                        }>
+                                <option>Select</option>
+                                {this.state.empList.map((data) => (
+                                    <option value={data.name}>{data.name}</option>
+                                ))
+                                }
+                                </select>
                               </div>
                               <div className="col">
                                 {/* dos */}

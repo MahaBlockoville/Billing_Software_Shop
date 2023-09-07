@@ -238,7 +238,7 @@ router.post("/addInWard", async (req, res) => {
 
     const newInward = new InWard({
       imei_number, purchase_value, selling_value, 
-      gst_percentage, branch, product: product_value, doi, type
+      gst_percentage, branch, product: product_value, doi, type, is_sale: false
     });
     const savedInWard = await newInward.save();
     res.json(savedInWard);
@@ -257,7 +257,7 @@ router.post("/addInWard", async (req, res) => {
         { _id: req.body.inward_id },
         {
           imei_number, purchase_value, selling_value, 
-          gst_percentage, branch, product: product_value, doi
+          gst_percentage, branch, product: product_value, doi, is_sale: false
         },
         { new: true },
         function (err, result) {

@@ -30,6 +30,8 @@ class AddSales extends Component {
       branchList: [],
       inwardList: [],
       purchased_value: "",
+      sales_person: "",
+      empList: [],
       // error
       error: "",
     };
@@ -47,13 +49,17 @@ class AddSales extends Component {
          data.imei_number,
       );
     });
+    const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
     this.setState({
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
       inwardList: inwardList.data,
+      empList: empList.data,
     });
   };
   onBranchSelect = (branch) => this.setState({ branch });
+  onEmpSelect = (sales_person) => this.setState({ sales_person });
+
 
   onNumberSelect = (imei_number) => {
     const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
@@ -81,7 +87,8 @@ class AddSales extends Component {
       dos,
       gst_number,
       gst_percentage,
-      type
+      type,
+      sales_person
     } = this.state;
 
     if(selling_value < this.state.purchased_value) {
@@ -106,7 +113,8 @@ class AddSales extends Component {
           dos,
           gst_number,
           gst_percentage,
-          type
+          type,
+          sales_person
         });
   
         toast.notify("Added new item", {
@@ -270,6 +278,18 @@ class AddSales extends Component {
                                   onChange={this.onChange}
                                   readOnly={true}
                                 />
+                              </div>
+                              <div className="col">
+                              <label htmlFor="team">Sales Person</label>
+                              <select className="form-control" value={this.state.sales_person} onChange={(e) =>
+                                          this.onEmpSelect(e.target.value)
+                                        }>
+                                <option>Select</option>
+                                {this.state.empList.map((data) => (
+                                    <option value={data.name}>{data.name}</option>
+                                ))
+                                }
+                                </select>
                               </div>
                               <div className="col">
                                 {/* dos */}

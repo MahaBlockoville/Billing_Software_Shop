@@ -144,12 +144,12 @@ class AddProduct extends Component {
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* name */}
-                                <label htmlFor="name">Product Name</label>
+                                <label htmlFor="name">Brand Name</label>
                                 <input
                                   type="text"
                                   name="name"
                                   className="form-control"
-                                  placeholder="Product Name"
+                                  placeholder="Brand Name"
                                   onChange={this.onChange}
                                   required
                                 />

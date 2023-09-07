@@ -17,6 +17,7 @@ const saleSchema = new Schema({
   payment_type: { type: String },
   tenure: { type: String },
   dos: { type: String },
+  sales_person: { type: String },
   type: { type: String , default: 'wgst'},
   gst_number: { type: String },
   gst_percentage: { type: String },

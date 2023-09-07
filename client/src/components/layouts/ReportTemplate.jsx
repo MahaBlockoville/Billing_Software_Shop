@@ -21,7 +21,7 @@ class ReportTemplate extends Component {
                   <img src={visaka}  alt={'branch'} height={'55px'} width={'100px'}/>
                 </div>
                 <div className="col-2">
-                  <p className="sub-heading">{this.props.branch}</p>
+                  <p className="sub-heading">Visaka Mobiles</p>
                 </div>
                 <div className="col-6">
                     <div className="company-details">
