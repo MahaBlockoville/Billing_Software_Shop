@@ -6,5 +6,5 @@
 
 client/.pnp
 client/coverage
-client/build
+#client/build
 client/.eslintcache

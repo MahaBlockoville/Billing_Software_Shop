@@ -133,15 +133,9 @@ export default class EditInWard extends Component {
       doi,
       inward_id,
     } = this.state;
-    console.log(`onSubmit`, imei_number.length > 20 || imei_number.length < 16, imei_number.length, typeof imei_number);
-
-    if (parseInt(selling_value) < parseInt(purchase_value)) {
+ if (imei_number.length > 20 || imei_number.length < 15) {
       this.setState({
-        error: "Amount must be less than or equal to the product purchase value",
-      });
-    } else if (imei_number.length > 20 || imei_number.length < 16) {
-      this.setState({
-        error: "IMEI number must be with in 16 to 20 characters",
+        error: "IMEI number must be with in 15 to 20 characters",
       });
     } else {
             // disable signup btn

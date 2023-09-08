@@ -94,10 +94,6 @@ class EditSales extends Component {
       gst_percentage,
       sale_id
     } = this.state;
-
-    if(selling_value < this.state.purchased_value) {
-      this.setState({ error: "Amount must be less than or equal to the product selling value" });
-    }else {
     // disable signup btn
     this.setState({
       disabled: true,
@@ -134,7 +130,7 @@ class EditSales extends Component {
       console.log("ERROR: ", err.response.data.msg);
       this.setState({ error: err.response.data.msg });
     }
-    }
+    
   };
 
   onChange = (e) => {

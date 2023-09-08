@@ -91,9 +91,6 @@ class AddSales extends Component {
       sales_person
     } = this.state;
 
-    if(selling_value < this.state.purchased_value) {
-      this.setState({ error: "Amount must be less than or equal to the product selling value" });
-    }else {
           // disable signup btn
     this.setState({
       disabled: true,
@@ -132,10 +129,6 @@ class AddSales extends Component {
         console.log("ERROR: ", err.response.data.msg);
         this.setState({ error: err.response.data.msg });
       }
-    }
-
-
-
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
