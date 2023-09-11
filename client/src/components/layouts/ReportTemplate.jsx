@@ -14,115 +14,92 @@ class ReportTemplate extends Component {
   render() {
     return (
       <div className="bill-template">
-      <div className="container">
-        <div className="brand-section section1">
-            <div className="row">
-                <div className="col-4">
-                  <img src={visaka}  alt={'branch'} height={'55px'} width={'100px'}/>
-                </div>
-                <div className="col-2">
-                  <p className="sub-heading">Visaka Mobiles</p>
-                </div>
-                <div className="col-6">
-                    <div className="company-details">
-                    <p className="sub-heading">{this.props.branchGst}</p>
-                    <p className="sub-heading">{this.props.branchAddress}</p>
-                    <p className="sub-heading">{this.props.branchPhone}</p>
-                    </div>
-                </div>
+      <table className="table table-bordered">
+                  <tr>
+                <td className="header-cell" colspan="4" rowspan="3">
+        <div className="header_cell_shop_details">
+                    <div>SRI VISAKA MOBILES  </div><br/>
+                    <div> 51B OPP SLB SCHOOL </div><br/>
+                <div>COURD ROAD,NAGAR COIL -629001 (BRANCH-3) <br/>
             </div>
         </div>
+</td>
+                    <td colspan="2">D</td>
+                        <td colspan="2">E</td>
+                    </tr>
+                                    <tr>
+                        <td colspan="2">F</td>
+                        <td colspan="2">G</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">H</td>
+      <td colspan="2">I</td>
+                    </tr>
+                    <tr>
+                    <td className="header-cell" colspan="4" rowspan="2">B</td>
+      <td colspan="2">J</td>
+      <td colspan="2">K</td>
+                    </tr>
+                    <tr>
+                    <td colspan="2">L</td>
+      <td colspan="2">M</td>
+                    </tr>
+                    <tr>
+                    <td>NO</td>
+      <td className="item_cell">ITEM</td>
+      <td>HSN</td>
+      <td>QTY</td>
+      <td>RATE</td>
+      <td>GST%</td>
+      <td>AMOUNT</td>
+    </tr>
+    
+    <tr className="bold">
+      <td></td>
+      <td className="item_cell"></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+                    </tr>
 
-        <div className="body-section section2">
-            <div className="row">
-                <div className="col-6">
-                    <h2 class="heading">Buyer Details</h2>
-                    <p className="sub-heading"> Invoice No: {this.props._id} </p>
-                    <p className="sub-heading"> {this.props.name} </p>
-                    <p className="sub-heading"> {this.props.email} </p>
-                    <p className="sub-heading"> {this.props.phone} </p>
-                    <p className="sub-heading"> {this.props.address}  </p>
-                </div>
-                <div className="col-6">
-                <p className="sub-heading"> {this.props.dos} </p>
-                <p className="sub-heading">Paid: {this.props.payment_type}</p>
-                </div>
-            </div>
+                    <tr>
+                        <td colspan="3">Total Amount</td>
+      <td></td>
+      <td></td>
+      <td></td>
+                        <td>Your Total Amount</td>
+    </tr>
+   
+    <tr>
+      <td colspan="8">Amount In Words</td>
+    </tr>
+  </table>
+
+  <table className="declarations table table-bordered">
+  <tr>
+    <td colspan="8">Declarations</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" rowspan="2">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
+                        <td colspan="4">Sales Man: SRM3</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Hypothecated By : </td>
+                    </tr>
+                            </table>
+
+  <div className="signature">
+  <div>Received Signature: ___________________________</div> 
+   <div> For Buyer Signature: _________________________ </div> 
+  </div>
+  <div className="signature2">
+    Authorized Signature: _________________________
         </div>
 
-        <div className="body-section section3">
-            <table className="table table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th className="w-20">Price</th>
-                        <th className="w-20">Quantity</th>
-                        <th className="w-20">Grandtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{
-                          this.props.inward && this.props.inward.product ?
-                           this.props.inward.product.name + ' ' + this.props.inward.product.model
-                           + ' ' + this.props.inward.product.variant + ' ' + this.props.inward.product.color
-                           + " " + this.props.imei_number
-                           : ""
-                        }</td>
-                        <td className="text-center">{this.props.selling_value}</td>
-                        <td className="text-center">1</td>
-                        <td className="text-center">{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                    <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                    <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                    <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" className="text-right">CGST</td>
-                        <td className="text-center"> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" className="text-right">SGST</td>
-                        <td className="text-center"> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" className="text-right">Total</td>
-                        <td className="text-center"> {parseFloat(this.props.selling_value).toFixed(2)}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div className="body-section section4">
-            <p> 
-              Terms And Conditions. 
-            </p>
-            <ul>
-              <li>
-                Mobile, Tablet & Accessories are warranted for a period defined by the respective manufactures against defect in material 
-              </li>
-              <li>
-                 The shop Is not giving the warranty and does not hold out any warranty of products sold.
-              </li>
-              <li>
-                 The shop will not be responsible for any defect/ deficient or otherwise unsatisfactory products.
-              </li>
-              <li>
-                Goods once sold cannot be returred or exchanged
-              </li>
-            </ul>
-            <p className="text-right">
-              Customer Signature
-            </p>
-        </div>      
+        <div className="footer">
+    Thank you for your business. This is a computer-generated invoice.      
       </div>  
       </div>
     );
