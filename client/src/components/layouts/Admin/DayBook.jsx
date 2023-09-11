@@ -65,7 +65,7 @@ export default class DayBook extends Component {
 
                     {/* right part */}
                     <div className="col " style={props}>
-                    <h3>Day Book</h3>
+                      <h3>Day Book</h3>
                       <hr />
 
                       {/* branch list */}
@@ -82,31 +82,46 @@ export default class DayBook extends Component {
                             <div className="table table-striped sortable">
                               <table className="inputTable searchable sortable">
                                 <thead>
-                                  <th>Name</th>
-                                  <th>Model</th>
-                                  <th>Variant</th>
-                                  <th>Color</th>
+                                  <th>Brand Details </th>
                                   <th>Branch</th>
-                                    <th>IMEI Number</th>
-                                    <th>Category</th>
-                                    <th>Amount</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
+                                  <th>IMEI Number</th>
+                                  <th>Category</th>
+                                  <th>Amount</th>
+                                  <th>Type</th>
+                                  <th>Date</th>
                                   <th></th>
                                   <th></th>
                                 </thead>
                                 {this.state.itemList.map((data, index) => (
                                   <tbody>
-                                    <td>{data.product && data.product.name ? data.product.name : data.inward.product.name}</td>
-                                    <td>{data.product && data.product.model ? data.product.model : data.inward.product.model}</td>
-                                    <td>{data.product && data.product.variant ? data.product.variant : data.inward.product.variant}</td>
-                                    <td>{data.product && data.product.color ? data.product.color : data.inward.product.color}</td>
+                                    <td>
+                                      {data.product && data.product.name
+                                        ? data.product.name
+                                        : data.inward.product.name}{" "}
+                                      {data.product && data.product.model
+                                        ? data.product.model
+                                        : data.inward.product.model}{" "}
+                                      {data.product && data.product.variant
+                                        ? data.product.variant
+                                        : data.inward.product.variant}{" "}
+                                      {data.product && data.product.color
+                                        ? data.product.color
+                                        : data.inward.product.color}
+                                    </td>
                                     <td>{data.branch}</td>
-                                    <td>{data.imei_number ? data.imei_number : data.inward.product.imei_number}</td>
-                                    <td>{data.product && data.product.category ? data.product.category.name : data.inward.product.category.name}</td>
-                                    <td>{data.selling_value }</td>
+                                    <td>
+                                      {data.imei_number
+                                        ? data.imei_number
+                                        : data.inward.product.imei_number}
+                                    </td>
+                                    <td>
+                                      {data.product && data.product.category
+                                        ? data.product.category.name
+                                        : data.inward.product.category.name}
+                                    </td>
+                                    <td>{data.selling_value}</td>
                                     <td>{data.type}</td>
-                                    <td>{data.doi ? data.doi : data.dos }</td>
+                                    <td>{data.doi ? data.doi : data.dos}</td>
                                     <td></td>
                                     <td></td>
                                   </tbody>
