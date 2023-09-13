@@ -16,6 +16,7 @@ const Sale = require("../models/sale.model");
 const Category = require("../models/category.model");
 const Supplier = require("../models/supplier.model");
 const Product = require("../models/product.model");
+const Expense = require("../models/expense.model");
 
 // @desc: register a user
 router.post("/register", async (req, res) => {
@@ -493,6 +494,35 @@ router.get("/getEmpList", async (req, res) => {
   res.send(empList);
 });
 
+// @desc: addExpense by admin
+router.post("/addExpense", async (req, res) => {
+  try {
+    let { brand,
+      content,
+      expense,
+      doe,
+      amount } = req.body;
+    // validation
+    if (
+      !content ||
+      !expense ||
+      !doe ||
+      !amount) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+      const newExpense = new Expense({
+        brand,
+        content,
+        expense,
+        doe,
+        amount
+      });
+      const savedExpense = await newExpense.save();
+      res.json(savedExpense);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // @desc: add branch by admin
 router.post("/addBranch", async (req, res) => {
@@ -866,18 +896,31 @@ router.get("/getDayBook", async (req, res) => {
   if(req.query.from_date || req.query.to_date) {
     const query = {};
     const sales_query = {};
+    const expense_query = {};
     if (req.query.from_date != undefined && req.query.from_date != "") {
+      expense_query.doe = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+
       sales_query.dos = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+
       query.doi = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
     }else {
+      expense_query.doe = { $gte: moment().format('Y-MM-DD') };
+
       sales_query.dos = { $gte: moment().format('Y-MM-DD') };
+
       query.doi = { $gte: moment().format('Y-MM-DD') };
     }
     if (req.query.to_date != undefined && req.query.to_date != "") {
+      expense_query.doe = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+
       sales_query.dos = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+
       query.doi = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
     }else {
+      expense_query.doe = { $lte: moment().format('Y-MM-DD') };
+
       sales_query.dos = { $lte: moment().format('Y-MM-DD') };
+
       query.doi = { $lte: moment().format('Y-MM-DD') };
     }
     console.log(query);
@@ -887,8 +930,14 @@ router.get("/getDayBook", async (req, res) => {
     const salesList = await Sale.find(sales_query);
     console.log(salesList);
 
+    const expenseList = await Expense.find(expense_query);
+    console.log(expenseList);
+
     dayBookData = inwardList.concat(salesList);
-    res.send(dayBookData);
+    res.send({
+      dayBookData: dayBookData,
+      expenseList: expenseList
+    });
   }else {
     const inwardList = await InWard.find({
       doi: moment().format('Y-MM-DD'),

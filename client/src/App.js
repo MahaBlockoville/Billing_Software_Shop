@@ -47,6 +47,7 @@ import StockReport from "./components/layouts/Admin/StockReport";
 import GenerateSalesReport from "./components/layouts/Admin/GenerateSaleReport";
 import DayBook from "./components/layouts/Admin/DayBook";
 import EditBranch from "./components/layouts/Admin/EditBranch";
+import AddExpense from "./components/layouts/Admin/AddExpense";
 
 export default class App extends Component {
   render() {
@@ -85,6 +86,8 @@ export default class App extends Component {
               <Route exact path="/viewSales/:type" component={ViewSales} />
               <Route exact path="/salesBill/:id" component={GenerateSalesReport} />
               <Route exact path="/dayBook" component={DayBook} />
+              <Route exact path="/addExpense" component={AddExpense} />
+
 
               <Route exact path="/viewCategory" component={ViewCategory} />
               <Route exact path="/addCategory" component={AddCategory} />
