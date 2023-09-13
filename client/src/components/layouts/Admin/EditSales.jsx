@@ -7,6 +7,7 @@ import "../../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "../Admin/AdminSidePanel";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
+//import Select from "react-select";
 
 class EditSales extends Component {
   constructor() {
@@ -33,6 +34,8 @@ class EditSales extends Component {
       purchased_value: '',
       sales_person: '',
       empList: [],
+      selectionOption: {},
+      options: [],
       // error
       error: "",
     };
@@ -50,6 +53,13 @@ class EditSales extends Component {
         data.imei_number,
       );
     });
+    const options = [];
+    inwardList.data.map(async (data) => {
+      options.push({
+        value: data.imei_number,
+        label: data.imei_number,
+      });
+    });
     const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
 
     this.setState({
@@ -57,6 +67,11 @@ class EditSales extends Component {
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
       inwardList: inwardList.data,
+      options: options,
+      selectionOption: {
+        value: salesData.data.imei_number,
+        label: salesData.data.imei_number,
+      },
       ...salesData.data
     });
     
@@ -69,6 +84,10 @@ class EditSales extends Component {
     const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
     console.log(currentInward);
     this.setState({ 
+      selectionOption: {
+        value: imei_number,
+        label:imei_number,
+      },
       imei_number, 
       branch: currentInward[0].branch,
       purchased_value: currentInward[0].selling_value,

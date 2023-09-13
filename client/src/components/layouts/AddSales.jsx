@@ -7,6 +7,8 @@ import "../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "./Admin/AdminSidePanel";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
+import Select from "react-select";
+
 
 class AddSales extends Component {
   constructor() {
@@ -32,6 +34,8 @@ class AddSales extends Component {
       purchased_value: "",
       sales_person: "",
       empList: [],
+      selectionOption: {},
+      options: [],
       // error
       error: "",
     };
@@ -44,17 +48,21 @@ class AddSales extends Component {
     const stock=  ['firstPurchase', 'secondPurchase'];
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
     const imeiNumberList = this.state.imeiNumberList;
+    const options = [];
     inwardList.data.map(async (data) => {
-      imeiNumberList.push(
-         data.imei_number,
-      );
+      options.push({
+        value: data.imei_number,
+        label: data.imei_number,
+      });
     });
+
     const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
     this.setState({
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
       inwardList: inwardList.data,
       empList: empList.data,
+      options: options
     });
   };
   onBranchSelect = (branch) => this.setState({ branch });
@@ -65,6 +73,10 @@ class AddSales extends Component {
     const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
     console.log(currentInward);
     this.setState({ 
+      selectionOption: {
+        value: imei_number,
+        label:imei_number,
+      },
       imei_number, branch: currentInward[0].branch,
       purchased_value: currentInward[0].selling_value,
     });
@@ -135,7 +147,7 @@ class AddSales extends Component {
 
   onCancel = (e) => {
     e.preventDefault();
-    this.props.history.push('/viewSales');
+    this.props.history.push('/viewSales/' + this.state.type);
   }
 
   render() {
@@ -195,15 +207,13 @@ class AddSales extends Component {
                             <div className="row">
                               <div className="col">
                                 <label htmlFor="team">IMEI/Serial Number</label>
-                                <select className="form-control" onChange={(e) =>
-                                          this.onNumberSelect(e.target.value)
-                                        }>
-                                <option>Select</option>
-                                {this.state.imeiNumberList.map((data) => (
-                                    <option value={data}>{data}</option>
-                                ))
-                                }
-                                </select>
+                                <Select
+                                  value={this.state.selectionOption}
+                                  options={this.state.options}
+                                  onChange={(e) =>
+                                    this.onNumberSelect(e.value)
+                                  }
+                                />
                               </div>
                               <div className="col">
                                 {/* name */}

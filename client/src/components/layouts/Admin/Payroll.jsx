@@ -2,10 +2,8 @@ import axios from "axios";
 import React, { Component } from "react";
 import AdminSidePanel from "./AdminSidePanel";
 import "../../../assets/payroll/payroll.css";
-import emptyImg from "../../../assets/payroll/empty.png";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Consumer } from "../../../context";
-import ReactTooltip from "react-tooltip";
 import { Spring } from "react-spring/renderprops";
 import noEmp from "../../../assets/images/noEmp.png";
 

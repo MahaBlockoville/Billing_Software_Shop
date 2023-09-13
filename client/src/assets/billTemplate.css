@@ -1,84 +1,88 @@
 .bill-template {
 
-        
-    @page {
-        size: A4;
-        margin: 20px;
-      }
-      
-      body {
-        margin: 40px;
-        font-family: Arial, sans-serif;
-      }
+  @page {
+    size: A4;
+    margin: 20px;
+  }
   
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid black;
-      }
-  
-      .declarations {
-        position: relative;
-        margin-top: 3%;
-        width: 80%;
-        border-collapse: collapse;
-        border: 1px solid black;
-      }
-  
-      td, th {
-        border: 1px solid black;
-        text-align: center;
-        padding: 5px;
-      }
-  
-      .bold {
-        font-weight: bold;
-        height: 500px;
-      }
-  
-      .header-cell {
-        height: 80px;
-      }
-  
-      .total-cell {
-        height: 40px;
-      }
-  
-      .empty-cell {
-        height: 20px;
-      }
-  
-      .item_cell {
-        width: 800px;
-      }
-       .signature {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-        font-weight: bold;
-      }
-      .signature2
-      {
-        display: flex;
-        justify-content: end;
-        margin-top: 20px;
-        font-weight: bold;
-      }
-  
-      .footer {
-        text-align: center;
-        margin-top: 10px;
-      }
-      .header_cell_shop_details
-      {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .header_cell_shop_details p {
-        margin: 0;
-      }
-      
+  body {
+    margin: 10px;
+    font-family: Arial, sans-serif;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+
+  .declarations {
+    position: relative;
+    margin-top: 3%;
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+
+  td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+  }
+
+  .bold {
+    font-weight: bold;
+    height: 425px;
+  }
+
+  .header-cell {
+    height: 80px;
+  }
+
+  .total-cell {
+    height: 40px;
+  }
+  #header-cell {
+    height: 10px !important;
+  }
+  .empty-cell {
+    height: 20px;
+  }
+
+  .item_cell {
+    width: 900px;
+  }
+   .signature {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  .signature2
+  {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .header_cell_shop_details
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header_cell_shop_details p {
+    margin: 0;
+  }
+  #header-cell2
+  {
+    width: 50%;
+  }
 .container{
     width: 34%;
     margin-right: auto;

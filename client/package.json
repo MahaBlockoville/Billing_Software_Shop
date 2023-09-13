@@ -21,6 +21,7 @@
     "react-select": "^5.7.4",
     "react-spring": "^8.0.27",
     "react-tooltip": "^4.2.13",
+    "to-words": "^3.6.1",
     "toasted-notes": "^3.2.0",
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"

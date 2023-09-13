@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import jsPDF from 'jspdf';
+//import jsPDF from 'jspdf';
 import ReportTemplate from "../ReportTemplate";
 import axios from "axios";
 
@@ -31,7 +31,8 @@ class GenerateSalesReport extends Component {
 
 handleGeneratePdf = (e) => {
     e.preventDefault();
-    const doc = new jsPDF({
+    window.print();
+    /*const doc = new jsPDF({
 			format: 'a4',
 			unit: 'pt',
 		});
@@ -44,18 +45,19 @@ handleGeneratePdf = (e) => {
 			async callback(doc) {
 				await doc.save('document');
 			},
-		});
+		});*/
 
   };
 
   render() {
     return (
-        <div>
+        <div className="text-center">
         <input
         onClick={this.handleGeneratePdf}
         type="button"
-        value="Generate PDF"
-        className="btn btn-primary"
+        value="Invoice"
+        className="btn"
+        style={{backgroundColor: 'black', color: 'white'}}
         />
         <div ref={this.reportTemplateRef}>
         <ReportTemplate {...this.state} />
