@@ -71,11 +71,8 @@ export default class InWardCard extends Component {
             inwardList.length > 0 &&
             <table className="inputTable searchable sortable" ref={this.exportTableRef}>
             <tr>
-             <th>Brand Name</th>
+            <th>Brand Details </th>
               <th>IMEI/Serial Number</th>
-              <th>Variant</th>
-              <th>Model</th>
-              <th>Color</th>
               <th>GST Percentage</th>
               <th>Purchase Value</th>
               <th>Selling Value</th>
@@ -87,11 +84,8 @@ export default class InWardCard extends Component {
             </tr>
          {inwardList.map((data, index) => (
            <tr>
-                <td>{data.product.name}</td>
+                <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color}</td>
                 <td>{data.imei_number}</td>
-                <td>{data.product.variant}</td>
-                <td>{data.product.model}</td>
-                <td>{data.product.color}</td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}</td>
                 <td>{data.selling_value}</td>

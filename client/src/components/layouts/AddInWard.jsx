@@ -17,15 +17,17 @@ class AddInWard extends Component {
       categories: [],
       disabled: false,
       name: "",
-      imei_number: "",
+      imei_number: [],
       purchase_value: "",
       selling_value: "",
       gst_percentage: "",
       doi: "",
+      quantity: "",
       branch: "Select Branch",
       product: "",
       branchList: [],
       productList: [],
+      imeiNumberList: [],
       selectionOption: {},
       location: "",
       options: [],
@@ -109,12 +111,17 @@ class AddInWard extends Component {
       product,
       doi,
       type,
+      quantity
     } = this.state;
-   if (imei_number.length > 20 || imei_number.length < 15) {
-      this.setState({
-        error: "IMEI number must be with in 15 to 20 characters",
-      });
-    } else {
+   /*if (imei_number.length > 0) {
+    imei_number.map(async (data, i) => {
+      if(data.length > 20 || data.length < 15) {
+        this.setState({
+          error: i + "IMEI number must be with in 15 to 20 characters",
+        });
+      }
+    })
+    } else {*/
       // disable signup btn
       this.setState({
         disabled: true,
@@ -124,13 +131,14 @@ class AddInWard extends Component {
           process.env.REACT_APP_API_URL + "/api/admin/addInWard",
           {
             imei_number,
-            purchase_value,
-            selling_value,
+            purchase_value: parseInt(purchase_value)/parseInt(quantity),
+            selling_value: parseInt(selling_value)/parseInt(quantity),
             gst_percentage,
             branch,
             product,
             doi,
             type,
+            quantity
           }
         );
 
@@ -149,12 +157,33 @@ class AddInWard extends Component {
         console.log("ERROR: ", err.response.data.msg);
         this.setState({ error: err.response.data.msg });
       }
-    }
+    //}
   };
 
   onCategorySelect = (category) => this.setState({ category });
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  onQuantityChange = (e) => {
+    const imeiNumberList = [];
+    for(let i = e.target.value - 1; i >= 0; i--) {
+      console.log(`onQuantityChange`, i);
+      imeiNumberList.push(i);
+    }
+    this.setState({ 
+      [e.target.name]: e.target.value,
+      imeiNumberList: imeiNumberList
+    });
+  }
+
+  onNumberChange = (i, e) => {
+    const temp = this.state.imei_number;
+    const val = e.target.value;
+    temp[i] = val;
+    this.setState({
+      imei_number: temp,
+    });
+  };
 
   onCancel = (e) => {
     e.preventDefault();
@@ -255,36 +284,56 @@ class AddInWard extends Component {
                                   required
                                 />
                               </div>
-                              {this.state.category !== "Accessories" ? (
-                                <div className="col">
+                              <div className="col">
                                   {/* email */}
+                                  <label htmlFor="quantity">
+                                  Quantity
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="quantity"
+                                    className="form-control mb-3 "
+                                    placeholder="Quantity"
+                                    onChange={this.onQuantityChange}
+                                    required
+                                  />
+                                </div>
+                            </div>
+                            <div className="row">
+                            {this.state.category !== "Accessories" ? (
+                                this.state.imeiNumberList.map((data) => {
+                                  return <div className="col">
                                   <label htmlFor="imei_number">
                                     IMEI Number
                                   </label>
                                   <input
                                     type="number"
                                     name="imei_number"
+                                    value={this.state.imei_number[data]}
                                     className="form-control mb-3 "
                                     placeholder="IMEI Number"
-                                    onChange={this.onChange}
+                                    onChange={(e) => this.onNumberChange(data, e)}
                                     required
                                   />
                                 </div>
+                                })
                               ) : (
-                                <div className="col">
-                                  {/* email */}
+                                this.state.imeiNumberList.map((data) => {
+                                  return <div className="col">
                                   <label htmlFor="imei_number">
                                     Serial Number
                                   </label>
                                   <input
                                     type="number"
                                     name="imei_number"
+                                    value={this.state.imei_number[data]}
                                     className="form-control mb-3 "
                                     placeholder="Serial Number"
-                                    onChange={this.onChange}
+                                    onChange={(e) => this.onNumberChange(data, e)}
                                     required
                                   />
                                 </div>
+                                })
                               )}
                             </div>
                             <div className="row">

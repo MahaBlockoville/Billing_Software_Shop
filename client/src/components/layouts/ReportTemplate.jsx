@@ -156,7 +156,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr>
     <td colspan="4" rowspan="2">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4">Sales Man: SRM3</td>
+    <td colspan="4">Sales Man: {this.props.sales_person}</td>
   </tr>
   <tr>
     <td colspan="4">Hypothecated By : </td>

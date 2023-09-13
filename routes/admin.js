@@ -212,15 +212,17 @@ router.post("/addEmployee", async (req, res) => {
 // @desc: add addInWard by admin
 router.post("/addInWard", async (req, res) => {
   try {
+    console.log("Please enter", req.body.imei_number);
+
     let {  imei_number, purchase_value, selling_value, 
-      gst_percentage, branch, product, doi, type } = req.body;
+      gst_percentage, branch, product, doi, type, quantity } = req.body;
     // validation
     if (
-      !imei_number ||
       !purchase_value||
       !selling_value ||
       !branch ||
       !product ||
+      !quantity ||
       !doi) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
@@ -228,21 +230,24 @@ router.post("/addInWard", async (req, res) => {
     const product_value = await Product.findOne({_id: product});
 
     if(!req.body.inward_id) {
-    
-    const existing = await InWard.findOne({ imei_number: imei_number });
-    console.log(existing, 'existing');
-    if (existing) {
-      return res.status(400).json({
-        msg: "The imei_number is already in use by another stock.",
+    console.log("Please enter", imei_number);
+    imei_number.length > 0 && imei_number.map(async (data) => {
+      const existing = await InWard.findOne({ imei_number: data });
+      console.log(existing, 'existing');
+      if (existing) {
+        return res.status(400).json({
+          msg: "The imei_number is already in use by another stock.",
+        });
+      }
+      const newInward = new InWard({
+        imei_number: data, purchase_value, selling_value, 
+        gst_percentage, branch, product: product_value, doi, type, is_sale: false
       });
-    }
+      const savedInWard = await newInward.save();
+      res.json(savedInWard);
+    })
+    /**/
 
-    const newInward = new InWard({
-      imei_number, purchase_value, selling_value, 
-      gst_percentage, branch, product: product_value, doi, type, is_sale: false
-    });
-    const savedInWard = await newInward.save();
-    res.json(savedInWard);
     }else {
       const existing = await InWard.findOne({ 
         imei_number: imei_number,
