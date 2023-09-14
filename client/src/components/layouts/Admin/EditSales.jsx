@@ -36,6 +36,13 @@ class EditSales extends Component {
       empList: [],
       selectionOption: {},
       options: [],
+      finance_name: '', 
+      order_no: '', 
+      is_same: false,
+      shipping_address: '',
+      shipping_name: '', 
+      shipping_email: '', 
+      shipping_phone: '',
       // error
       error: "",
     };
@@ -57,7 +64,13 @@ class EditSales extends Component {
     inwardList.data.map(async (data) => {
       options.push({
         value: data.imei_number,
-        label: data.imei_number,
+        label: data.product.name +
+        " - " +
+        data.product.model +
+        " - " +
+        data.product.variant +
+        " - " +
+        data.product.color + '-' + data.imei_number,
       });
     });
     const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
@@ -70,7 +83,14 @@ class EditSales extends Component {
       options: options,
       selectionOption: {
         value: salesData.data.imei_number,
-        label: salesData.data.imei_number,
+        //label: salesData.data.imei_number
+        label: salesData.data.inward.product.name +
+        " - " +
+        salesData.data.inward.product.model +
+        " - " +
+        salesData.data.inward.product.variant +
+        " - " +
+        salesData.data.inward.product.color + '-' + salesData.data.imei_number,
       },
       ...salesData.data
     });
@@ -80,19 +100,6 @@ class EditSales extends Component {
     console.log("onBranchSelect", branch);
     this.setState({ branch });
   }
-  onNumberSelect = (imei_number) => {
-    const currentInward = this.state.inwardList.filter(inward => inward.imei_number === imei_number);
-    console.log(currentInward);
-    this.setState({ 
-      selectionOption: {
-        value: imei_number,
-        label:imei_number,
-      },
-      imei_number, 
-      branch: currentInward[0].branch,
-      purchased_value: currentInward[0].selling_value,
-    });
-  };
 
   onPaymentSelect = (payment_type) => this.setState({ payment_type });
 
@@ -111,7 +118,9 @@ class EditSales extends Component {
       dos,
       gst_number,
       gst_percentage,
-      sale_id
+      sale_id,
+      sales_person,
+      finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
     } = this.state;
     // disable signup btn
     this.setState({
@@ -131,7 +140,9 @@ class EditSales extends Component {
         dos,
         gst_number,
         gst_percentage,
-        sale_id
+        sale_id,
+        sales_person,
+        finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
       });
 
       toast.notify("Added new item", {
@@ -332,7 +343,7 @@ class EditSales extends Component {
                             </div>
 
                             <div className="row">
-                              <div className="col-md-4">
+                              <div className="col">
                                 <label htmlFor="team">Payment Type</label>
                                 <select className="form-control" value={this.state.payment_type} onChange={(e) =>
                                           this.onPaymentSelect(e.target.value)
@@ -345,7 +356,32 @@ class EditSales extends Component {
                                 </select>
                               </div>
                               {this.state.payment_type === "EMI" && (
-                                <div className="col-md-4">
+                                <>
+                                <div className="col">
+                                <label>Finance Name</label>
+                                  <input
+                                    type="text"
+                                    value={this.state.finance_name}
+                                    name="finance_name"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    
+                                  />
+                                </div>
+                                <div className="col">
+                                <label>Order No</label>
+                                  <input
+                                    type="text"
+                                    value={this.state.order_no}
+                                    name="order_no"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+
+                                <div className="col">
                                   <label htmlFor="doj">Initial Amount</label>
                                   <input
                                     type="number"
@@ -357,8 +393,9 @@ class EditSales extends Component {
                                     required
                                   />
                                 </div>
+                                </>
                               )}
-                              <div className="col-md-4">
+                              <div className="col">
                                 <label>Amount</label>
                                 <input
                                   type="number"
@@ -400,6 +437,76 @@ class EditSales extends Component {
                               </div>
                             </div>
                             }
+                                                        <div className="row">
+                              <div className="col">
+                              <label className="checkbox-holder">
+                                <input
+                                  type="checkbox"
+                                  name="is_information_saved"
+                                  className="me-2"
+                                  checked={this.state.is_same}
+                                  onChange={(e) =>
+                                    this.setState({
+                                      is_same: e.target.checked,
+                                      shipping_name: this.state.name,
+                                      shipping_address: this.state.address,
+                                      shipping_email: this.state.email,
+                                      shipping_phone: this.state.phone
+                                    })
+                                  }
+                                />
+                                Save this information for shipping
+                              </label>
+                              </div>
+                              <div className="col">
+                                  <label>Shipping User Name</label>
+                                  <input
+                                    type="text"
+                                    value={this.state.is_same ? this.state.name : this.state.shipping_name}
+                                    name="shipping_name"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Address</label>
+                                  <input
+                                    type="text"
+                                    name="shipping_address"
+                                    value={this.state.is_same ? this.state.address : this.state.shipping_address}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Email</label>
+                                  <input
+                                    type="email"
+                                    name="shipping_email"
+                                    value={this.state.is_same ? this.state.email : this.state.shipping_email}
+                                    readOnly={this.state.is_same}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Phone</label>
+                                  <input
+                                    type="number"
+                                    name="shipping_phone"
+                                    value={this.state.is_same ? this.state.phone : this.state.shipping_phone}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                            </div>
                             <br />
                             <input
                                   disabled={this.state.disabled}

@@ -17,6 +17,7 @@ class AddProduct extends Component {
       model: "",
       color: "", 
       variant: "", 
+      hsn: "",
       category: "",
       supplier: "",
       categoryList: [],
@@ -45,12 +46,12 @@ class AddProduct extends Component {
     });
 
     const {
-      name, model, color, variant, category, supplier
+      name, model, color, variant, category, supplier, hsn
     } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addProduct", {
-        name, model, color, variant, category, supplier
+        name, model, color, variant, category, supplier, hsn
       });
 
       toast.notify("Added new product", {
@@ -192,6 +193,20 @@ class AddProduct extends Component {
                                   name="variant"
                                   className="form-control"
                                   placeholder="Variant"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              </div>
+                              <div className="row">
+                              <div className="col-sm-6 mx-auto">
+                                {/* name */}
+                                <label htmlFor="name">HSN</label>
+                                <input
+                                  type="number"
+                                  name="hsn"
+                                  className="form-control"
+                                  placeholder="HSN"
                                   onChange={this.onChange}
                                   required
                                 />

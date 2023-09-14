@@ -4,7 +4,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel-3';
 
 export default class SaleCard extends Component {
   constructor() {
@@ -49,19 +49,32 @@ export default class SaleCard extends Component {
 
   render() {
     const { salesList } = this.props;
-    const currentdate = "sales " + this.props.type  + ' '+ new Date().toISOString().split('T')[0];
+    const currentdate = "sales " + this.props.type  + ' '+ new Date().toISOString().split('T')[0] +'.xlsx';
     return (        
         <div className="table table-striped sortable">
-          <DownloadTableExcel
-            filename={currentdate}
-            sheet="stock"
-            currentTableRef={this.exportTableRef.current}
-        >
-            <button className="btn btn-primary pull-right">
-            <i className="fa fa-download"></i>  Export excel 
-            </button>
-        </DownloadTableExcel>
-         <table className="inputTable searchable sortable" ref={this.exportTableRef}>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+          <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-xlsx"
+        filetype="xlsx"
+        buttonText="Download XLSX"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableRef.current}
+        />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-xlsx"
+        filetype="xls"
+        buttonText="Download XLS"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableRef.current}
+        />
+         <table className="inputTable searchable sortable" id="table-to-xlsx" ref={this.exportTableRef}>
            <tr>
             <th>Name</th>
             <th>Phone</th>

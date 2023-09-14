@@ -36,6 +36,13 @@ class AddSales extends Component {
       empList: [],
       selectionOption: {},
       options: [],
+      finance_name: '', 
+      order_no: '', 
+      is_same: false,
+      shipping_address: '',
+      shipping_name: '', 
+      shipping_email: '', 
+      shipping_phone: '',
       // error
       error: "",
     };
@@ -52,7 +59,13 @@ class AddSales extends Component {
     inwardList.data.map(async (data) => {
       options.push({
         value: data.imei_number,
-        label: data.imei_number,
+        label: data.product.name +
+        " - " +
+        data.product.model +
+        " - " +
+        data.product.variant +
+        " - " +
+        data.product.color + '-' + data.imei_number,
       });
     });
 
@@ -75,7 +88,13 @@ class AddSales extends Component {
     this.setState({ 
       selectionOption: {
         value: imei_number,
-        label:imei_number,
+        label: currentInward[0].product.name +
+        " - " +
+        currentInward[0].product.model +
+        " - " +
+        currentInward[0].product.variant +
+        " - " +
+        currentInward[0].product?.color + '-' + imei_number,
       },
       imei_number, branch: currentInward[0].branch,
       purchased_value: currentInward[0].selling_value,
@@ -100,7 +119,8 @@ class AddSales extends Component {
       gst_number,
       gst_percentage,
       type,
-      sales_person
+      sales_person,
+      finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
     } = this.state;
 
           // disable signup btn
@@ -123,7 +143,8 @@ class AddSales extends Component {
           gst_number,
           gst_percentage,
           type,
-          sales_person
+          sales_person,
+          finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
         });
   
         toast.notify("Added new item", {
@@ -311,7 +332,7 @@ class AddSales extends Component {
                             </div>
 
                             <div className="row">
-                              <div className="col-md-4">
+                              <div className="col">
                                 <label htmlFor="team">Payment Type</label>
                                 <select className="form-control" onChange={(e) =>
                                           this.onPaymentSelect(e.target.value)
@@ -324,7 +345,30 @@ class AddSales extends Component {
                                 </select>
                               </div>
                               {this.state.payment_type === "EMI" && (
-                                <div className="col-md-4">
+                                <>
+                                                                <div className="col">
+                                <label>Finance Name</label>
+                                  <input
+                                    type="text"
+                                    name="finance_name"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    
+                                  />
+                                </div>
+                                <div className="col">
+                                <label>Order No</label>
+                                  <input
+                                    type="text"
+                                    name="order_no"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    
+                                  />
+                                </div>
+                                <div className="col">
                                   <label htmlFor="doj">Initial Amount</label>
                                   <input
                                     type="number"
@@ -335,8 +379,9 @@ class AddSales extends Component {
                                     required
                                   />
                                 </div>
+                                </>
                               )}
-                              <div className="col-md-4">
+                              <div className="col">
                                 <label>Amount</label>
                                 <input
                                   type="number"
@@ -375,6 +420,76 @@ class AddSales extends Component {
                                 </div>
                               </div>
                             }
+                            <div className="row">
+                              <div className="col">
+                              <label className="checkbox-holder">
+                                <input
+                                  type="checkbox"
+                                  name="is_information_saved"
+                                  className="me-2"
+                                  checked={this.state.is_same}
+                                  onChange={(e) =>
+                                    this.setState({
+                                      is_same: e.target.checked,
+                                      shipping_name: this.state.name,
+                                      shipping_address: this.state.address,
+                                      shipping_email: this.state.email,
+                                      shipping_phone: this.state.phone
+                                    })
+                                  }
+                                />
+                                Save this information for shipping
+                              </label>
+                              </div>
+                              <div className="col">
+                                  <label>Shipping User Name</label>
+                                  <input
+                                    type="text"
+                                    value={this.state.is_same ? this.state.name : this.state.shipping_name}
+                                    name="shipping_name"
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Address</label>
+                                  <input
+                                    type="text"
+                                    name="shipping_address"
+                                    value={this.state.is_same ? this.state.address : this.state.shipping_address}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Email</label>
+                                  <input
+                                    type="email"
+                                    name="shipping_email"
+                                    value={this.state.is_same ? this.state.email : this.state.shipping_email}
+                                    readOnly={this.state.is_same}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+                                <div className="col">
+                                  <label>Shipping User Phone</label>
+                                  <input
+                                    type="number"
+                                    name="shipping_phone"
+                                    value={this.state.is_same ? this.state.phone : this.state.shipping_phone}
+                                    className="form-control mb-3 "
+                                    placeholder="Type value"
+                                    onChange={this.onChange}
+                                    readOnly={this.state.is_same}
+                                  />
+                                </div>
+                            </div>
 
                             <br />
                             <input

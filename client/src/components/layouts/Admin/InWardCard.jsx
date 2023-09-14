@@ -4,7 +4,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import axios from "axios";
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel-3';
 
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
@@ -52,30 +52,49 @@ export default class InWardCard extends Component {
     }
   };
 
+  onClickExcel = async (e) => {
+    e.preventDefault();
+    console.log("clickExcel", e.target);
+  };
+
   render() {
     const { inwardList } = this.props;
     const currentdate = "stock " + this.props.type  + ' ' +  new Date().toISOString().split('T')[0];
 
     return (
         <div className="table table-striped sortable">
-        <DownloadTableExcel
-            filename={currentdate}
-            sheet="stock"
-            currentTableRef={this.exportTableRef.current}
-        >
-            <button className="btn btn-primary pull-right">
-            <i className="fa fa-download"></i>  Export excel 
-            </button>
-        </DownloadTableExcel>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+        <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-xlsx"
+        filetype="xlsx"
+        buttonText="Download XLSX"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableRef.current}
+        />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-xlsx"
+        filetype="xls"
+        buttonText="Download XLS"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableRef.current}
+        />
           {
             inwardList.length > 0 &&
-            <table className="inputTable searchable sortable" ref={this.exportTableRef}>
+            <table className="inputTable searchable sortable" id="table-to-xlsx" ref={this.exportTableRef}>
             <tr>
             <th>Brand Details </th>
               <th>IMEI/Serial Number</th>
               <th>GST Percentage</th>
               <th>Purchase Value</th>
               <th>Selling Value</th>
+              <th>Reference Invoice Number</th>
               <th>Date</th>
              <th>
              </th>
@@ -89,6 +108,7 @@ export default class InWardCard extends Component {
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}</td>
                 <td>{data.selling_value}</td>
+                <td>{data.reference_invoice_number ? data.reference_invoice_number : ''}</td>
                 <td>{this.onGetDate(data.doi)}</td>
                 <td>
                   <Link

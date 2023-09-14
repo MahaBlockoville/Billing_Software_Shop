@@ -21,6 +21,7 @@ class AddInWard extends Component {
       purchase_value: "",
       selling_value: "",
       gst_percentage: "",
+      reference_invoice_number: "",
       doi: "",
       quantity: "",
       branch: "Select Branch",
@@ -111,7 +112,8 @@ class AddInWard extends Component {
       product,
       doi,
       type,
-      quantity
+      quantity,
+      reference_invoice_number
     } = this.state;
    /*if (imei_number.length > 0) {
     imei_number.map(async (data, i) => {
@@ -138,7 +140,8 @@ class AddInWard extends Component {
             product,
             doi,
             type,
-            quantity
+            quantity,
+            reference_invoice_number
           }
         );
 
@@ -401,6 +404,19 @@ class AddInWard extends Component {
                                     ))}
                                   </div>
                                 </div>
+                              </div>
+                              <div className="col">
+                                <label htmlFor="reference_invoice_number">
+                                Reference Invoice Number
+                                </label>
+                                <input
+                                  type="number"
+                                  name="reference_invoice_number"
+                                  value={this.state.reference_invoice_number}
+                                  className="form-control mb-3 "
+                                  placeholder="Reference Invoice Number"
+                                  onChange={this.onChange}
+                                />
                               </div>
                               {/* role */}
                               {this.state.type === "firstPurchase" && (

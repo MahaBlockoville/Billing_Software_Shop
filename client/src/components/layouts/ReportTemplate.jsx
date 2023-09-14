@@ -43,7 +43,7 @@ class ReportTemplate extends Component {
     <td colspan="3">
       <div>
         <div>Order No:</div>
-        <span id="Order No">{this.props._id}</span>
+        <span id="Order No">{this.props.order_no ? this.props.order_no : this.props.order_no}</span>
       </div>
     </td>
   </tr>
@@ -70,7 +70,9 @@ class ReportTemplate extends Component {
       <div>
         <div className="header_cell_shop_details">
          <div>Shipping Details:</div>
-         <span id="Shipping Details">{this.props.name} - {this.props.address} - {this.props.phone}</span>
+         <span id="Shipping Details">{this.props.shipping_name ? this.props.shipping_name : ''} 
+         - {this.props.shipping_address ? this.props.shipping_address : ''} 
+         - {this.props.shipping_phone ? this.props.shipping_phone : ''}</span>
         </div>
       </div>
     </td>
@@ -159,7 +161,7 @@ class ReportTemplate extends Component {
     <td colspan="4">Sales Man: {this.props.sales_person}</td>
   </tr>
   <tr>
-    <td colspan="4">Hypothecated By : </td>
+    <td colspan="4">Hypothecated By : {this.props.finance_name}</td>
   </tr>
   </table>
 
