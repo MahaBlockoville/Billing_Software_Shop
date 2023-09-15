@@ -215,14 +215,13 @@ router.post("/addInWard", async (req, res) => {
     console.log("Please enter", req.body.imei_number);
 
     let {  imei_number, purchase_value, selling_value, 
-      gst_percentage, branch, product, doi, type, quantity } = req.body;
+      gst_percentage, branch, product, doi, type, quantity, reference_invoice_number } = req.body;
     // validation
     if (
       !purchase_value||
       !selling_value ||
       !branch ||
       !product ||
-      !quantity ||
       !doi) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
@@ -235,13 +234,16 @@ router.post("/addInWard", async (req, res) => {
       const existing = await InWard.findOne({ imei_number: data });
       console.log(existing, 'existing');
       if (existing) {
+        const message = existing.product.category.name  === 'Accessories' ? 
+        "The serial_number is already in use by another stock." : 
+        "The imei_number is already in use by another stock.";
         return res.status(400).json({
-          msg: "The imei_number is already in use by another stock.",
+          msg: message,
         });
       }
       const newInward = new InWard({
         imei_number: data, purchase_value, selling_value, 
-        gst_percentage, branch, product: product_value, doi, type, is_sale: false
+        gst_percentage, branch, product: product_value, doi, type, is_sale: false, reference_invoice_number
       });
       const savedInWard = await newInward.save();
       res.json(savedInWard);
@@ -255,15 +257,18 @@ router.post("/addInWard", async (req, res) => {
       });
       console.log(existing, 'existing');
       if (existing) {
+        const message = existing.product.category.name  === 'Accessories' ? 
+        "The serial_number is already in use by another stock." : 
+        "The imei_number is already in use by another stock.";
         return res.status(400).json({
-          msg: "The imei_number is already in use by another stock.",
+          msg: message,
         });
       }
       InWard.findOneAndUpdate(
         { _id: req.body.inward_id },
         {
           imei_number, purchase_value, selling_value, 
-          gst_percentage, branch, product: product_value, doi, is_sale: false
+          gst_percentage, branch, product: product_value, doi, is_sale: false, reference_invoice_number
         },
         { new: true },
         function (err, result) {
@@ -285,7 +290,8 @@ router.post("/addInWard", async (req, res) => {
 router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type } = req.body;
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
+      finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
     if (
       !name ||
@@ -305,8 +311,9 @@ router.post("/addSale", async (req, res) => {
     const newSaleItem = new Sale({
       name, imei_number, phone, address, email, selling_value, 
       tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
-      category: inward_value.category,
-      inward: inward_value
+      category: inward_value.category, sales_person,
+      inward: inward_value, finance_name, order_no, shipping_address, 
+      shipping_name, shipping_email, shipping_phone
     });
     const savedSaleItem = await newSaleItem.save();
     res.json(savedSaleItem);
@@ -315,8 +322,9 @@ router.post("/addSale", async (req, res) => {
         { _id: req.body.sale_id },
         {
           name, imei_number, phone, address, email, selling_value, 
-          tenure, branch, payment_type, dos, gst_number, gst_percentage,
-          category: inward_value.category, inward: inward_value
+          tenure, branch, payment_type, dos, gst_number, gst_percentage,sales_person,
+          category: inward_value.category, inward: inward_value, finance_name, order_no, 
+          shipping_address, shipping_name, shipping_email, shipping_phone
         },
         { new: true },
         function (err, result) {
@@ -791,7 +799,7 @@ router.delete("/deleteSupplier/:id", async (req, res) => {
 router.post("/addProduct", async (req, res) => {
   try {
 
-    let { name, variant, model, color, supplier, category } = req.body;
+    let { name, variant, model, color, supplier, category, hsn } = req.body;
     // validation
     if (
       !name ||
@@ -799,6 +807,7 @@ router.post("/addProduct", async (req, res) => {
       !model ||
       !color ||
       !supplier ||
+      !hsn ||
       !category) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
@@ -806,7 +815,7 @@ router.post("/addProduct", async (req, res) => {
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
-        name, variant, model, color, supplier: supplier_value, category: category_value
+        name, variant, model, color, supplier: supplier_value, category: category_value, hsn
       });
       const savedProduct = await newProduct.save();
       res.json(savedProduct);
@@ -814,7 +823,7 @@ router.post("/addProduct", async (req, res) => {
       Product.findOneAndUpdate(
         { _id: req.body.product_id },
         {
-          name, variant, model, color, supplier: supplier_value, category: category_value
+          name, variant, model, color, supplier: supplier_value, category: category_value, hsn
         },
         { new: true },
         function (err, result) {
@@ -871,7 +880,7 @@ router.get("/getInWardList", async (req, res) => {
   }
   query.is_sale = false;
   console.log(query);
-  const inwardList = await InWard.find(query);
+  const inwardList = await InWard.find(query).sort({_id: -1});
   res.send(inwardList);
 });
 
@@ -890,7 +899,7 @@ router.get("/getSalesList", async (req, res) => {
     }
   }
   console.log(query);
-  const salesList = await Sale.find(query);
+  const salesList = await Sale.find(query).sort({_id: -1});
   res.send(salesList);
 });
 
@@ -1126,7 +1135,7 @@ router.post("/searchInward", async (req, res) => {
   }
   filter.$and.push({is_sale: false});
   console.log(filter);
-  InWard.find(filter)
+  InWard.find(filter).sort({_id: -1})
     .then((emp) => {
       res.json(emp);
     })
@@ -1139,6 +1148,7 @@ router.post("/searchSale", async (req, res) => {
   let dos = req.body.dos;
   let category = req.body.category;
   let type = req.body.type;
+  let branch = req.body.branch;
 
   if (dos === "") dos = new RegExp(/.+/s);
   if(branch === "" )branch = new RegExp(/.+/s);
@@ -1168,7 +1178,7 @@ router.post("/searchSale", async (req, res) => {
     filter.$and.push({type: type});
   }
   console.log(filter);
-  Sale.find(filter)
+  Sale.find(filter).sort({_id: -1})
     .then((emp) => {
       res.json(emp);
     })

@@ -9,6 +9,7 @@ const inWardSchema = new Schema({
   },
   product: { type: Object },
   purchase_value: { type: String },
+  reference_invoice_number: {type: String},
   quantity: { type: Number },
   selling_value: { type: String },
   gst_percentage: { type: String },

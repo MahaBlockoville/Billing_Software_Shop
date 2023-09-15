@@ -135,11 +135,6 @@ export default class EditInWard extends Component {
       inward_id,
       reference_invoice_number
     } = this.state;
- if (imei_number.length > 20 || imei_number.length < 15) {
-      this.setState({
-        error: "IMEI number must be with in 15 to 20 characters",
-      });
-    } else {
             // disable signup btn
       this.setState({
         disabled: true,
@@ -175,7 +170,6 @@ export default class EditInWard extends Component {
         console.log("ERROR: ", err.response.data.msg);
         this.setState({ error: err.response.data.msg });
       }
-    }
   };
 
   onCategorySelect = (category) => this.setState({ category });
@@ -280,6 +274,7 @@ export default class EditInWard extends Component {
                                   readOnly={true}
                                 />
                               </div>
+                              {this.state.category !== "Accessories" ? (
                               <div className="col">
                                 {/* email */}
                                 <label htmlFor="imei_number">IMEI Number</label>
@@ -290,9 +285,24 @@ export default class EditInWard extends Component {
                                   className="form-control mb-3 "
                                   placeholder="IMEI Number"
                                   onChange={this.onChange}
-                                  required
                                 />
                               </div>
+                              )
+                              : (
+                              <div className="col">
+                                {/* email */}
+                                <label htmlFor="imei_number">Serial Number</label>
+                                <input
+                                  type="number"
+                                  name="imei_number"
+                                  value={this.state.imei_number}
+                                  className="form-control mb-3 "
+                                  placeholder="Serial Number"
+                                  onChange={this.onChange}
+                                />
+                              </div>
+                              )
+                              }
                             </div>
                             <div className="row">
                               <div className="col">
@@ -357,20 +367,21 @@ export default class EditInWard extends Component {
                                 />
                               </div>
                               {/* role */}
-                              <div className="col">
-                                <label htmlFor="gst_percentage">
-                                  GST Percentage
-                                </label>
-                                <input
-                                  type="number"
-                                  name="gst_percentage"
-                                  value={this.state.gst_percentage}
-                                  className="form-control mb-3 "
-                                  placeholder="GST Percentage"
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
+                              {this.state.type === "firstPurchase" && (
+                                <div className="col">
+                                  <label htmlFor="gst_percentage">
+                                    GST Percentage
+                                  </label>
+                                  <input
+                                    type="number"
+                                    name="gst_percentage"
+                                    value={this.state.gst_percentage}
+                                    className="form-control mb-3 "
+                                    placeholder="GST Percentage"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+                              )}
                             </div>
                             <div className="row">
                               <div className="col-md-6">

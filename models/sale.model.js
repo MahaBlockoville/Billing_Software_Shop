@@ -18,7 +18,13 @@ const saleSchema = new Schema({
   tenure: { type: String },
   dos: { type: String },
   sales_person: { type: String },
+  finance_name: { type: String },
+  order_no: { type: String },
   type: { type: String , default: 'wgst'},
+  shipping_name: { type: String },
+  shipping_phone: { type: String },
+  shipping_address: { type: String },
+  shipping_email: { type: String },
   gst_number: { type: String },
   gst_percentage: { type: String },
 });

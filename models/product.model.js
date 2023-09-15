@@ -9,6 +9,7 @@ const productSchema = new Schema({
   color: { type: String },
   variant: { type: String },
   model: { type: String },
+  hsn: { type: Number },
   category: { type: Object },
   supplier: { type: Object }
 });
