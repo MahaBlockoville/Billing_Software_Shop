@@ -208,7 +208,6 @@ class AddProduct extends Component {
                                   className="form-control"
                                   placeholder="HSN"
                                   onChange={this.onChange}
-                                  required
                                 />
                               </div>
                               </div>

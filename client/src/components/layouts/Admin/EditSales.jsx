@@ -294,7 +294,6 @@ class EditSales extends Component {
                                   className="form-control mb-3 "
                                   placeholder="Email"
                                   onChange={this.onChange}
-                                  required
                                 />
                               </div>
                             </div>
