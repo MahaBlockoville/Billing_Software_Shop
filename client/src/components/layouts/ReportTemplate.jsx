@@ -3,7 +3,6 @@ import "toasted-notes/src/styles.css";
 import "../../assets/billTemplate.css";
 import { ToWords } from 'to-words';
 import visaka  from "../../assets/images/visaka_icon.jpeg";
-import moment from "moment";
 
 const toWords = new ToWords();
 
@@ -21,10 +20,10 @@ class ReportTemplate extends Component {
        <table className="table table-bordered">
   <tr>
     <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", backgroundPosition: 'right', backgroundSize: '250px'}}>
-      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '22px', fontWeight: 'bold'}}>
-        <div>SRI VISAKA MOBILES</div><br/>
-        <div>{this.props.branchAddress}</div><br/>
-        <div>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
+      <div className="header_cell_shop_details">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>SRI VISAKA MOBILES</div><br/>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div><br/>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
       </div>
     </td>
     <td colspan="2" >

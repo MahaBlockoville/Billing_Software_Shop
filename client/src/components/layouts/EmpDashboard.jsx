@@ -22,12 +22,12 @@ export default class EmpDashboard extends Component {
   }
 
   componentDidMount = async () => {
-    const news = await axios.get(process.env.REACT_APP_API_URL +"/api/users/getNews");
+    //const news = await axios.get(process.env.REACT_APP_API_URL +"/api/users/getNews");
     let firstCol = [];
     let secondCol = [];
     let ThirdCol = [];
 
-    for (let i = 0; i < 2; i++) {
+    /*for (let i = 0; i < 2; i++) {
       firstCol.push(news.data.articles[i]);
     }
 
@@ -37,15 +37,14 @@ export default class EmpDashboard extends Component {
 
     for (let i = 4; i < 6; i++) {
       ThirdCol.push(news.data.articles[i]);
-    }
+    }*/
 
     this.setState({
       firstCol,
       secondCol,
       ThirdCol,
-      newsList: news.data.articles,
+      newsList: [],
     });
-    console.log(news.data.articles);
   };
 
   onGreet = () => {
