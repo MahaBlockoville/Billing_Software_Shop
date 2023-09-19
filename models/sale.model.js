@@ -7,6 +7,7 @@ const saleSchema = new Schema({
          // tenure, branch, payment_type, dos
   name: { type: String },
   imei_number: { type: String },
+  invoice_id: { type: String },
   category: { type: String },
   inward: { type: Object },
   phone: { type: String },

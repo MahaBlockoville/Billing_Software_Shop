@@ -290,7 +290,7 @@ router.post("/addInWard", async (req, res) => {
 router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,salesCount,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
     if (
@@ -304,13 +304,15 @@ router.post("/addSale", async (req, res) => {
       !dos) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
+    const invoice_id = moment().format('Y-MM-DD') + '-00' + (parseInt(salesCount) + 1);
+    console.log(invoice_id, 'invoice_id');
     const inward_value = await InWard.findOne({imei_number: imei_number});
     await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
     if(!req.body.sale_id) {
     const newSaleItem = new Sale({
       name, imei_number, phone, address, email, selling_value, 
       tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
-      category: inward_value.category, sales_person,
+      category: inward_value.category, sales_person, invoice_id,
       inward: inward_value, finance_name, order_no, shipping_address, 
       shipping_name, shipping_email, shipping_phone
     });
@@ -323,7 +325,7 @@ router.post("/addSale", async (req, res) => {
           name, imei_number, phone, address, email, selling_value, 
           tenure, branch, payment_type, dos, gst_number, gst_percentage,sales_person,
           category: inward_value.category, inward: inward_value, finance_name, order_no, 
-          shipping_address, shipping_name, shipping_email, shipping_phone
+          shipping_address, shipping_name, shipping_email, shipping_phone, invoice_id
         },
         { new: true },
         function (err, result) {
@@ -343,7 +345,9 @@ router.post("/addSale", async (req, res) => {
 // @desc: get list of all emp
 router.get("/getSaleCount", async (req, res) => {
   let query = {};
+  console.log('moment', moment().format('Y-MM-DD'));
   query.type = {$in: ['wgst', 'wogst']}
+  query.dos = moment().format('Y-MM-DD');
   const empList = await Sale.find(query).countDocuments();
   console.log(empList, 'countDocuments');
   res.json(empList);
