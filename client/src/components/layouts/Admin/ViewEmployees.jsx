@@ -48,7 +48,7 @@ export default class ViewEmployees extends Component {
           const token = localStorage.getItem("auth-token");
 
           if (!token) return <Redirect to="/login" />;
-          if (user && user.role !== "admin")
+          if (user && (user.role !== "admin"  && user.role !== 'branch'))
             return <Redirect to="/empDashBoard" />;
 
           return (

@@ -188,7 +188,7 @@ export default class Profile extends Component {
           const token = localStorage.getItem("auth-token");
           if (!token) return <Redirect to="/login" />;
 
-          if (user && user.role === "admin") return <Redirect to="/" />;
+          if (user && (user.role === "admin" || user.role === 'branch')) return <Redirect to="/" />;
 
           return (
             <Spring
@@ -474,7 +474,7 @@ export default class Profile extends Component {
                                   <LoanDetailsCard
                                     key={loan.reqId}
                                     isAdmin={
-                                      user && user.role === "admin"
+                                      user && (user.role === "admin" || user.role === 'branch')
                                         ? true
                                         : false
                                     }

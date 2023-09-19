@@ -85,7 +85,7 @@ class EditSupplier extends Component {
           if (token === undefined) token = "";
 
           if (token) {
-            if (user.role !== "admin") return <Redirect to="/" />;
+            if (user.role !== "admin"  && user.role !== 'branch') return <Redirect to="/" />;
             return (
               <Spring
                 // from={{ opacity: 0 }}

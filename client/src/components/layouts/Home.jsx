@@ -14,13 +14,13 @@ export default class Home extends Component {
             <div>
               <h1>this is home page</h1>
 
-              {token && user && user.role === "admin" ? (
+              {token && user && (user.role === "admin" || user.role === 'branch') ? (
                 <Link to="/statistics">
                   <button>admin dashboard</button>
                 </Link>
               ) : null}
 
-              {token && user && user.role !== "admin" ? (
+              {token && user && (user.role !== "admin"  && user.role !== 'branch')? (
                 <Link to="/empDashboard">
                   <button>emp dashboard</button>
                 </Link>

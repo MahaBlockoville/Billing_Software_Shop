@@ -22,12 +22,12 @@ const Expense = require("../models/expense.model");
 router.post("/register", async (req, res) => {
   try {
     // check if already one admin is present or not
-    const admin = await Admin.countDocuments();
+    /*const admin = await Admin.find({role: 'admin'}).countDocuments();
 
     if (admin)
       return res
         .status(400)
-        .json({ msg: "There can be only one admin at max" });
+        .json({ msg: "There can be only one admin at max" });*/
 
     let { email, password, passwordCheck, name } = req.body;
 
@@ -64,7 +64,7 @@ router.post("/register", async (req, res) => {
       email,
       password: passwordHash,
       name,
-      role: "admin",
+      role: req.body.role ? req.body.role : "admin",
       leaveRequests: [],
       bonusRequests: [],
       loanRequests: [],

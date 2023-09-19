@@ -182,7 +182,7 @@ export default class otherRequest extends Component {
           const token = localStorage.getItem("auth-token");
           if (!token) return <Redirect to="/login" />;
 
-          if (user && user.role === "admin") return <Redirect to="/" />;
+          if (user && (user.role === "admin" || user.role === 'branch')) return <Redirect to="/" />;
 
           return (
             <Spring

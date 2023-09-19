@@ -79,11 +79,11 @@ export default class Statistics extends Component {
           const token = localStorage.getItem("auth-token");
 
           if (!token) return <Redirect to="/login" />;
-          if (user && user.role !== "admin")
+          if (user && (user.role !== "admin" && user.role !== "branch"))
             return <Redirect to="/empDashBoard" />;
 
           //added this condition coz it was showing admin panel till emp data was loaded
-          if (user && user.role === "admin")
+          if (user && (user.role === "admin" || user.role === 'branch'))
             return (
               <Spring
                 from={{ opacity: 0 }}

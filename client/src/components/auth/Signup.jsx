@@ -19,7 +19,7 @@ class Signup extends Component {
       name: "",
       error: "",
       disabled: false,
-
+      role: "",
       // validation
       emailCheck: false,
       password1Check: false,
@@ -35,7 +35,7 @@ class Signup extends Component {
       disabled: true,
     });
 
-    const { email, password, passwordCheck, name } = this.state;
+    const { email, password, passwordCheck, name, role } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/register", {
@@ -43,6 +43,7 @@ class Signup extends Component {
         password,
         passwordCheck,
         name,
+        role
       });
       console.log("created acc successfully: ", newUser.data);
       // now login the user
@@ -74,6 +75,8 @@ class Signup extends Component {
       this.setState({ error: err.response.data.msg });
     }
   };
+
+  onRoleSelect = (role) => this.setState({ role });
 
   onChange = (e) => {
     const { name } = e.target;
@@ -213,6 +216,16 @@ class Signup extends Component {
                                   />
                                 </div>
                                 {/* <div className="col-1 correctContainer"></div> */}
+                              </div>
+
+                              <div className="col">
+                              <label htmlFor="team">Role</label>
+                              <select className="form-control" value={this.state.role} onChange={(e) =>
+                                          this.onRoleSelect(e.target.value)
+                                        }>
+                                <option>Select</option>
+                                <option value={'branch'}>Branch</option>
+                                </select>
                               </div>
 
                               <div className="row">

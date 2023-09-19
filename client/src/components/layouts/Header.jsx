@@ -99,7 +99,7 @@ class Header extends Component {
                             Logout
                           </span>
                         </li>
-                        {user && user.role !== "admin" ? (
+                        {user && (user.role !== "admin"  && user.role !== 'branch') ? (
                           <li className="nav-item ">
                             <Link
                               to="/profile"

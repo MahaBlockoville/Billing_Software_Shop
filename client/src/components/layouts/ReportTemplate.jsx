@@ -3,7 +3,6 @@ import "toasted-notes/src/styles.css";
 import "../../assets/billTemplate.css";
 import { ToWords } from 'to-words';
 import visaka  from "../../assets/images/visaka_icon.jpeg";
-import moment from "moment";
 
 const toWords = new ToWords();
 

@@ -47,7 +47,7 @@ class Login extends Component {
         });
       }
 
-      console.log("logged in successfully: ", loggedInUser.data);
+      console.log("logged in successfully: ", loggedInUser.data.user);
 
       localStorage.setItem("auth-token", loggedInUser.data.token);
       localStorage.setItem("userId", loggedInUser.data.user._id);
@@ -59,8 +59,10 @@ class Login extends Component {
           token: loggedInUser.data.token,
         },
       });
-      if (email === "admin@gmail.com") this.props.history.push("/");
-      else this.props.history.push("/empDashBoard");
+      if (loggedInUser.data.user && (loggedInUser.data.user.role === "admin" || loggedInUser.data.user.role === 'branch'))  {
+        this.props.history.push("/statistics");
+      }
+      /*else this.props.history.push("/empDashBoard");*/
     } catch (err) {
       // enable login btn
       this.setState({
