@@ -298,7 +298,6 @@ router.post("/addSale", async (req, res) => {
       !imei_number ||
       !phone ||
       !address||
-      !email ||
       !selling_value ||
       !branch ||
       !payment_type ||
@@ -340,6 +339,16 @@ router.post("/addSale", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// @desc: get list of all emp
+router.get("/getSaleCount", async (req, res) => {
+  let query = {};
+  query.type = {$in: ['wgst', 'wogst']}
+  const empList = await Sale.find(query).countDocuments();
+  console.log(empList, 'countDocuments');
+  res.json(empList);
+});
+
 
 // @desc: approve/reject requests
 router.put("/takeAction", async (req, res) => {
@@ -799,7 +808,7 @@ router.delete("/deleteSupplier/:id", async (req, res) => {
 router.post("/addProduct", async (req, res) => {
   try {
 
-    let { name, variant, model, color, supplier, category, hsn } = req.body;
+    let { name, variant, model, color, supplier, category, hsn, selling_value, purchase_value } = req.body;
     // validation
     if (
       !name ||
@@ -807,7 +816,8 @@ router.post("/addProduct", async (req, res) => {
       !model ||
       !color ||
       !supplier ||
-      !hsn ||
+      !selling_value ||
+      !purchase_value ||
       !category) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
@@ -815,7 +825,7 @@ router.post("/addProduct", async (req, res) => {
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
-        name, variant, model, color, supplier: supplier_value, category: category_value, hsn
+        name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
       });
       const savedProduct = await newProduct.save();
       res.json(savedProduct);
@@ -823,7 +833,7 @@ router.post("/addProduct", async (req, res) => {
       Product.findOneAndUpdate(
         { _id: req.body.product_id },
         {
-          name, variant, model, color, supplier: supplier_value, category: category_value, hsn
+          name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
         },
         { new: true },
         function (err, result) {

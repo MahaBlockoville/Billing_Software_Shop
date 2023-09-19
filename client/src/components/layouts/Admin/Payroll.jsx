@@ -173,7 +173,8 @@ export default class Payroll extends Component {
                                     }}
                                   ></i>
                                 </button>
-                                <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '12px'}}>
+                                &nbsp;&nbsp;
+                                <button className="btn btn-primary" onClick={this.onClickAdd} style={{marginTop: '0px'}}>
                                   <i
                                     className="fas fa-user-plus p-2"
                                     style={{ cursor: "pointer", fontSize: "20px" }}
@@ -201,24 +202,20 @@ export default class Payroll extends Component {
                               }}
                             >
                               <div className="table table-striped sortable">
-                              <table className="inputTable searchable sortable">
-                                <thead>
-                                  <th>Type</th>
-                                  <th>Brand</th>
-                                  <th>Content</th>
-                                  <th>Amount</th>
-                                  <th>Date</th>
-                                </thead>
                                 {this.state.expenseList.map((data, index) => (
-                                    <tbody>
-                                      <td>{data?.expense}</td>
-                                      <td>{data?.brand}</td>
-                                      <td>{data?.content}</td>
-                                      <td>{data?.amount}</td>
-                                      <td>{data?.date}</td>
-                                    </tbody>
+                                      <>
+                                      <div>
+                                         <span>Type: {data?.expense} {', '}</span>
+                                         {
+                                          data.brand &&
+                                          <span> Brand: {data?.brand} {', '}</span>
+                                         }
+                                         <span>Content: {data?.content} {', '}</span>
+                                        <span>Amount: {data?.amount} {', '}</span>
+                                        <span>Date: {data?.doe} </span>
+                                      </div>
+                                      </>
                                 ))}
-                              </table>
                                 <table className="inputTable searchable sortable">
                                   <thead>
                                     <th>Brand Details </th>
@@ -259,7 +256,7 @@ export default class Payroll extends Component {
                                           : data.inward.product.category.name}
                                       </td>
                                       <td>{data.selling_value}</td>
-                                      <td>{data.type}</td>
+                                      <td>{data.type === 'firstPurchase' || data.type === 'secondPurchase' ? 'DEBIT' : 'CREDIT'}</td>
                                       <td>{data.doi ? data.doi : data.dos}</td>
                                       <td></td>
                                       <td></td>

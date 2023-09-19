@@ -11,7 +11,9 @@ const productSchema = new Schema({
   model: { type: String },
   hsn: { type: Number },
   category: { type: Object },
-  supplier: { type: Object }
+  supplier: { type: Object },
+  purchase_value: { type: String },
+  selling_value: { type: String },
 });
 
 const Product = mongoose.model("Product", productSchema);

@@ -20,6 +20,8 @@ class AddInWard extends Component {
       imei_number: [],
       purchase_value: "",
       selling_value: "",
+      initial_purchase_value: "",
+      initial_selling_value: "",
       gst_percentage: "",
       reference_invoice_number: "",
       doi: "",
@@ -85,6 +87,10 @@ class AddInWard extends Component {
       model: currentProduct[0].model,
       variant: currentProduct[0].variant,
       color: currentProduct[0].color,
+      purchase_value: currentProduct[0].purchase_value,
+      initial_purchase_value: currentProduct[0].purchase_value,
+      initial_selling_value: currentProduct[0].selling_value,
+      selling_value: currentProduct[0].selling_value,
       category: currentProduct[0].category.name,
       selectionOption: {
         value: product_id,
@@ -115,15 +121,12 @@ class AddInWard extends Component {
       quantity,
       reference_invoice_number
     } = this.state;
-   /*if (imei_number.length > 0) {
-    imei_number.map(async (data, i) => {
-      if(data.length > 20 || data.length < 15) {
-        this.setState({
-          error: i + "IMEI number must be with in 15 to 20 characters",
-        });
-      }
-    })
-    } else {*/
+    console.log(branch, 'branch')
+   if (branch === "Select Branch") {
+      this.setState({
+        error: "Branch is required",
+      });
+    } else {
       // disable signup btn
       this.setState({
         disabled: true,
@@ -160,7 +163,7 @@ class AddInWard extends Component {
         console.log("ERROR: ", err.response.data.msg);
         this.setState({ error: err.response.data.msg });
       }
-    //}
+    }
   };
 
   onCategorySelect = (category) => this.setState({ category });
@@ -168,15 +171,24 @@ class AddInWard extends Component {
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   onQuantityChange = (e) => {
-    const imeiNumberList = [];
-    for(let i = e.target.value - 1; i >= 0; i--) {
-      console.log(`onQuantityChange`, i);
-      imeiNumberList.push(i);
+    console.log(`onQuantityChange`, e.target.value);
+    if(e.target.value === '') {
+      this.setState({
+        purchase_value: this.state.initial_purchase_value,
+        selling_value: this.state.initial_selling_value,
+      });
+    } else {
+      const imeiNumberList = [];
+      for(let i = e.target.value - 1; i >= 0; i--) {
+        imeiNumberList.push(i);
+      }
+      this.setState({ 
+        [e.target.name]: e.target.value,
+        purchase_value: this.state.purchase_value * e.target.value,
+        selling_value: this.state.selling_value * e.target.value,
+        imeiNumberList: imeiNumberList
+      });
     }
-    this.setState({ 
-      [e.target.name]: e.target.value,
-      imeiNumberList: imeiNumberList
-    });
   }
 
   onNumberChange = (i, e) => {
@@ -467,10 +479,12 @@ class AddInWard extends Component {
                                 <label>Purchase Value</label>
                                 <input
                                   type="number"
+                                  value={this.state.purchase_value}
                                   name="purchase_value"
                                   className="form-control mb-3 "
                                   placeholder="Type purchase value"
                                   onChange={this.onChange}
+                                  readOnly={true}
                                   required
                                 />
                               </div>
@@ -478,10 +492,12 @@ class AddInWard extends Component {
                                 <label>Selling Value</label>
                                 <input
                                   type="number"
+                                  value={this.state.selling_value}
                                   name="selling_value"
                                   className="form-control mb-3 "
                                   placeholder="Type selling value"
                                   onChange={this.onChange}
+                                  readOnly={true}
                                   required
                                 />
                               </div>

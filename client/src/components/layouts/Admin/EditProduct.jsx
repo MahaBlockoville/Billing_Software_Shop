@@ -56,12 +56,12 @@ class EditProduct extends Component {
 
     const {
       name, model, color, variant, category, supplier,
-      product_id, hsn
+      product_id, hsn, selling_value, purchase_value
     } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addProduct", {
-        name, model, color, variant, category, supplier, product_id, hsn
+        name, model, color, variant, category, supplier, product_id, hsn, selling_value, purchase_value
       });
 
       toast.notify("Added new product", {
@@ -153,7 +153,7 @@ class EditProduct extends Component {
                             <hr />
 
                             <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Brand Name</label>
                                 <input
@@ -166,9 +166,7 @@ class EditProduct extends Component {
                                   required
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Color</label>
                                 <input
@@ -183,7 +181,7 @@ class EditProduct extends Component {
                               </div>
                               </div>
                               <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Model</label>
                                 <input
@@ -196,9 +194,7 @@ class EditProduct extends Component {
                                   required
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Variant</label>
                                 <input
@@ -213,7 +209,7 @@ class EditProduct extends Component {
                               </div>
                               </div>
                               <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">HSN</label>
                                 <input
@@ -225,9 +221,7 @@ class EditProduct extends Component {
                                   onChange={this.onChange}
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Category</label>
                                 <select className="form-control"
@@ -243,9 +237,7 @@ class EditProduct extends Component {
                                 </select>
                     
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Supplier Name</label>
                                 <select className="form-control"
@@ -254,13 +246,40 @@ class EditProduct extends Component {
                                           this.onSupplierSelect(e.target.value)
                                         }>
                                 <option>Select</option>
-                                {this.state.supplierList.map((data) => (
+                                {this.state.supplierList.length > 0 && this.state.supplierList.map((data) => (
                                     <option value={data.company_name}>{data.company_name}</option>
                                 ))
                                 }
                                 </select>
                               </div>
                               </div>
+                              <div className="row">
+                              {/* gender */}
+                              <div className="col">
+                                <label>Purchase Value</label>
+                                <input
+                                  type="number"
+                                  value={this.state.purchase_value}
+                                  name="purchase_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type purchase value"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              <div className="col">
+                                <label>Selling Value</label>
+                                <input
+                                  type="number"
+                                  value={this.state.selling_value}
+                                  name="selling_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type selling value"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
 <br/>
                             <div className="row">
                               {/* dop */}

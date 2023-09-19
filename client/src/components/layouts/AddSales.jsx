@@ -410,11 +410,12 @@ class AddSales extends Component {
                                   <label>GST Percentage</label>
                                   <input
                                     type="number"
+                                    value={'18'}
                                     name="gst_percentage"
                                     className="form-control mb-3 "
                                     placeholder="Type value"
                                     onChange={this.onChange}
-                                    
+                                    readOnly={true}
                                   />
                                 </div>
                               </div>

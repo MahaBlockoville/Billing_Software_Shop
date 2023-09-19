@@ -9,6 +9,7 @@ class GenerateSalesReport extends Component {
     super();
     this.state = {
         sale_id: '',
+        salesCount: ''
     };
     this.reportTemplateRef = React.createRef();
   }
@@ -19,10 +20,12 @@ class GenerateSalesReport extends Component {
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
     const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.branch}`);
+    const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
     this.setState({
       branchGst: branchData.data.gst_number,
       branchAddress: branchData.data.address,
       branchPhone: branchData.data.phoneNo,
+      salesCount: salesCount.data
     });
     this.setState({
       ...salesData.data,

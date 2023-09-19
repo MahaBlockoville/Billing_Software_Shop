@@ -140,7 +140,7 @@ export default class ViewProduct extends Component {
                <td>{data.color}</td>
                <td>{data.variant}</td>
                <td>{data.category ? data.category.name : ''}</td>
-               <td>{data.supplier.company_name + '|' + data.supplier.contact_person}</td>
+               <td>{data.supplier ? data.supplier.company_name + '|' + data.supplier.contact_person : ''}</td>
                <td>
                  <Link
                     to={`/editProduct/${data._id}`}

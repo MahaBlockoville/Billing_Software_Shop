@@ -22,6 +22,8 @@ class AddProduct extends Component {
       supplier: "",
       categoryList: [],
       supplierList: [],
+      selling_value: "",
+      purchase_value: "",
       disabled: false,
       // error
       error: "",
@@ -46,12 +48,12 @@ class AddProduct extends Component {
     });
 
     const {
-      name, model, color, variant, category, supplier, hsn
+      name, model, color, variant, category, supplier, hsn, selling_value, purchase_value
     } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addProduct", {
-        name, model, color, variant, category, supplier, hsn
+        name, model, color, variant, category, supplier, hsn, selling_value, purchase_value
       });
 
       toast.notify("Added new product", {
@@ -143,7 +145,7 @@ class AddProduct extends Component {
                             <hr />
 
                             <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Brand Name</label>
                                 <input
@@ -155,9 +157,7 @@ class AddProduct extends Component {
                                   required
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Color</label>
                                 <input
@@ -171,7 +171,7 @@ class AddProduct extends Component {
                               </div>
                               </div>
                               <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Model</label>
                                 <input
@@ -183,9 +183,7 @@ class AddProduct extends Component {
                                   required
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Variant</label>
                                 <input
@@ -199,7 +197,7 @@ class AddProduct extends Component {
                               </div>
                               </div>
                               <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">HSN</label>
                                 <input
@@ -210,9 +208,7 @@ class AddProduct extends Component {
                                   onChange={this.onChange}
                                 />
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Category</label>
                                 <select className="form-control"
@@ -228,9 +224,7 @@ class AddProduct extends Component {
                                 </select>
                     
                               </div>
-                              </div>
-                              <div className="row">
-                              <div className="col-sm-6 mx-auto">
+                              <div className="col">
                                 {/* name */}
                                 <label htmlFor="name">Supplier Name</label>
                                 <select className="form-control"
@@ -246,6 +240,31 @@ class AddProduct extends Component {
                                 </select>
                               </div>
                               </div>
+                              <div className="row">
+                              {/* gender */}
+                              <div className="col">
+                                <label>Purchase Value</label>
+                                <input
+                                  type="number"
+                                  name="purchase_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type purchase value"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              <div className="col">
+                                <label>Selling Value</label>
+                                <input
+                                  type="number"
+                                  name="selling_value"
+                                  className="form-control mb-3 "
+                                  placeholder="Type selling value"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
                             <br/>
                             <div className="row">
                               {/* dop */}

@@ -20,20 +20,20 @@ class ReportTemplate extends Component {
        <table className="table table-bordered">
   <tr>
     <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", backgroundPosition: 'right', backgroundSize: '250px'}}>
-      <div className="header_cell_shop_details">
+      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '22px', fontWeight: 'bold'}}>
         <div>SRI VISAKA MOBILES</div><br/>
         <div>{this.props.branchAddress}</div><br/>
         <div>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
       </div>
     </td>
     <td colspan="2" >
-      <div>
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Invoice:</div>
         <span id="invoice_number">{this.props._id}</span>
       </div>
   </td>
     <td colspan="2" >
-      <div>
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Date:</div>
         <span id="Date">{this.props.dos}</span>
       </div>
@@ -41,7 +41,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr>
     <td colspan="3">
-      <div>
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Order No:</div>
         <span id="Order No">{this.props.order_no ? this.props.order_no : this.props.order_no}</span>
       </div>
@@ -49,7 +49,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr>
     <td colspan="3">
-      <div>
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Payment Mode:</div>
         <span id="Payment Mode">{this.props.payment_type}</span>
       </div>
@@ -59,27 +59,23 @@ class ReportTemplate extends Component {
   </tr>
   <tr>
     <td className="header-cell" id="header-cell" colspan="2" rowspan="2">
-      <div>
-        <div className="header_cell_shop_details">
+      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
          <div>Buyer Details:</div>
         <span id="Buyer Details">{this.props.name} - {this.props.address} - {this.props.phone}</span>
       </div>
-    </div>
     </td>
     <td className="header-cell" id="header-cell2" colspan="5" rowspan="2">
-      <div>
-        <div className="header_cell_shop_details">
+        <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
          <div>Shipping Details:</div>
          <span id="Shipping Details">{this.props.shipping_name ? this.props.shipping_name : ''} 
          - {this.props.shipping_address ? this.props.shipping_address : ''} 
          - {this.props.shipping_phone ? this.props.shipping_phone : ''}</span>
         </div>
-      </div>
     </td>
     </tr>
   <tr>
   </tr>
-  <tr>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
     <td>NO</td>
     <td className="item_cell">ITEM</td>
     <td>HSN</td>
@@ -95,6 +91,7 @@ class ReportTemplate extends Component {
     backgroundPosition: 'center', 
     //filter: 'opacity(30%)',
     //fontWeight: 'bold',
+    fontSize: '22px',
     height: '450px',
     backgroundSize: '400px'}
     }>
@@ -114,7 +111,7 @@ class ReportTemplate extends Component {
     <td>{this.props.gst_percentage}</td>
     <td>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
   </tr>
-  <tr className="bold">
+  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
     <td></td>
     <td className="item_cell">
       CGST {this.props.gst_percentage / 2} %
@@ -125,7 +122,7 @@ class ReportTemplate extends Component {
     <td></td>
     <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr className="bold">
+  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
     <td></td>
     <td className="item_cell">
       SGST {this.props.gst_percentage / 2} %
@@ -136,14 +133,14 @@ class ReportTemplate extends Component {
     <td></td>
     <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
     <td colspan="3">Total Amount</td>
     <td></td>
     <td></td>
     <td></td>
     <td>{parseInt(this.props.selling_value)}</td>
   </tr>
-  <tr>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
     <td colspan="8">{
       this.props.selling_value !== undefined &&
       'Amount In Words:' + toWords.convert(parseInt(this.props.selling_value))
@@ -154,14 +151,14 @@ class ReportTemplate extends Component {
 
   <table className="table table-bordered declarations">
   <tr>
-    <td colspan="8">Declarations</td>
+    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bolder'}}>Declarations</td>
   </tr>
   <tr>
-    <td colspan="4" rowspan="2">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4">Sales Man: {this.props.sales_person}</td>
+    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
+    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Sales Man: {this.props.sales_person}</td>
   </tr>
   <tr>
-    <td colspan="4">Hypothecated By : {this.props.finance_name}</td>
+    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Hypothecated By : {this.props.finance_name}</td>
   </tr>
   </table>
 
