@@ -484,7 +484,6 @@ class AddInWard extends Component {
                                   className="form-control mb-3 "
                                   placeholder="Type purchase value"
                                   onChange={this.onChange}
-                                  readOnly={true}
                                   required
                                 />
                               </div>
@@ -497,7 +496,6 @@ class AddInWard extends Component {
                                   className="form-control mb-3 "
                                   placeholder="Type selling value"
                                   onChange={this.onChange}
-                                  readOnly={true}
                                   required
                                 />
                               </div>
