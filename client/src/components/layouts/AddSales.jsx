@@ -43,6 +43,7 @@ class AddSales extends Component {
       shipping_name: '', 
       shipping_email: '', 
       shipping_phone: '',
+      salesCount: '',
       // error
       error: "",
     };
@@ -56,6 +57,7 @@ class AddSales extends Component {
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
     const imeiNumberList = this.state.imeiNumberList;
     const options = [];
+    const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
     inwardList.data.map(async (data) => {
       options.push({
         value: data.imei_number,
@@ -75,6 +77,7 @@ class AddSales extends Component {
       branchList: branchList.data,
       inwardList: inwardList.data,
       empList: empList.data,
+      salesCount: salesCount.data,
       options: options
     });
   };
@@ -120,7 +123,7 @@ class AddSales extends Component {
       gst_percentage,
       type,
       sales_person,
-      finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
+      finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone, salesCount
     } = this.state;
 
           // disable signup btn
@@ -144,6 +147,7 @@ class AddSales extends Component {
           gst_percentage,
           type,
           sales_person,
+          salesCount,
           finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
         });
   

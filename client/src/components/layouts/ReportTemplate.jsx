@@ -3,6 +3,7 @@ import "toasted-notes/src/styles.css";
 import "../../assets/billTemplate.css";
 import { ToWords } from 'to-words';
 import visaka  from "../../assets/images/visaka_icon.jpeg";
+import moment from "moment";
 
 const toWords = new ToWords();
 
@@ -29,7 +30,7 @@ class ReportTemplate extends Component {
     <td colspan="2" >
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Invoice:</div>
-        <span id="invoice_number">{this.props._id}</span>
+        <span id="invoice_number">{this.props.invoice_id}</span>
       </div>
   </td>
     <td colspan="2" >
