@@ -43,6 +43,7 @@ class EditSales extends Component {
       shipping_name: '', 
       shipping_email: '', 
       shipping_phone: '',
+      salesCount: "",
       // error
       error: "",
     };
@@ -54,6 +55,8 @@ class EditSales extends Component {
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);    const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
+    const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
+
     const imeiNumberList = this.state.imeiNumberList;
     inwardList.data.map(async (data) => {
       imeiNumberList.push(
@@ -80,6 +83,7 @@ class EditSales extends Component {
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
       inwardList: inwardList.data,
+      salesCount: salesCount.data,
       options: options,
       selectionOption: {
         value: salesData.data.imei_number,
@@ -120,6 +124,7 @@ class EditSales extends Component {
       gst_percentage,
       sale_id,
       sales_person,
+      salesCount,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
     } = this.state;
     // disable signup btn
@@ -142,6 +147,7 @@ class EditSales extends Component {
         gst_percentage,
         sale_id,
         sales_person,
+        salesCount,
         finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone
       });
 
