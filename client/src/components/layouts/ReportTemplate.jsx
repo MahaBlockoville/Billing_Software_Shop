@@ -16,176 +16,94 @@ class ReportTemplate extends Component {
 
   render() {
     return (
-      <div className="bill-template">
-       <table className="table table-bordered">
-  <tr>
-    <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", backgroundPosition: 'right', backgroundSize: '250px'}}>
-      <div className="header_cell_shop_details">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>VISAKA MOBILES</div><br/>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div><br/>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
-      </div>
-    </td>
-    <td colspan="2" >
-      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-        <div>Invoice:</div>
-        <span id="invoice_number">{this.props.invoice_id}</span>
-      </div>
-  </td>
-    <td colspan="2" >
-      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-        <div>Date:</div>
-        <span id="Date">{this.props.dos}</span>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-        <div>Order No:</div>
-        <span id="Order No">{this.props.order_no ? this.props.order_no : this.props.order_no}</span>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-        <div>Payment Mode:</div>
-        <span id="Payment Mode">{this.props.payment_type}</span>
-      </div>
-    </td>
-    </tr>
-  <tr>
-  </tr>
-  <tr>
-    <td className="header-cell" id="header-cell" colspan="2" rowspan="2">
-      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-         <div>Buyer Details:</div>
-        <span id="Buyer Details">{this.props.name} - {this.props.address} - {this.props.phone}</span>
-      </div>
-    </td>
-    <td className="header-cell" id="header-cell2" colspan="5" rowspan="2">
-        <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-         <div>Shipping Details:</div>
-         <span id="Shipping Details">{this.props.shipping_name ? this.props.shipping_name : ''} 
-         - {this.props.shipping_address ? this.props.shipping_address : ''} 
-         - {this.props.shipping_phone ? this.props.shipping_phone : ''}</span>
+<div className="bill-template">
+<div className="container">
+    <div className="row">
+        <div className="col-6 header_cell_shop_details">
+          <div><p id="address1"><b>SRI VISAKA MOBILES</b></p></div>
+          <p id="address2"><b>51B OPP SLB SCHOOL</b></p>
+          <p id="address3"><b>COURD ROAD, NAGAR COIL - 629001 (BRANCH-3)</b></p>
+          <p id="address4">Ph.04526387262 </p>
+          <p id="address5">GSTIN-33DHUPS1680G1ZV</p>
         </div>
-    </td>
-    </tr>
-  <tr>
-  </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td>NO</td>
-    <td className="item_cell">ITEM</td>
-    <td>HSN</td>
-    <td>QTY</td>
-    <td>RATE</td>
-    <td>GST%</td>
-    <td >AMOUNT</td>
-  </tr>
-  <tr className="bold" style={
-    {
-    //backgroundImage: `url(${visaka})`, 
-    backgroundRepeat: "no-repeat", 
-    backgroundPosition: 'center', 
-    //filter: 'opacity(30%)',
-    //fontWeight: 'bold',
-    fontSize: '22px',
-    height: '450px',
-    backgroundSize: '400px'}
-    }>
-    <td> 1 </td>
-    <td className="item_cell">
-    {
-      this.props.inward && this.props.inward.product ?
-        this.props.inward.product.name + ' ' + this.props.inward.product.model
-        + ' ' + this.props.inward.product.variant + ' ' + this.props.inward.product.color
-        + " " + this.props.imei_number
-        : ""
-    }
-    </td>
-    <td></td>
-    <td>1</td>
-    <td>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
-    <td>{this.props.gst_percentage}</td>
-    <td>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
-  </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td></td>
-    <td className="item_cell">
-      CGST {this.props.gst_percentage / 2} %
-    </td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
-  </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td></td>
-    <td className="item_cell">
-      SGST {this.props.gst_percentage / 2} %
-    </td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
-  </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td colspan="3">Total Amount</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>{parseInt(this.props.selling_value)}</td>
-  </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td colspan="8">{
-      this.props.selling_value !== undefined &&
-      'Amount In Words:' + toWords.convert(parseInt(this.props.selling_value))
-  }</td>
-  </tr>
-</table>
-
-
-  <table className="table table-bordered declarations">
-  <tr>
-    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bolder'}}>Declarations</td>
-  </tr>
-  <tr>
-    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Sales Man: {this.props.sales_person}</td>
-  </tr>
-  <tr>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Hypothecated By : {this.props.finance_name}</td>
-  </tr>
-  </table>
-
-  <div className="signature" style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        marginTop: '20px',
-        fontWeight: 'bold'
-  }}>
-<div>Received Signature: </div> 
-   <div> For Buyer Signature: </div> 
-  </div>
-  <div className="signature2" style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        marginTop: '75px',
-        fontWeight: 'bold',
-        marginLeft: '170px',
-  }}>
-    <div></div>
-    <div>Authorized Signature:</div> 
-  </div>
-
-  <div className="footer">
-    Thank you for your business. This is a computer-generated invoice.
-  </div>
+        <div className="col-6">
+            <div className="row">
+              <div className="col-6" id="invoice">
+                 <div className="inner-details" >Invoice:</div>
+              </div>
+              <div className="col-6" id="Date">
+                <div>Date:</div>
+              </div>
+            </div>
+            <div className="row">
+                <div className="inner-details" id="order">Order No:</div> 
+            </div>
+               <div className="inner-details" id="payment" >Payment Mode:</div>  
+        </div>
       </div>
+    <div className="row">
+        <div className="col-6 header_cell_shop_details">
+          <div><p id="address1"><b>SUBATHRA JEWELLERS</b></p>
+          <p id="address2"><b>NO 68,ANNANAGAR 8TH STREET</b></p>
+          <p id="address3"><b>V.V.D.MAIN ROAD,TUTICORN-628002</b></p>
+          <p id="address4">Ph:</p>
+          </div>
+        </div>
+        <div className="col-6">
+                <p><b>Shipping Details:</b></p>
+        </div>
+      </div>
+      <div className="row">  
+          <div className="row" id="itemheader">
+            <div className="col-1">NO</div>
+            <div className="col-4">ITEM</div>
+            <div className="col-1">HSN</div>
+            <div className="col-1">QTY</div>
+            <div className="col-2">RATE</div>
+            <div className="col-1">GST%</div>
+            <div className="col-2" id="last" >AMOUNT</div>
+          </div>
+          <div className="row" id="itemDetails">
+            <div className="col-1"></div>
+            <div className="col-4"></div>
+            <div className="col-1"></div>
+            <div className="col-1"></div>
+            <div className="col-2"></div>
+            <div className="col-1"></div>
+            <div className="col-2" id="last" ></div>
+          </div>
+      </div>
+    <div className="row">
+      <div className="col-10 totalamount">Total Amount</div> 
+      <div className="col-2 amount">15000<span>.00</span></div>
+    </div>
+    <div className="row" style={{border:'none'}}>
+      <div className="col-12 amountInWords">Amount In Words: </div>
+    </div>
+  </div>
+  <div className="container">
+    <div className="row">
+      <div className="col-12 declarations">Declarations</div>
+    </div>
+    <div className="row" style={{border:'none'}}>
+      <div className="col-8 declarationsDetails">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</div>
+
+      <div className="col-4">
+        <div className="row salesMan">
+          <div>Sales Man: SRM3</div>
+          <div >Hypothecated By :</div>
+      </div>
+      </div>
+  </div>
+</div>
+    <div className="signature">
+      <div className="col-6">Received Signature: ___________________________</div>
+      <div className="col-6">For Buyer Signature: _________________________</div>
+    </div>
+    <div className="signature2">
+      <div className="col-12">Authorized </div>
+    </div>
+</div>
     );
   }
 }
