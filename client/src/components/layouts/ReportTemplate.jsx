@@ -21,8 +21,8 @@ class ReportTemplate extends Component {
   <tr>
     <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", backgroundPosition: 'right', backgroundSize: '250px'}}>
       <div className="header_cell_shop_details">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>VISAKA MOBILES</div><br/>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div><br/>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>VISAKA MOBILES</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
       </div>
     </td>
@@ -91,7 +91,7 @@ class ReportTemplate extends Component {
     backgroundPosition: 'center', 
     //filter: 'opacity(30%)',
     //fontWeight: 'bold',
-    fontSize: '22px',
+    fontSize: '18px',
     height: '450px',
     backgroundSize: '400px'}
     }>
@@ -141,24 +141,37 @@ class ReportTemplate extends Component {
     <td>{parseInt(this.props.selling_value)}</td>
   </tr>
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
-    <td colspan="8">{
-      this.props.selling_value !== undefined &&
-      'Amount In Words:' + toWords.convert(parseInt(this.props.selling_value))
-  }</td>
+    <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+      {
+        this.props.selling_value !== undefined &&
+        toWords.convert(parseInt(this.props.selling_value))
+      }
+      </div>
+      </td>
   </tr>
 </table>
 
 
   <table className="table table-bordered declarations">
   <tr>
-    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bolder'}}>Declarations</td>
+    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Declarations</td>
   </tr>
   <tr>
-    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Sales Man: {this.props.sales_person}</td>
+    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
+    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+      Sales Man: 
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+      {this.props.sales_person}
+      </div>
+    </td>
   </tr>
   <tr>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Hypothecated By : {this.props.finance_name}</td>
+    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+      Hypothecated By : 
+      <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+      {this.props.finance_name}
+      </div>
+    </td>
   </tr>
   </table>
 
