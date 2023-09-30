@@ -99,7 +99,8 @@ class AddSales extends Component {
         " - " +
         currentInward[0].product?.color + '-' + imei_number,
       },
-      imei_number, branch: currentInward[0].branch,
+      imei_number, 
+      branch: currentInward[0].branch,
       purchased_value: currentInward[0].selling_value,
     });
   } 
@@ -108,7 +109,7 @@ class AddSales extends Component {
 
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
-    const {
+    let {
       name,
       imei_number,
       phone,
@@ -130,7 +131,9 @@ class AddSales extends Component {
     this.setState({
       disabled: true,
     });
-
+    if(type === "wgst") {
+      gst_percentage = 18;
+    }
       try {
         const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
           name,

@@ -17,65 +17,72 @@ class ReportTemplate extends Component {
   render() {
     return (
       <div className="bill-template">
-       <table className="table table-bordered">
-  <tr>
+       <table className="table table-bordered" style={{border: '3px solid black'}}>
+  <tr style={{border: '3px solid black'}}>
     <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", backgroundPosition: 'right', backgroundSize: '250px'}}>
       <div className="header_cell_shop_details">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>VISAKA MOBILES</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone}  GSTIN: {this.props.branchGst}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone} </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>GSTIN: {this.props.branchGst} </div>
       </div>
     </td>
-    <td colspan="2" >
+    <td colspan="2" style={{border: '3px solid black'}}>
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Invoice:</div>
         <span id="invoice_number">{this.props.invoice_id}</span>
       </div>
   </td>
-    <td colspan="2" >
+    <td colspan="2" style={{border: '3px solid black'}}>
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Date:</div>
         <span id="Date">{this.props.dos}</span>
       </div>
     </td>
   </tr>
-  <tr>
-    <td colspan="3">
+  <tr style={{border: '3px solid black'}}>
+    <td colspan="3" style={{border: '3px solid black'}}>
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Order No:</div>
         <span id="Order No">{this.props.order_no ? this.props.order_no : this.props.order_no}</span>
       </div>
     </td>
   </tr>
-  <tr>
-    <td colspan="3">
+  <tr style={{border: '3px solid black'}}>
+    <td colspan="3" style={{border: '3px solid black'}}>
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
         <div>Payment Mode:</div>
         <span id="Payment Mode">{this.props.payment_type}</span>
       </div>
     </td>
     </tr>
-  <tr>
+  <tr style={{border: '3px solid black'}}>
   </tr>
-  <tr>
-    <td className="header-cell" id="header-cell" colspan="2" rowspan="2">
-      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr style={{border: '3px solid black'}}>
+    <td className="header-cell" id="header-cell" colspan="2" rowspan="2"style={{border: '3px solid black'}}>
+      <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bolder'}}>
          <div>Buyer Details:</div>
-        <span id="Buyer Details">{this.props.name} - {this.props.address} - {this.props.phone}</span>
+        <div id="Buyer Details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+          <div>{this.props.name} </div>
+          <div> {this.props.address} </div>
+          <div>{this.props.phone}</div> 
+          </div>
       </div>
     </td>
-    <td className="header-cell" id="header-cell2" colspan="5" rowspan="2">
-        <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+    <td className="header-cell" id="header-cell2" colspan="5" rowspan="2" style={{border: '3px solid black'}}>
+        <div className="header_cell_shop_details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bolder'}}>
          <div>Shipping Details:</div>
-         <span id="Shipping Details">{this.props.shipping_name ? this.props.shipping_name : ''} 
-         - {this.props.shipping_address ? this.props.shipping_address : ''} 
-         - {this.props.shipping_phone ? this.props.shipping_phone : ''}</span>
+         <div id="Shipping Details" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+          <div >{this.props.shipping_name ? this.props.shipping_name : ''} </div>
+          <div>{this.props.shipping_address ? this.props.shipping_address : ''} </div>
+          <div> {this.props.shipping_phone ? this.props.shipping_phone : ''}</div>
+          </div>
         </div>
     </td>
     </tr>
-  <tr>
+  <tr style={{border: '3px solid black'}}>
   </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold',border: '3px solid black'}}>
     <td>NO</td>
     <td className="item_cell">ITEM</td>
     <td>HSN</td>
@@ -89,21 +96,29 @@ class ReportTemplate extends Component {
     //backgroundImage: `url(${visaka})`, 
     backgroundRepeat: "no-repeat", 
     backgroundPosition: 'center', 
+    border: '3px solid black',
     //filter: 'opacity(30%)',
     //fontWeight: 'bold',
     fontSize: '18px',
-    height: '450px',
+    height: '300px',
     backgroundSize: '400px'}
     }>
     <td> 1 </td>
     <td className="item_cell">
-    {
+      <div>
+      {
       this.props.inward && this.props.inward.product ?
         this.props.inward.product.name + ' ' + this.props.inward.product.model
         + ' ' + this.props.inward.product.variant + ' ' + this.props.inward.product.color
-        + " " + this.props.imei_number
         : ""
     }
+      </div>
+      <div>
+        {
+          this.props.imei_number
+        }
+      </div>
+    
     </td>
     <td></td>
     <td>1</td>
@@ -111,7 +126,7 @@ class ReportTemplate extends Component {
     <td>{this.props.gst_percentage}</td>
     <td>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
   </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>
     <td></td>
     <td className="item_cell">
       CGST {this.props.gst_percentage / 2} %
@@ -122,7 +137,7 @@ class ReportTemplate extends Component {
     <td></td>
     <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>
     <td></td>
     <td className="item_cell">
       SGST {this.props.gst_percentage / 2} %
@@ -133,14 +148,14 @@ class ReportTemplate extends Component {
     <td></td>
     <td> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>
     <td colspan="3">Total Amount</td>
     <td></td>
     <td></td>
     <td></td>
     <td>{parseInt(this.props.selling_value)}</td>
   </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>
     <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {
         this.props.selling_value !== undefined &&
@@ -152,12 +167,12 @@ class ReportTemplate extends Component {
 </table>
 
 
-  <table className="table table-bordered declarations">
-  <tr>
-    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>Declarations</td>
+  <table className="table table-bordered declarations" style={{border: '3px solid black'}}>
+  <tr style={{border: '3px solid black'}}> 
+    <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>Declarations</td>
   </tr>
-  <tr>
-    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
+  <tr style={{border: '3px solid black'}}>
+    <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal', verticalAlign: 'middle', border: '3px solid black'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
     <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
       Sales Man: 
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
@@ -165,8 +180,8 @@ class ReportTemplate extends Component {
       </div>
     </td>
   </tr>
-  <tr>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+  <tr style={{border: '3px solid black'}}>
+    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black'}}>
       Hypothecated By : 
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {this.props.finance_name}
@@ -179,7 +194,7 @@ class ReportTemplate extends Component {
         display: 'flex',
         justifyContent: 'space-around',
         marginTop: '20px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
   }}>
 <div>Received Signature: </div> 
    <div> For Buyer Signature: </div> 
