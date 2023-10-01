@@ -174,4 +174,10 @@ table th, table td {
 .float-right{
     float: right;
 }
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
 }

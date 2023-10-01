@@ -304,7 +304,7 @@ router.post("/addSale", async (req, res) => {
       !dos) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
-    const invoice_id = moment().format('Y-MM-DD') + '-00' + (parseInt(salesCount) + 1);
+    const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
     console.log(invoice_id, 'invoice_id');
     const inward_value = await InWard.findOne({imei_number: imei_number});
     await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
