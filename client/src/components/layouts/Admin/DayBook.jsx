@@ -22,14 +22,42 @@ export default class DayBook extends Component {
   }
 
   componentDidMount = async () => {
-    const itemList = await axios.get(
-      process.env.REACT_APP_API_URL + "/api/admin/getDayBook"
-    );
-    console.log("List: ", itemList);
-    this.setState({
-      itemList: itemList.data,
-      loading: false,
+    
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
     });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+        branch: adminRes.data.user.name
+      });
+      if(adminRes.data.user && adminRes.data.user.role === 'branch') {
+        const itemList = await axios.get(
+          process.env.REACT_APP_API_URL + "/api/admin/getDayBook?branch=" + adminRes.data.user.name
+        );
+        console.log("List: ", itemList);
+        this.setState({
+          itemList: itemList.data,
+          loading: false,
+        });
+      }else {
+        const itemList = await axios.get(
+          process.env.REACT_APP_API_URL + "/api/admin/getDayBook"
+        );
+        console.log("List: ", itemList);
+        this.setState({
+          itemList: itemList.data,
+          loading: false,
+        });
+      }
+    }
   };
 
   // to filter data according to search criteria

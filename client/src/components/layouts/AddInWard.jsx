@@ -42,6 +42,23 @@ class AddInWard extends Component {
   componentDidMount = async () => {
     const type = this.props.match.params.type;
     this.setState({ type: type });
+
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
+    });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+        branch: adminRes.data.user.name
+      });
+    }
     const branchList = await axios.get(
       process.env.REACT_APP_API_URL + "/api/admin/getBranchList"
     );
@@ -385,38 +402,56 @@ class AddInWard extends Component {
                             </div>
                             <div className="row">
                               {/* team */}
-                              <div className="col">
-                                <label htmlFor="team">Branch</label>
-                                <div className="dropdown">
-                                  <button
-                                    className="btn btn-light dropdown-toggle"
-                                    type="button"
-                                    id="dropdownMenuButton"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                  >
-                                    {this.state.branch}
-                                  </button>
-                                  <div
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton"
-                                  >
-                                    {this.state.branchList.map((data) => (
-                                      <li
-                                        style={{ cursor: "pointer" }}
-                                        key={data._id}
-                                        className="dropdown-item"
-                                        onClick={() =>
-                                          this.onBranchSelect(data.name)
-                                        }
-                                      >
-                                        {data.name}
-                                      </li>
-                                    ))}
+                              {
+                                this.state.admin && this.state.admin.role === "admin" ? 
+                                <div className="col">
+                                  <label htmlFor="team">Branch</label>
+                                  <div className="dropdown">
+                                    <button
+                                      className="btn btn-light dropdown-toggle"
+                                      type="button"
+                                      id="dropdownMenuButton"
+                                      data-toggle="dropdown"
+                                      aria-haspopup="true"
+                                      aria-expanded="false"
+                                    >
+                                      {this.state.branch}
+                                    </button>
+                                    <div
+                                      className="dropdown-menu"
+                                      aria-labelledby="dropdownMenuButton"
+                                    >
+                                      {this.state.branchList.map((data) => (
+                                        <li
+                                          style={{ cursor: "pointer" }}
+                                          key={data._id}
+                                          className="dropdown-item"
+                                          onClick={() =>
+                                            this.onBranchSelect(data.name)
+                                          }
+                                        >
+                                          {data.name}
+                                        </li>
+                                      ))}
+                                    </div>
                                   </div>
                                 </div>
+                                :
+                                <div className="col">
+                                {/* phone no */}
+                                <label htmlFor="branch">Branch</label>
+                                <input
+                                  type="text"
+                                  name="branch"
+                                  value={this.state.branch}
+                                  className="form-control mb-3 "
+                                  placeholder="Branch"
+                                  onChange={this.onChange}
+                                  readOnly={true}
+                                  required
+                                />
                               </div>
+                              }
                               <div className="col">
                                 <label htmlFor="reference_invoice_number">
                                 Reference Invoice Number

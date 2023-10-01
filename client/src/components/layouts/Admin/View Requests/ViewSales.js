@@ -14,6 +14,7 @@ export default class ViewSales extends Component {
 
     this.state = {
       salesList: [],
+      branch: '',
       loading: true,
     };
   }
@@ -21,12 +22,38 @@ export default class ViewSales extends Component {
   componentDidMount = async () => {
     const type = this.props.match.params.type;
     this.setState({type: type});
-    const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type=" + type);
-    console.log("List: ", salesList.data);
-    this.setState({
-      salesList: salesList.data,
-      loading: false,
+
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
     });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+        branch: adminRes.data.user ? adminRes.data.user.name : ''
+      });
+      if(adminRes.data.user && adminRes.data.user.name)  {
+        const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type=" + type + "&branch=" + adminRes.data.user.name);
+        console.log("List: ", salesList.data);
+        this.setState({
+          salesList: salesList.data,
+          loading: false,
+        });
+      } else {
+        const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type=" + type);
+        console.log("List: ", salesList.data);
+        this.setState({
+          salesList: salesList.data,
+          loading: false,
+        });
+      }
+    }
   };
 
 

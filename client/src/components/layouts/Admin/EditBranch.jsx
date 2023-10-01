@@ -20,6 +20,9 @@ class EditBranch extends Component {
       branch_id: "",
       disabled: false,
       gst_number: "",
+      password: "",
+      passwordCheck: "",
+      branch_user_id: "",
       // error
       error: "",
     };
@@ -35,9 +38,11 @@ class EditBranch extends Component {
     });
     const branchId = this.props.match.params.id;
     this.setState({branch_id: branchId});
-    const inWardData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchData/${branchId}`);
+    const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchData/${branchId}`);
+    const branchUser = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchUser/${branchData.data.name}`);
     this.setState({
-      ...inWardData.data
+      ...branchData.data,
+      branch_user_id: branchUser.data ? branchUser.data._id : '',
     });
   };
 
@@ -55,9 +60,29 @@ class EditBranch extends Component {
       phoneNo,
       dop,
       branch_id,
-      gst_number
+      gst_number,
+      branch_user_id,
+      password,
+      passwordCheck
     } = this.state;
-
+    const email = name + '@gmail.com';
+    if(branch_user_id) {
+      await axios.post(process.env.REACT_APP_API_URL +"/api/admin/branchUserUpdate", {
+        email,
+        password,
+        passwordCheck,
+        branch_user_id,
+        name,
+      });
+    } else {
+      await axios.post(process.env.REACT_APP_API_URL +"/api/admin/register", {
+        email,
+        password,
+        passwordCheck,
+        name,
+        role: 'branch'
+      });
+    }
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addBranch", {
         name,
@@ -163,6 +188,37 @@ class EditBranch extends Component {
                                 />
                               </div>
                               </div>
+                                                            {/* password */}
+                                                            <div className="row">
+                                <div className="col-sm-6 mx-auto">
+                                <label htmlFor="name">Password</label>
+
+                                  <input
+                                    name="password"
+                                    type="password"
+                                    className="form-control mb-3"
+                                    placeholder="Password"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              {/* re-enter password */}
+                              <div className="row">
+                                <div className="col-sm-6 mx-auto">
+                                <label htmlFor="name">Re-Enter Password</label>
+                                  <input
+                                    name="passwordCheck"
+                                    type="password"
+                                    className="form-control mb-3"
+                                    placeholder="Re-enter password"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* address */}

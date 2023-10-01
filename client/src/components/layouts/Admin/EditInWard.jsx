@@ -35,6 +35,21 @@ export default class EditInWard extends Component {
   componentDidMount = async () => {
     const inWardId = this.props.match.params.id;
     this.setState({ inward_id: inWardId });
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
+    });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+      });
+    }
     const inWardData = await axios.get(
       process.env.REACT_APP_API_URL + `/api/admin/getInWardData/${inWardId}`
     );
@@ -62,25 +77,31 @@ export default class EditInWard extends Component {
     const currentProduct = productList.data.filter(
       (product) => product_id === product._id
     );
-    this.setState({
-      product: product_id,
-      name: currentProduct[0].name,
-      model: currentProduct[0].model,
-      variant: currentProduct[0].variant,
-      color: currentProduct[0].color,
-      category: currentProduct[0].category.name,
-      selectionOption: {
-        value: product_id,
-        label:
-          currentProduct[0].name +
-          " - " +
-          currentProduct[0].model +
-          " - " +
-          currentProduct[0].variant +
-          " - " +
-          currentProduct[0].color,
-      },
-    });
+    if(currentProduct.length > 0) {
+      this.setState({
+        product: product_id,
+        name: currentProduct[0].name,
+        model: currentProduct[0].model,
+        variant: currentProduct[0].variant,
+        color: currentProduct[0].color,
+        category: currentProduct[0].category.name,
+        selectionOption: {
+          value: product_id,
+          label:
+            currentProduct[0].name +
+            " - " +
+            currentProduct[0].model +
+            " - " +
+            currentProduct[0].variant +
+            " - " +
+            currentProduct[0].color,
+        },
+      });
+    }else {
+      this.setState({
+        product: product_id,
+      });
+    }
     this.setState({
       options: options,
       branchList: branchList.data,
@@ -336,6 +357,8 @@ export default class EditInWard extends Component {
                             </div>
                             <div className="row">
                               {/* team */}
+                              {
+                              this.state.admin && this.state.admin.role === "admin" ? 
                               <div className="col">
                                 <label htmlFor="team">Branch</label>
                                 <select
@@ -352,6 +375,22 @@ export default class EditInWard extends Component {
                                   ))}
                                 </select>
                               </div>
+                              :
+                              <div className="col">
+                              {/* phone no */}
+                              <label htmlFor="branch">Branch</label>
+                              <input
+                                type="text"
+                                name="branch"
+                                value={this.state.branch}
+                                className="form-control mb-3 "
+                                placeholder="Branch"
+                                onChange={this.onChange}
+                                readOnly={true}
+                                required
+                              />
+                            </div>
+                              }
                               
                               <div className="col">
                                 <label htmlFor="reference_invoice_number">

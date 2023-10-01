@@ -113,6 +113,8 @@ export default class SaleCard extends Component {
                   </Link>
                </td>
                <td>
+               {
+                this.state.admin && this.state.admin.role === "admin" &&
                <Link
                     onClick={(e) => {
                       this.onClickDelete(e, data._id)
@@ -126,6 +128,7 @@ export default class SaleCard extends Component {
                   >
                     <i className="fa fa-trash"></i>
                   </Link>
+                }
                </td>
                {
                    (data.type === 'wgst' || 

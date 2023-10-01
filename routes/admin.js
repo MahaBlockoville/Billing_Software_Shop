@@ -77,6 +77,61 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// @desc: register a user
+router.post("/branchUserUpdate", async (req, res) => {
+  try {
+    // check if already one admin is present or not
+    /*const admin = await Admin.find({role: 'admin'}).countDocuments();
+
+    if (admin)
+      return res
+        .status(400)
+        .json({ msg: "There can be only one admin at max" });*/
+
+    let { email, password, passwordCheck, name, branch_user_id } = req.body;
+
+    // validation
+    if (!email || !password || !passwordCheck) {
+      return res.status(400).json({ msg: "Please enter all the fields" });
+    }
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ msg: "Password should be at least 6 characters" });
+    }
+
+    if (password !== passwordCheck) {
+      return res
+        .status(400)
+        .json({ msg: "Please enter the same password twice" });
+    }
+    if (!name) name = email;
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+    const existingUser = await Admin.findOne({ _id: branch_user_id });
+    existingUser.email = email;
+    existingUser.name = name;
+    existingUser.password = passwordHash
+    const savedUser = await existingUser.save();
+    res.json(savedUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// @desc: get branch a user
+router.get("/getBranchUser/:name", async (req, res) => {
+  try {
+    console.log(req.params.name);
+    const existingUser = await Admin.findOne({ name: req.params.name });
+    res.json(existingUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // @desc: login a user
 router.post("/login", async (req, res) => {
   try {
@@ -85,8 +140,14 @@ router.post("/login", async (req, res) => {
     // validate
     if (!email || !password)
       return res.status(400).json({ msg: "Please enter all the fields" });
-
-    const user = await Admin.findOne({ email: email });
+    
+    let query =  {
+      '$or': [ 
+        { 'email': email }, 
+        { 'name': email }
+      ]
+    }
+    const user = await Admin.findOne(query);
     if (!user)
       return res
         .status(400)
@@ -888,6 +949,9 @@ router.get("/getInWardList", async (req, res) => {
   if(req.query.type) {
     query.type = req.query.type
   }
+  if(req.query.branch) {
+    query.branch = req.query.branch
+  }
   
   if(req.query.stock) {
     query.type = {$in: req.query.stock.split(",")};
@@ -911,6 +975,9 @@ router.get("/getSalesList", async (req, res) => {
     if(req.query.type === 'return') {
       query.type = {$in: ['wgstReturn', 'wogstReturn']}
     }
+  }
+  if(req.query.branch) {
+    query.branch = req.query.branch;
   }
   console.log(query);
   const salesList = await Sale.find(query).sort({_id: -1});
@@ -951,6 +1018,13 @@ router.get("/getDayBook", async (req, res) => {
 
       query.doi = { $lte: moment().format('Y-MM-DD') };
     }
+    if(req.query.branch) {
+      expense_query.doe = req.query.branch;
+
+      sales_query.dos = req.query.branch;
+
+      query.doi = req.query.branch;
+    }
     console.log(query);
     const inwardList = await InWard.find(query);
     console.log(inwardList);
@@ -967,12 +1041,20 @@ router.get("/getDayBook", async (req, res) => {
       expenseList: expenseList
     });
   }else {
-    const inwardList = await InWard.find({
-      doi: moment().format('Y-MM-DD'),
-    });
-    const salesList = await Sale.find({
-      dos: moment().format('Y-MM-DD'),
-    });
+
+    let sales_query = {
+      dos: moment().format('Y-MM-DD')
+    }
+    let query = {
+      doi: moment().format('Y-MM-DD')
+    }
+    if(req.query.branch) {
+      sales_query.dos = req.query.branch;
+      query.doi = req.query.branch;
+    }
+
+    const inwardList = await InWard.find(query);
+    const salesList = await Sale.find(sales_query);
     dayBookData = inwardList.concat(salesList);
     res.send(dayBookData);
   }

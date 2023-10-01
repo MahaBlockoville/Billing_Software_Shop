@@ -52,33 +52,76 @@ class AddSales extends Component {
   componentDidMount = async () => {
     const type = this.props.match.params.type;
     this.setState({type: type});
-    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
-    const stock=  ['firstPurchase', 'secondPurchase'];
-    const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
-    const imeiNumberList = this.state.imeiNumberList;
-    const options = [];
-    const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
-    inwardList.data.map(async (data) => {
-      options.push({
-        value: data.imei_number,
-        label: data.product.name +
-        " - " +
-        data.product.model +
-        " - " +
-        data.product.variant +
-        " - " +
-        data.product.color + '-' + data.imei_number,
-      });
+
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
     });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+        branch: adminRes.data.user.name
+      });
+      const stock=  ['firstPurchase', 'secondPurchase'];
+      let inwardList = [];
+      if(adminRes.data.user && adminRes.data.user.role === 'branch') {
+        inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock + "&branch=" + adminRes.data.user.name);
+        console.log('inwardList', inwardList)
+        const options = [];
+        inwardList.data.length > 0 && inwardList.data.map(async (data) => {
+          options.push({
+            value: data.imei_number,
+            label: data.product.name +
+            " - " +
+            data.product.model +
+            " - " +
+            data.product.variant +
+            " - " +
+            data.product.color + '-' + data.imei_number,
+          });
+        });
+        this.setState({
+          inwardList: inwardList.data,
+          options: options
+        })
+      }else {
+        inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);
+        const options = [];
+        inwardList.data.length > 0 && inwardList.data.map(async (data) => {
+          options.push({
+            value: data.imei_number,
+            label: data.product.name +
+            " - " +
+            data.product.model +
+            " - " +
+            data.product.variant +
+            " - " +
+            data.product.color + '-' + data.imei_number,
+          });
+        });
+        this.setState({
+          inwardList: inwardList.data,
+          options: options
+        })
+      }
+    }
+
+    const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
+    const imeiNumberList = this.state.imeiNumberList;
+    const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
 
     const empList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getEmpList");
     this.setState({
       imeiNumberList: imeiNumberList,
       branchList: branchList.data,
-      inwardList: inwardList.data,
       empList: empList.data,
       salesCount: salesCount.data,
-      options: options
     });
   };
   onBranchSelect = (branch) => this.setState({ branch });
@@ -99,7 +142,8 @@ class AddSales extends Component {
         " - " +
         currentInward[0].product?.color + '-' + imei_number,
       },
-      imei_number, branch: currentInward[0].branch,
+      imei_number, 
+      //branch: currentInward[0].branch,
       purchased_value: currentInward[0].selling_value,
     });
   } 

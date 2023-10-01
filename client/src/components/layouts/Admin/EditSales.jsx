@@ -51,6 +51,24 @@ class EditSales extends Component {
 
   componentDidMount = async () => {
     const branchList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getBranchList");
+
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
+    });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+
+      this.setState({
+        admin: adminRes.data.user,
+        branch: adminRes.data.user.name
+      });
+    }
+
     const stock=  ['firstPurchase', 'secondPurchase'];
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);    const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});

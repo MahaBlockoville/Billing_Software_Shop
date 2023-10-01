@@ -19,8 +19,12 @@ class AddBranch extends Component {
       gst_number: "",
       dop: "",
       disabled: false,
+      password: "",
+      passwordCheck: "",
       // error
       error: "",
+      password1Check: false,
+      password2Check: false,
     };
   }
 
@@ -47,10 +51,21 @@ class AddBranch extends Component {
       address,
       phoneNo,
       dop,
-      gst_number
+      gst_number,
+      password, passwordCheck
     } = this.state;
 
     try {
+
+      const email = name + '@gmail.com';
+      await axios.post(process.env.REACT_APP_API_URL +"/api/admin/register", {
+        email,
+        password,
+        passwordCheck,
+        name,
+        role: 'branch'
+      });
+
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addBranch", {
         name,
         address,
@@ -77,7 +92,20 @@ class AddBranch extends Component {
     }
   };
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChange = (e) => {
+    const { name } = e.target;
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      if (name === "password") {
+        if (this.state.password.length >= 6) {
+          this.setState({ password1Check: true });
+        } else this.setState({ password1Check: false });
+      } else if (name === "passwordCheck") {
+        if (this.state.password === this.state.passwordCheck) {
+          this.setState({ password2Check: true });
+        } else this.setState({ password2Check: false });
+      }
+    });
+  };
 
   onCancel = (e) => {
     e.preventDefault();
@@ -153,6 +181,39 @@ class AddBranch extends Component {
                                 />
                               </div>
                               </div>
+
+                              
+                              {/* password */}
+                              <div className="row">
+                                <div className="col-sm-6 mx-auto">
+                                <label htmlFor="name">Password</label>
+
+                                  <input
+                                    name="password"
+                                    type="password"
+                                    className="form-control mb-3"
+                                    placeholder="Password"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              {/* re-enter password */}
+                              <div className="row">
+                                <div className="col-sm-6 mx-auto">
+                                <label htmlFor="name">Re-Enter Password</label>
+                                  <input
+                                    name="passwordCheck"
+                                    type="password"
+                                    className="form-control mb-3"
+                                    placeholder="Re-enter password"
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
                             <div className="row">
                               <div className="col-sm-6 mx-auto">
                                 {/* address */}

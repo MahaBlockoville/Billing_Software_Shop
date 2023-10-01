@@ -54,7 +54,9 @@ export default class SidePanel extends Component {
         </Link>
 
         <ul className="nav flex-column flex-nowrap">
-          <li className="nav-item">
+          {
+            this.state.admin && this.state.admin.role === "admin" && 
+            <li className="nav-item">
             <a className="nav-link list-group-item text-dark border-0 my-1 myList collapsed" href="#submenu1" data-toggle="collapse" data-target="#submenu1">
             <i
                     className="fa fa-tasks mr-4"
@@ -106,6 +108,8 @@ export default class SidePanel extends Component {
               </ul>
             </div>
           </li>
+          }
+
         </ul>
 
         <ul className="nav flex-column flex-nowrap">

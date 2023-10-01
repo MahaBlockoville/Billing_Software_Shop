@@ -118,7 +118,7 @@ class Login extends Component {
                               </div>
                             ) : null}
                             <input
-                              type="email"
+                              type="text"
                               name="email"
                               className="form-control mb-3 mt-4"
                               placeholder="Email id"
