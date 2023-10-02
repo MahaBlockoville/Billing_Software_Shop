@@ -38,14 +38,6 @@ export default function About() {
                 <p className="mb-1 font-italic">
                   Add reminders directly to your google calender!
                 </p>
-                <p className="text-secondary font-italic mt-5">Version 1.0.0</p>
-                <a href="https://github.com/68rohitd/Human-Resource-management">
-                  <b>GitHub Repo</b>
-                </a>
-                <br />
-                <a href="https://youtu.be/wA47RCpYd3g">
-                  <b>Youtube Demo </b>
-                </a>
               </div>
 
               <div className="col">

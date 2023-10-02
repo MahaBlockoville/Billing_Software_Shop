@@ -189,7 +189,7 @@ class EditBranch extends Component {
                               </div>
                               </div>
                                                             {/* password */}
-                                                            <div className="row">
+                                <div className="row">
                                 <div className="col-sm-6 mx-auto">
                                 <label htmlFor="name">Password</label>
 

@@ -31,7 +31,6 @@ class AddSales extends Component {
       branch: "",
       branchList: [],
       inwardList: [],
-      purchased_value: "",
       sales_person: "",
       empList: [],
       selectionOption: {},
@@ -66,7 +65,6 @@ class AddSales extends Component {
 
       this.setState({
         admin: adminRes.data.user,
-        branch: adminRes.data.user.name
       });
       const stock=  ['firstPurchase', 'secondPurchase'];
       let inwardList = [];
@@ -88,6 +86,7 @@ class AddSales extends Component {
         });
         this.setState({
           inwardList: inwardList.data,
+          branch: adminRes.data.user.name,
           options: options
         })
       }else {
@@ -143,8 +142,9 @@ class AddSales extends Component {
         currentInward[0].product?.color + '-' + imei_number,
       },
       imei_number, 
-      //branch: currentInward[0].branch,
-      purchased_value: currentInward[0].selling_value,
+      branch: currentInward[0].branch,
+      selling_value: currentInward[0].selling_value,
+      gst_percentage: currentInward[0].gst_percentage
     });
   } 
 
@@ -214,7 +214,14 @@ class AddSales extends Component {
       }
   };
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+    if(e.target.name === 'tenure') {
+        const initial_amount = parseInt(e.target.value);
+        const amount = parseInt(this.state.selling_value) - initial_amount;
+        this.setState({ selling_value: amount });
+    }
+  }
 
   onCancel = (e) => {
     e.preventDefault();
@@ -395,7 +402,7 @@ class AddSales extends Component {
                               </div>
                               {this.state.payment_type === "EMI" && (
                                 <>
-                                                                <div className="col">
+                                <div className="col">
                                 <label>Finance Name</label>
                                   <input
                                     type="text"
@@ -435,9 +442,11 @@ class AddSales extends Component {
                                 <input
                                   type="number"
                                   name="selling_value"
+                                  value={this.state.selling_value}
                                   className="form-control mb-3 "
                                   placeholder="Type value"
                                   onChange={this.onChange}
+                                  readOnly={true}
                                   required
                                 />
                               </div>
@@ -460,7 +469,7 @@ class AddSales extends Component {
                                   <label>GST Percentage</label>
                                   <input
                                     type="number"
-                                    value={'18'}
+                                    value={this.state.gst_percentage}
                                     name="gst_percentage"
                                     className="form-control mb-3 "
                                     placeholder="Type value"

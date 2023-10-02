@@ -22,6 +22,7 @@ class GenerateSalesReport extends Component {
     const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.branch}`);
     const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
     this.setState({
+      branchName: process.env.REACT_APP_BILL_NAME,
       branchGst: branchData.data.gst_number,
       branchAddress: branchData.data.address,
       branchPhone: branchData.data.phoneNo,

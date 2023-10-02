@@ -73,10 +73,12 @@ export default class EditInWard extends Component {
           data.color,
       });
     });
+    console.log('inWardData', inWardData, 'productList', productList)
     const product_id = inWardData.data.product._id;
     const currentProduct = productList.data.filter(
       (product) => product_id === product._id
     );
+    console.log('current Product', currentProduct);
     if(currentProduct.length > 0) {
       this.setState({
         product: product_id,
@@ -368,6 +370,7 @@ export default class EditInWard extends Component {
                                     this.onBranchSelect(e.target.value)
                                   }
                                 >
+                                  <option> Select Branch</option>
                                   {this.state.branchList.map((data) => (
                                     <option value={data.name}>
                                       {data.name}

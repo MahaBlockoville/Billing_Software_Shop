@@ -48,6 +48,7 @@ import GenerateSalesReport from "./components/layouts/Admin/GenerateSaleReport";
 import DayBook from "./components/layouts/Admin/DayBook";
 import EditBranch from "./components/layouts/Admin/EditBranch";
 import AddExpense from "./components/layouts/Admin/AddExpense";
+import UserProfile from "./components/layouts/UserProfile";
 
 export default class App extends Component {
   render() {
@@ -66,6 +67,7 @@ export default class App extends Component {
 
               {/* emp related */}
               <Route exact path="/profile" component={Profile} />
+              <Route exact path="/userProfile" component={UserProfile} />
               <Route exact path="/attendence" component={Attendence} />
               <Route exact path="/myRequests" component={MyRequests} />
               <Route exact path="/empDashboard" component={EmpDashboard} />

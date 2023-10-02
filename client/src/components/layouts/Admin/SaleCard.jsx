@@ -15,6 +15,23 @@ export default class SaleCard extends Component {
     this.exportTableRef = React.createRef();
   }
 
+  componentDidMount = async () => {
+    const token = localStorage.getItem("auth-token");
+    const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
+      headers: { "x-auth-token": token },
+    });
+    if (tokenRes.data) {
+      //logged in
+      const adminRes = await axios.get(process.env.REACT_APP_API_URL +"/api/admin", {
+        headers: { "x-auth-token": token },
+      });
+      console.log("admin profile: ", adminRes.data.user);
+      this.setState({
+        admin: adminRes.data.user,
+      });
+    }
+  }
+  
   onGetDate = (date) => {
     const d = new Date(date);
     let returnDate = d.toLocaleDateString("en-GB");

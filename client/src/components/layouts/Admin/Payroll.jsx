@@ -58,7 +58,6 @@ export default class Payroll extends Component {
 
       this.setState({
         admin: adminRes.data.user,
-        branch: adminRes.data.user.name
       });
       if(adminRes.data.user && adminRes.data.user.role === 'branch') {
         const itemList = await axios.get(
@@ -67,6 +66,7 @@ export default class Payroll extends Component {
         console.log("List: ", itemList);
         this.setState({
           itemList: itemList.data,
+          branch: adminRes.data.user.name,
           loading: false,
         });
       }else {
@@ -95,7 +95,7 @@ export default class Payroll extends Component {
     e.preventDefault();
 
     let { from_date, to_date, branch } = this.state;
-
+    branch = branch ? branch : '';
     try {
       const itemList = await axios.get(
         process.env.REACT_APP_API_URL +

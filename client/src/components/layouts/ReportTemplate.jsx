@@ -20,11 +20,11 @@ class ReportTemplate extends Component {
   render() {
     return (
       <div className="bill-template">
-       <table className="table table-bordered" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+       <table className="table" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
   <tr style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", border: '3px solid black', backgroundPosition: 'right', backgroundSize: '250px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
       <div className="header_cell_shop_details">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>VISAKA MOBILES</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>{this.props.branchName}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>Ph: {this.props.branchPhone} </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>GSTIN: {this.props.branchGst} </div>
@@ -178,7 +178,7 @@ class ReportTemplate extends Component {
 </table>
 
 
-  <table className="table table-bordered declarations" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+  <table className="table  declarations" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
   <tr style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> 
     <td colspan="8" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>Declarations</td>
   </tr>

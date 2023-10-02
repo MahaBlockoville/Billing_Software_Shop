@@ -36,13 +36,13 @@ export default class ViewSales extends Component {
 
       this.setState({
         admin: adminRes.data.user,
-        branch: adminRes.data.user ? adminRes.data.user.name : ''
       });
-      if(adminRes.data.user && adminRes.data.user.name)  {
+      if(adminRes.data.user && adminRes.data.user.role === 'branch')  {
         const salesList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList?type=" + type + "&branch=" + adminRes.data.user.name);
         console.log("List: ", salesList.data);
         this.setState({
           salesList: salesList.data,
+          branch: adminRes.data.user ? adminRes.data.user.name : '',
           loading: false,
         });
       } else {

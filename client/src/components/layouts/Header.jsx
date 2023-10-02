@@ -111,12 +111,13 @@ class Header extends Component {
                           </li>
                         ) : (
                           <li className="nav-item ">
-                            <div
+                           <Link
+                              to="/userProfile"
                               className="nav-link text-light "
-                              style={{ fontSize: 16 }}
+                              style={{ cursor: "pointer", fontSize: 16 }}
                             >
                               {user.name}
-                            </div>
+                            </Link>
                           </li>
                         )}
                       </>

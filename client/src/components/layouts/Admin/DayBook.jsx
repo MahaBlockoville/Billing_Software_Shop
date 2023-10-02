@@ -36,7 +36,6 @@ export default class DayBook extends Component {
 
       this.setState({
         admin: adminRes.data.user,
-        branch: adminRes.data.user.name
       });
       if(adminRes.data.user && adminRes.data.user.role === 'branch') {
         const itemList = await axios.get(
@@ -45,6 +44,7 @@ export default class DayBook extends Component {
         console.log("List: ", itemList);
         this.setState({
           itemList: itemList.data,
+          branch: adminRes.data.user.name,
           loading: false,
         });
       }else {
