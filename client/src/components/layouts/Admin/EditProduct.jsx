@@ -40,7 +40,7 @@ class EditProduct extends Component {
     const categoryList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getCategoryList");
     const supplierList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSupplierList");
     this.setState({
-      supplier: productData.data.supplier.company_name,
+      supplier: productData.data?.supplier?.company_name,
       category: productData.data.category ? productData.data.category.name : '',
       categoryList: categoryList.data,
       supplierList: supplierList.data
