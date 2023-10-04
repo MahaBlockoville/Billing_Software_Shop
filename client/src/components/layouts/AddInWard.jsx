@@ -56,8 +56,12 @@ class AddInWard extends Component {
 
       this.setState({
         admin: adminRes.data.user,
-        branch: adminRes.data.user.name
       });
+      if(adminRes.data.user.role === "branch") {
+        this.setState({
+          branch: adminRes.data.user.name
+        });
+      }
     }
     const branchList = await axios.get(
       process.env.REACT_APP_API_URL + "/api/admin/getBranchList"
