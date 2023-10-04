@@ -367,7 +367,7 @@ router.post("/addSale", async (req, res) => {
       !dos) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
-    const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
+    const invoice_id = process.env.INVOICE_ID + '/00' + (parseInt(salesCount) + 1);
     console.log(invoice_id, 'invoice_id');
     const inward_value = await InWard.findOne({imei_number: imei_number});
     await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
@@ -882,13 +882,15 @@ router.post("/addProduct", async (req, res) => {
       !variant ||
       !model ||
       !color ||
-      !supplier ||
       !selling_value ||
       !purchase_value ||
       !category) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
-    const supplier_value = await Supplier.findOne({company_name: supplier});
+    let supplier_value = {};
+    if(supplier) {
+      supplier_value = await Supplier.findOne({company_name: supplier});
+    }
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
