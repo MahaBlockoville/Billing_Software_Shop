@@ -97,6 +97,7 @@ export default class SaleCard extends Component {
             <th>Phone</th>
              <th>IMEI/Serial Number</th>
              <th>Brand Details </th>
+             <th>Reward points</th>
              <th>Payment Type</th>
              <th>Selling Value</th>
              <th>Date</th>
@@ -114,6 +115,7 @@ export default class SaleCard extends Component {
                <td>{data.inward.product.name} {" - "}{data.inward.product.model}
                {" - "}{data.inward.product.variant}
                {" - "}{data.inward.product.color}</td>
+               <td>{data.inward.product.reward_points}</td>
                <td>{data.payment_type}</td>
                <td>{data.selling_value}</td>
                <td>{this.onGetDate(data.dos)}</td>

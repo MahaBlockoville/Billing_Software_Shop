@@ -129,6 +129,7 @@ export default class ViewProduct extends Component {
             <th>Variant</th>
             <th>Category</th>
             <th>Supplier</th>
+            <th>Reward Points</th>
             <th></th>
             <th></th>
 
@@ -141,6 +142,7 @@ export default class ViewProduct extends Component {
                <td>{data.variant}</td>
                <td>{data.category ? data.category.name : ''}</td>
                <td>{data.supplier ? data.supplier.company_name + '|' + data.supplier.contact_person : ''}</td>
+               <td>{data.reward_points ? data.reward_points : ''}</td>
                <td>
                  <Link
                     to={`/editProduct/${data._id}`}

@@ -875,7 +875,7 @@ router.delete("/deleteSupplier/:id", async (req, res) => {
 router.post("/addProduct", async (req, res) => {
   try {
 
-    let { name, variant, model, color, supplier, category, hsn, selling_value, purchase_value } = req.body;
+    let { name, variant, model, color, supplier, category, reward_points, hsn, selling_value, purchase_value } = req.body;
     // validation
     if (
       !name ||
@@ -894,7 +894,9 @@ router.post("/addProduct", async (req, res) => {
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
-        name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
+        name, variant, model, color, supplier: supplier_value, 
+        category: category_value, hsn, selling_value, purchase_value,
+        reward_points
       });
       const savedProduct = await newProduct.save();
       res.json(savedProduct);
@@ -902,7 +904,9 @@ router.post("/addProduct", async (req, res) => {
       Product.findOneAndUpdate(
         { _id: req.body.product_id },
         {
-          name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
+          name, variant, model, color, supplier: supplier_value, 
+          category: category_value, hsn, selling_value, purchase_value,
+          reward_points
         },
         { new: true },
         function (err, result) {

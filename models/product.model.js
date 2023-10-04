@@ -11,6 +11,7 @@ const productSchema = new Schema({
   model: { type: String },
   hsn: { type: Number },
   category: { type: Object },
+  reward_points: { type: String, default: 0},
   supplier: { type: Object },
   purchase_value: { type: String },
   selling_value: { type: String },
