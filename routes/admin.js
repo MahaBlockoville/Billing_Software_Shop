@@ -110,7 +110,7 @@ router.post("/branchUserUpdate", async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
     const existingUser = await Admin.findOne({ _id: branch_user_id });
-    if(existingUser.role == 'branch') {
+    if(existingUser.role === 'branch') {
       existingUser.email = email;
     }
     existingUser.name = name;
