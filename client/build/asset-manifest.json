@@ -1,25 +1,24 @@
 {
   "files": {
     "main.css": "/static/css/main.646ec50a.css",
-    "main.js": "/static/js/main.9d3ece62.js",
+    "main.js": "/static/js/main.60daee2d.js",
     "static/js/787.44e022fc.chunk.js": "/static/js/787.44e022fc.chunk.js",
     "static/media/empty.png": "/static/media/empty.93a149295a019cb314f4.png",
     "static/media/authentication.png": "/static/media/authentication.f0629e13b63da25d1af3.png",
     "static/media/contactUs.png": "/static/media/contactUs.2af89bd373a17925fd59.png",
     "static/media/femaleUserPic.png": "/static/media/femaleUserPic.cda67374ea93b044eff7.png",
     "static/media/maleUserPic.png": "/static/media/maleUserPic.34a2f804acadf727a004.png",
-    "static/media/visaka_icon.jpeg": "/static/media/visaka_icon.9211d9e443772d0cc2d0.jpeg",
     "static/media/noEmp.png": "/static/media/noEmp.10cf423367de1ee448c2.png",
     "static/media/pageNotFound.svg": "/static/media/pageNotFound.4861ae776b44868dd600a76fba88073d.svg",
     "static/media/login.png": "/static/media/login.0dcf40a9ba305f8b9099.png",
     "static/media/checklist.svg": "/static/media/checklist.35b62159b0d5737d0512279ddd6402bc.svg",
     "index.html": "/index.html",
     "main.646ec50a.css.map": "/static/css/main.646ec50a.css.map",
-    "main.9d3ece62.js.map": "/static/js/main.9d3ece62.js.map",
+    "main.60daee2d.js.map": "/static/js/main.60daee2d.js.map",
     "787.44e022fc.chunk.js.map": "/static/js/787.44e022fc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.646ec50a.css",
-    "static/js/main.9d3ece62.js"
+    "static/js/main.60daee2d.js"
   ]
 }
