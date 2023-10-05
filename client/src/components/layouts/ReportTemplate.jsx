@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../assets/billTemplate.css";
 import { ToWords } from 'to-words';
 import moment from 'moment';
-import visaka  from "../../assets/images/visaka_icon.jpeg";
+import logo_path  from '../../assets/images/';
 
 const toWords = new ToWords();
 let body = document.querySelector('body');
@@ -22,7 +22,7 @@ class ReportTemplate extends Component {
       <div className="bill-template">
        <table className="table" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
   <tr style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${visaka})`, backgroundRepeat: "no-repeat", border: '3px solid black', backgroundPosition: 'right', backgroundSize: '250px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+    <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${logo_path + process.env.REACT_APP_LOG_NAME})`, backgroundRepeat: "no-repeat", border: '3px solid black', backgroundPosition: 'right', backgroundSize: '250px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
       <div className="header_cell_shop_details">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>{this.props.branchName}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div>
@@ -102,7 +102,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr className="bold" style={
     {
-    //backgroundImage: `url(${visaka})`, 
+    //backgroundImage: `url(${log_path})`, 
     backgroundRepeat: "no-repeat", 
     backgroundPosition: 'center', 
     border: '3px solid black',
