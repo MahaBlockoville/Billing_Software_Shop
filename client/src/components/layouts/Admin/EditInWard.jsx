@@ -302,7 +302,7 @@ export default class EditInWard extends Component {
                                 {/* email */}
                                 <label htmlFor="imei_number">IMEI Number</label>
                                 <input
-                                  type="number"
+                                  type="text"
                                   name="imei_number"
                                   value={this.state.imei_number}
                                   className="form-control mb-3 "
@@ -316,7 +316,7 @@ export default class EditInWard extends Component {
                                 {/* email */}
                                 <label htmlFor="imei_number">Serial Number</label>
                                 <input
-                                  type="number"
+                                  type="text"
                                   name="imei_number"
                                   value={this.state.imei_number}
                                   className="form-control mb-3 "

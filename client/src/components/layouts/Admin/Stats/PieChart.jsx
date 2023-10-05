@@ -29,28 +29,36 @@ export default class PieChart extends Component {
         this.onFilterGender();
       });
     });
-    const categoryList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getCategoryList");
-    const labels = [];
-    categoryList.data.map(async (category) => {
-      labels.push(category.name);
-    })
-    this.setState({ labels: labels});
   };
 
   onFilterGender = () => {
-    let smartPhoneCount = 0;
-    let featurePhoneCount = 0;
-    let accessoryCount = 0;
+    //   no of emp per team
+    let teamDict = {};
+
     this.state.inwardList.forEach((emp) => {
-      if (emp.category === "Smart Phone") smartPhoneCount = parseInt(smartPhoneCount) + 1;
-      else if (emp.category === "Featured Phone") featurePhoneCount = parseInt(featurePhoneCount) + 1;
-      else accessoryCount = parseInt(accessoryCount) + 1;
+      if (!teamDict[emp.product.category.name]) {
+        teamDict[emp.product.category.name] = 1;
+      } else {
+        teamDict[emp.product.category.name]++;
+      }
     });
 
-    let datasets = [...this.state.datasets];
-    datasets[0].data = [smartPhoneCount, featurePhoneCount, accessoryCount];
+    console.log("taem dict: ", teamDict);
 
-    this.setState({ datasets });
+    let datasets = this.state.datasets;
+    let labels = [];
+    let data = [];
+
+    for (const property in teamDict) {
+      labels.push(property);
+      data.push(teamDict[property]);
+    }
+
+    console.log(data);
+
+    datasets[0].data = data;
+
+    this.setState({ datasets, labels });
   };
 
   render() {
