@@ -14,6 +14,7 @@ class EditBranch extends Component {
 
     this.state = {
       name: "",
+      prev_name: "",
       address: "",
       phoneNo: "",
       dop: "",
@@ -42,6 +43,7 @@ class EditBranch extends Component {
     const branchUser = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchUser/${branchData.data.name}`);
     this.setState({
       ...branchData.data,
+      prev_name: branchData.data.name,
       branch_user_id: branchUser.data ? branchUser.data._id : '',
     });
   };
@@ -56,6 +58,7 @@ class EditBranch extends Component {
 
     const {
       name,
+      prev_name,
       address,
       phoneNo,
       dop,
@@ -86,6 +89,7 @@ class EditBranch extends Component {
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addBranch", {
         name,
+        prev_name,
         address,
         phoneNo,
         dop,

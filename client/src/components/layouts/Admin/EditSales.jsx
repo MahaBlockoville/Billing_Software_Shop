@@ -73,6 +73,13 @@ class EditSales extends Component {
     const inwardList = await axios.get(process.env.REACT_APP_API_URL +"/api/admin/getInWardList?stock=" + stock);    const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
+
+    if(salesData.data.payment_type === 'EMI') {
+      const initial_amount = parseInt(salesData.data.tenure);
+      const amount = parseInt(salesData.data.selling_value) - initial_amount;
+      salesData.data.selling_value = amount;
+    }
+    console.log('salesData.data.selling_value', salesData.data.selling_value)
     const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
 
     const imeiNumberList = this.state.imeiNumberList;
@@ -116,7 +123,7 @@ class EditSales extends Component {
       },
       ...salesData.data
     });
-    
+
   };
   onBranchSelect = (branch) => {
     console.log("onBranchSelect", branch);
@@ -127,7 +134,7 @@ class EditSales extends Component {
 
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
-    const {
+    let {
       name,
       imei_number,
       phone,
@@ -149,6 +156,9 @@ class EditSales extends Component {
     this.setState({
       disabled: true,
     });
+    const initial_amount = parseInt(tenure);
+    const amount = parseInt(selling_value) + initial_amount;
+    selling_value = amount;
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
         name,
@@ -190,7 +200,13 @@ class EditSales extends Component {
   onChange = (e) => {
     console.log("onChange", e.target);
     this.setState({ [e.target.name]: e.target.value });
+    if(e.target.name === 'tenure') {
+      const initial_amount = parseInt(e.target.value);
+      const amount = parseInt(this.state.selling_value) - initial_amount;
+      this.setState({ selling_value: amount });
+    }
   }
+
   onEmpSelect = (sales_person) => this.setState({ sales_person });
 
 

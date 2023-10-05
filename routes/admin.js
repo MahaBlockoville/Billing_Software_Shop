@@ -616,7 +616,7 @@ router.post("/addExpense", async (req, res) => {
 // @desc: add branch by admin
 router.post("/addBranch", async (req, res) => {
   try {
-    let { name, address, phoneNo, dop, gst_number } = req.body;
+    let { name, address, phoneNo, dop, gst_number, prev_name } = req.body;
     // validation
     if (
       !name ||
@@ -626,6 +626,14 @@ router.post("/addBranch", async (req, res) => {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
     if(req.body.branch_id) {
+      if(prev_name !== name) {
+        InWard.updateMany({branch: prev_name}, {branch: name}, function (err, result) {
+          console.log(result, err);
+        })
+        Sale.updateMany({branch: prev_name}, {branch: name}, function (err, result) {
+          console.log(result, err);
+        })
+      }
       Branch.findOneAndUpdate(
         { _id: req.body.branch_id },
         {
