@@ -174,8 +174,10 @@ class AddSales extends Component {
     this.setState({
       disabled: true,
     });
-    if(type === "wgst") {
-      gst_percentage = 18;
+    if(payment_type === 'EMI') {
+      const initial_amount = parseInt(tenure);
+      const amount = parseInt(selling_value) + initial_amount;
+      selling_value = amount;
     }
       try {
         const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {

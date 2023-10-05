@@ -339,7 +339,7 @@ class AddInWard extends Component {
                                     IMEI Number
                                   </label>
                                   <input
-                                    type="number"
+                                    type="text"
                                     name="imei_number"
                                     value={this.state.imei_number[data]}
                                     className="form-control mb-3 "
@@ -356,7 +356,7 @@ class AddInWard extends Component {
                                     Serial Number
                                   </label>
                                   <input
-                                    type="number"
+                                    type="text"
                                     name="imei_number"
                                     value={this.state.imei_number[data]}
                                     className="form-control mb-3 "

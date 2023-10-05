@@ -7,6 +7,7 @@ import { Consumer } from "../../../context";
 import { Spring } from "react-spring/renderprops";
 import noEmp from "../../../assets/images/noEmp.png";
 import { createHashHistory } from 'history'
+import moment from "moment";
 export const history = createHashHistory()
 
 export default class Payroll extends Component {
@@ -221,8 +222,8 @@ export default class Payroll extends Component {
                           <div className="container">
                             <h4 className="my-3 text-right text-secondary">
                               Profit/Loss for {this.state.from_date},{" "}
-                              {this.state.to_date}, {'-'}
-                              {parseFloat(this.state.total_revenue) - parseFloat(this.state.total_expense)}
+                              {this.state.to_date},{" "}
+                              {(parseFloat(this.state.total_revenue).toFixed(2) - parseFloat(this.state.total_expense).toFixed(2)).toFixed(2)}
                             </h4>
                             <div
                               className="row"
@@ -230,35 +231,29 @@ export default class Payroll extends Component {
                                 display: "flex",
                               }}
                             >
-                              <div className="table table-striped sortable">
-                                {this.state.expenseList.map((data, index) => (
-                                      <>
-                                      <div>
-                                         <span>Type: {data?.expense} {', '}</span>
-                                         {
-                                          data.brand &&
-                                          <span> Brand: {data?.brand} {', '}</span>
-                                         }
-                                         <span>Content: {data?.content} {', '}</span>
-                                        <span>Amount: {data?.amount} {', '}</span>
-                                        <span>Date: {data?.doe} </span>
-                                      </div>
-                                      </>
-                                ))}
+                              <div className="table table-striped sortable" style={{padding: '0.5rem'}}>
                                 <table className="inputTable searchable sortable">
                                   <thead>
-                                    <th>Brand Details </th>
-                                    <th>Branch</th>
-                                    <th>IMEI Number</th>
-                                    <th>Category</th>
-                                    <th>Amount</th>
-                                    <th>Type</th>
+                                    <th></th>
                                     <th>Date</th>
+                                    <th>Details </th>
+                                    <th>Branch</th>
+                                    <th>Category</th>
+                                    <th>CREDIT</th>
+                                    <th>DEBIT</th>
                                     <th></th>
                                     <th></th>
                                   </thead>
                                   {this.state.itemList.map((data, index) => (
                                     <tbody>
+                                      <td></td>
+                                      <td>{data.doi ? 
+                                      moment(data?.doi).format(
+                                        'DD MMM'
+                                      ) : 
+                                      moment(data?.dos).format(
+                                        'DD MMM'
+                                      )}</td>
                                       <td>
                                         {data.product && data.product.name
                                           ? data.product.name
@@ -271,26 +266,53 @@ export default class Payroll extends Component {
                                           : data.inward.product.variant}{" "}
                                         {data.product && data.product.color
                                           ? data.product.color
-                                          : data.inward.product.color}
-                                      </td>
-                                      <td>{data.branch}</td>
-                                      <td>
+                                          : data.inward.product.color} {" "}
                                         {data.imei_number
                                           ? data.imei_number
                                           : data.inward.product.imei_number}
                                       </td>
+                                      <td>{data.branch}</td>
                                       <td>
                                         {data.product && data.product.category
                                           ? data.product.category.name
                                           : data.inward.product.category.name}
                                       </td>
-                                      <td>{data.selling_value}</td>
-                                      <td>{data.type === 'firstPurchase' || data.type === 'secondPurchase' ? 'DEBIT' : 'CREDIT'}</td>
-                                      <td>{data.doi ? data.doi : data.dos}</td>
+                                      <td>{data.inward !== undefined ? parseFloat(data.selling_value).toFixed(2) : ''}</td>
+                                      <td>{data.product !== undefined ? parseFloat(data.selling_value).toFixed(2) : ''}</td>
                                       <td></td>
                                       <td></td>
                                     </tbody>
                                   ))}
+                                  {this.state.expenseList.map((data, index) => (
+                                    <tbody>
+                                      <td></td>
+                                      <td>
+                                        {
+                                          moment(data?.doe).format(
+                                            'DD MMM'
+                                          )
+                                        }
+                                      </td>
+                                      <td> {data?.brand} {' - '} {data?.content} </td>
+                                      <td></td>
+                                      <td>{data?.expense}</td>
+                                      <td>{data?.expense === "scheme" ? data?.amount : ''}</td>
+                                      <td>{data?.expense === "expense" ? data?.amount : ''}</td>
+                                      <td></td>
+                                      <td></td>
+                                    </tbody>
+                                  ))}
+                                  <tbody>
+                                    <td></td>
+                                     <td></td>
+                                     <td></td>
+                                     <td></td>
+                                     <td></td>
+                                     <td>{parseFloat(this.state.total_revenue).toFixed(2)}</td>
+                                     <td>{parseFloat(this.state.total_expense).toFixed(2)}</td>
+                                     <td>{(parseFloat(this.state.total_revenue).toFixed(2) - parseFloat(this.state.total_expense).toFixed(2)).toFixed(2)}</td>
+                                     <td></td>
+                                  </tbody>
                                 </table>
                               </div>
                             </div>
