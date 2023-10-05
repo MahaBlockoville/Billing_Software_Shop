@@ -28,39 +28,41 @@ export default class BarChart2 extends Component {
 
   componentDidMount = async () => {
     axios.get(process.env.REACT_APP_API_URL +"/api/admin/getSalesList").then((saleList) => {
-      let smartPhoneCount = 0;
-      let featurePhoneCount = 0;
-      let accessoryCount = 0;
-      saleList.data.forEach((emp) => {
-        if (emp.category === "Smart Phone") smartPhoneCount = parseInt(smartPhoneCount) + 1;
-        else if (emp.category === "Featured Phone") featurePhoneCount = parseInt(featurePhoneCount) + 1;
-        else accessoryCount = parseInt(accessoryCount) + 1;
+      this.setState({ saleList: saleList.data }, () => {
+        this.onPopulateBarChart();
       });
-      this.setState(
-        {
-          smartPhoneCount,
-          featurePhoneCount,
-          accessoryCount,
-        },
-        () => {
-          this.onPopulateBarChart();
-        }
-      );
     });
 
   };
 
   onPopulateBarChart = () => {
+    //   no of emp per team
+    let teamDict = {};
+
+    this.state.saleList.forEach((emp) => {
+      if (!teamDict[emp.inward.product.category.name]) {
+        teamDict[emp.inward.product.category.name] = 1;
+      } else {
+        teamDict[emp.inward.product.category.name]++;
+      }
+    });
+
+    console.log("taem dict: ", teamDict);
+
     let datasets = this.state.datasets;
-    let data = [
-      this.state.smartPhoneCount,
-      this.state.featurePhoneCount,
-      this.state.accessoryCount,
-    ];
+    let labels = [];
+    let data = [];
+
+    for (const property in teamDict) {
+      labels.push(property);
+      data.push(teamDict[property]);
+    }
+
+    console.log(data);
 
     datasets[0].data = data;
 
-    this.setState({ datasets });
+    this.setState({ datasets, labels });
   };
 
   render() {
