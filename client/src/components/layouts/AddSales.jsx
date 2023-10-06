@@ -174,11 +174,6 @@ class AddSales extends Component {
     this.setState({
       disabled: true,
     });
-    if(payment_type === 'EMI') {
-      const initial_amount = parseInt(tenure);
-      const amount = parseInt(selling_value) + initial_amount;
-      selling_value = amount;
-    }
       try {
         const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addSale", {
           name,
@@ -218,11 +213,6 @@ class AddSales extends Component {
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
-    if(e.target.name === 'tenure') {
-        const initial_amount = parseInt(e.target.value);
-        const amount = parseInt(this.state.selling_value) - initial_amount;
-        this.setState({ selling_value: amount });
-    }
   }
 
   onCancel = (e) => {
