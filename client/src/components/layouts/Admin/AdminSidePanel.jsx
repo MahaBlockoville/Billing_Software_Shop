@@ -55,7 +55,7 @@ export default class SidePanel extends Component {
 
         <ul className="nav flex-column flex-nowrap">
           {
-            this.state.admin && this.state.admin.role === "admin" && 
+            this.state.admin && (this.state.admin.role === "admin" || this.state.admin.role === "branch") && 
             <li className="nav-item">
             <a className="nav-link list-group-item text-dark border-0 my-1 myList collapsed" href="#submenu1" data-toggle="collapse" data-target="#submenu1">
             <i
@@ -66,17 +66,21 @@ export default class SidePanel extends Component {
             </a>
             <div className="collapse" id="submenu1" aria-expanded="false">
               <ul className="flex-column pl-2 nav list-group">
-                <Link to="/viewEmployees" style={{ textDecoration: "none" }}>
-                <li className="list-group-item text-dark border-0 my-1 myList nav-item">
-                <i class="fas fa-users mr-4"
-                style={{ fontSize: "20px" }}></i>
-                {currLocation === "viewEmployees" ? (
-                    <b>Employee</b>
-                  ) : (
-                    "Employee"
-                  )}
-                </li>
-              </Link>
+                {
+                  this.state.admin.role === "admin" && 
+                  <>
+                  <Link to="/viewEmployees" style={{ textDecoration: "none" }}>
+                  <li className="list-group-item text-dark border-0 my-1 myList nav-item">
+                  <i class="fas fa-users mr-4"
+                  style={{ fontSize: "20px" }}></i>
+                  {currLocation === "viewEmployees" ? (
+                      <b>Employee</b>
+                    ) : (
+                      "Employee"
+                    )}
+                  </li>
+                </Link>
+                
                 <Link to="/viewSupplier" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fas fa-industry mr-4"
@@ -91,6 +95,8 @@ export default class SidePanel extends Component {
                   {currLocation === "addBranch" ? <b>Branch</b> : "Branch"}
                 </li>
               </Link>
+              </>
+              }
               <Link to="/viewProduct" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fa fa-product-hunt mr-4"
@@ -98,13 +104,16 @@ export default class SidePanel extends Component {
                   {currLocation === "viewProduct" ? <b>Product</b> : "Product"}
                 </li>
               </Link>
-              <Link to="/viewCategory" style={{ textDecoration: "none" }}>
+              {
+                this.state.admin.role === "admin" &&
+                <Link to="/viewCategory" style={{ textDecoration: "none" }}>
                 <li className="nav-item list-group-item text-dark border-0 my-1 myList">
                 <i class="fas fa-clipboard mr-4"
                 style={{ fontSize: "20px" }} aria-hidden="true"></i>
                   {currLocation === "/viewCategory" ? <b>Category</b> : "Category"}
                 </li>
               </Link>
+              }
               </ul>
             </div>
           </li>
