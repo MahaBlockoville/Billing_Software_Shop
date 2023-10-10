@@ -353,7 +353,7 @@ router.post("/addInWard", async (req, res) => {
 router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,salesCount,
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
     if (
@@ -367,6 +367,10 @@ router.post("/addSale", async (req, res) => {
       !dos) {
       return res.status(400).json({ msg: "Please enter all the fields" });
     }
+    const salesCount = await Sale.countDocuments({
+      type: {$in: ['wgst', 'wogst']}
+    })
+    console.log(salesCount, 'salesCount');
     const invoice_id = process.env.INVOICE_ID + '/00' + (parseInt(salesCount) + 1);
     console.log(invoice_id, 'invoice_id');
     const inward_value = await InWard.findOne({imei_number: imei_number});
@@ -388,7 +392,7 @@ router.post("/addSale", async (req, res) => {
           name, imei_number, phone, address, email, selling_value, 
           tenure, branch, payment_type, dos, gst_number, gst_percentage,sales_person,
           category: inward_value.category, inward: inward_value, finance_name, order_no, 
-          shipping_address, shipping_name, shipping_email, shipping_phone, invoice_id
+          shipping_address, shipping_name, shipping_email, shipping_phone
         },
         { new: true },
         function (err, result) {
@@ -770,9 +774,9 @@ router.delete("/deleteStock/:id", async (req, res) => {
 // @desc: delete a user stock
 router.delete("/deleteSale/:id", async (req, res) => {
   try {
+    const sale_data = await Sale.findOne({_id: req.params.id});
+    const inward_data = await InWard.findOneAndUpdate({_id: sale_data.inward._id}, {is_sale: false});
     const deleteSale = await Sale.findByIdAndDelete(req.params.id);
-    await InWard.findOneAndUpdate({_id: req.params.id}, {is_sale: false});
-
     res.json(deleteSale);
   } catch (err) {
     res.status(500).json({ err: err.message });
