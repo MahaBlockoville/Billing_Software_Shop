@@ -381,7 +381,6 @@ router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
       tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
     if (
