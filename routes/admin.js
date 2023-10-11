@@ -272,6 +272,33 @@ router.post("/addEmployee", async (req, res) => {
   }
 });
 
+router.get('/inwardCount', async (req, res) => {
+  try {
+    const inward_list_data = await InWard.aggregate([
+      {
+        $match: {
+            is_sale: false,
+        }
+      },
+      {
+        $group: {
+          _id: '$product.model',
+          inward: { $first: '$$ROOT' },
+          count: { $sum: 1 }
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: { $mergeObjects: [{ count: '$count' }, '$inward'] }
+        }
+      }
+    ])
+    res.json(inward_list_data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+})
+
 // @desc: add addInWard by admin
 router.post("/addInWard", async (req, res) => {
   try {
@@ -353,6 +380,7 @@ router.post("/addInWard", async (req, res) => {
 router.post("/addSale", async (req, res) => {
   try {
     let {name, imei_number, phone, address, email, selling_value, 
+      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
       tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
