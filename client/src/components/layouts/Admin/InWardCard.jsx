@@ -91,7 +91,7 @@ export default class InWardCard extends Component {
       return number_list.push(data.imei_number)
     })
 
-    return number_list.length > 0 ? number_list : '';
+    return number_list.length > 0 ? number_list : [];
   };
 
   render() {
@@ -153,7 +153,7 @@ export default class InWardCard extends Component {
                 <tr>
                   <td>
                      <div><b>{product_data.product.name} {" - "} {product_data.product.model} {'/ Count - '} {product_data.count}</b> </div>
-                      {this.imeiNumberList(product_data.product.model).map((data) => (
+                      {this.imeiNumberList(product_data.product.model).length > 0 && this.imeiNumberList(product_data.product.model).map((data) => (
                         <div>{data}</div>
                       ))}
                   </td>
