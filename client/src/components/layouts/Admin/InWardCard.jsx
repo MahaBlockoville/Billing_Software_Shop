@@ -12,12 +12,19 @@ export default class InWardCard extends Component {
   constructor() {
     super();
     this.state = {
+      countData: [],
       type: this.props !== undefined && this.props.type ? this.props.type : "",
     };
     this.exportTableRef = React.createRef();
+    this.exportTableStockRef = React.createRef();
   }
 
   componentDidMount = async () => {
+    const inwardCount = await axios.get(process.env.REACT_APP_API_URL + "/api/admin/inwardCount");
+    console.log(inwardCount.data, 'inwardCount');
+    this.setState({
+      countData: inwardCount.data
+    })
     const token = localStorage.getItem("auth-token");
     const tokenRes = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/tokenIsValid", null, {
       headers: { "x-auth-token": token },
@@ -74,6 +81,19 @@ export default class InWardCard extends Component {
     console.log("clickExcel", e.target);
   };
 
+  imeiNumberList = (model) => {
+    const number_list = []
+    const dataByModel = this.props.inwardList.filter((data) => {
+      return data.product.model === model;
+    })
+    console.log(dataByModel, 'inwardCount model')
+    dataByModel.length > 0 && dataByModel.map((data) => {
+      return number_list.push(data.imei_number)
+    })
+
+    return number_list.length > 0 ? number_list : '';
+  };
+
   render() {
     const { inwardList } = this.props;
     const currentdate = "stock " + this.props.type  + ' ' +  new Date().toISOString().split('T')[0];
@@ -102,12 +122,51 @@ export default class InWardCard extends Component {
         sheet="stock"
         currentTableRef={this.exportTableRef.current}
         />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+      <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-stock"
+        filetype="xlsx"
+        buttonText="Download Stock XLSX"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableStockRef.current}
+        />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <ReactHTMLTableToExcel
+        id="test-table-xlsx-button"
+        className="btn btn-primary pull-right"
+        table="table-to-stock"
+        filetype="xls"
+        buttonText="Download Stock XLS"
+        filename={currentdate}
+        sheet="stock"
+        currentTableRef={this.exportTableStockRef.current}
+        />
+
+        {
+          this.state.countData.length > 0 &&
+          <table className="inputTable searchable sortable" id="table-to-stock" ref={this.exportTableStockRef}  style={{display: 'none'}}>
+            {
+              this.state.countData.map((product_data, i) => (
+                <tr>
+                  <td>
+                     <div><b>{product_data.product.name} {" - "} {product_data.product.model} {'/ Count - '} {product_data.count}</b> </div>
+                      {this.imeiNumberList(product_data.product.model).map((data) => (
+                        <div>{data}</div>
+                      ))}
+                  </td>
+                </tr>
+              ))
+            }
+          </table>
+        }
           {
             inwardList.length > 0 &&
             <table className="inputTable searchable sortable" id="table-to-xlsx" ref={this.exportTableRef}>
             <tr>
             <th>Brand Details </th>
-              <th>IMEI/Serial Number</th>
               <th>GST Percentage</th>
               <th>Purchase Value</th>
               <th>Selling Value</th>
@@ -120,8 +179,7 @@ export default class InWardCard extends Component {
             </tr>
          {inwardList.map((data, index) => (
            <tr>
-                <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color}</td>
-                <td>{data.imei_number}</td>
+                <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color} - {data.imei_number}</td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}</td>
                 <td>{data.selling_value}</td>
@@ -178,7 +236,7 @@ export default class InWardCard extends Component {
                }
              </tr>
             ))}
-          </table>
+            </table>
           }
 
          </div>

@@ -272,6 +272,33 @@ router.post("/addEmployee", async (req, res) => {
   }
 });
 
+router.get('/inwardCount', async (req, res) => {
+  try {
+    const inward_list_data = await InWard.aggregate([
+      {
+        $match: {
+            is_sale: false,
+        }
+      },
+      {
+        $group: {
+          _id: '$product.model',
+          inward: { $first: '$$ROOT' },
+          count: { $sum: 1 }
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: { $mergeObjects: [{ count: '$count' }, '$inward'] }
+        }
+      }
+    ])
+    res.json(inward_list_data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+})
+
 // @desc: add addInWard by admin
 router.post("/addInWard", async (req, res) => {
   try {
