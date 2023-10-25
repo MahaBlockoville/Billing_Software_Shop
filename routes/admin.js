@@ -1039,27 +1039,35 @@ router.get("/getDayBook", async (req, res) => {
       expense_query.doe = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
 
       sales_query.dos = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+      sales_query.type = {$in: ['wgstReturn', 'wogstReturn']}
 
       query.doi = { $gte: moment(req.query.from_date).format('Y-MM-DD') };
+      query.type = {$in: ['firstPurchase', 'secondPurchase']}
     }else {
       expense_query.doe = { $gte: moment().format('Y-MM-DD') };
 
       sales_query.dos = { $gte: moment().format('Y-MM-DD') };
+      sales_query.type = {$in: ['wgstReturn', 'wogstReturn']}
 
       query.doi = { $gte: moment().format('Y-MM-DD') };
+      query.type = {$in: ['firstPurchase', 'secondPurchase']}
     }
     if (req.query.to_date != undefined && req.query.to_date != "") {
       expense_query.doe = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
 
       sales_query.dos = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+      sales_query.type = {$in: ['wgstReturn', 'wogstReturn']}
 
       query.doi = { $lte: moment(req.query.to_date).format('Y-MM-DD') };
+      query.type = {$in: ['firstPurchase', 'secondPurchase']}
     }else {
       expense_query.doe = { $lte: moment().format('Y-MM-DD') };
 
       sales_query.dos = { $lte: moment().format('Y-MM-DD') };
+      sales_query.type = {$in: ['wgstReturn', 'wogstReturn']}
 
       query.doi = { $lte: moment().format('Y-MM-DD') };
+      query.type = {$in: ['firstPurchase', 'secondPurchase']}
     }
     if(req.query.branch) {
       expense_query.doe = req.query.branch;
