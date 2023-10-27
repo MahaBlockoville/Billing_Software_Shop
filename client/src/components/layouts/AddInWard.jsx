@@ -205,8 +205,8 @@ class AddInWard extends Component {
       }
       this.setState({ 
         [e.target.name]: e.target.value,
-        purchase_value: this.state.purchase_value * e.target.value,
-        selling_value: this.state.selling_value * e.target.value,
+        purchase_value: this.state.initial_purchase_value * e.target.value,
+        selling_value: this.state.initial_selling_value * e.target.value,
         imeiNumberList: imeiNumberList
       });
     }
@@ -330,7 +330,7 @@ class AddInWard extends Component {
                                     name="quantity"
                                     className="form-control mb-3 "
                                     placeholder="Quantity"
-                                    onChange={this.onQuantityChange}
+                                    onBlur={this.onQuantityChange}
                                     required
                                   />
                                 </div>
