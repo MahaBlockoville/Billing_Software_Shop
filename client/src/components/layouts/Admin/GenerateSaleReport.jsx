@@ -9,7 +9,8 @@ class GenerateSalesReport extends Component {
     super();
     this.state = {
         sale_id: '',
-        salesCount: ''
+        salesCount: '',
+        total: ''
     };
     this.reportTemplateRef = React.createRef();
   }
@@ -19,7 +20,7 @@ class GenerateSalesReport extends Component {
     const saleId = this.props.match.params.id;
     this.setState({sale_id: saleId});
     const salesData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleData/${saleId}`);
-    const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.branch}`);
+    const branchData = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getBranchDataByName/${salesData.data.product_list[0].branch}`);
     const salesCount = await axios.get(process.env.REACT_APP_API_URL +`/api/admin/getSaleCount`);
     this.setState({
       branchName: process.env.REACT_APP_BILL_NAME,
@@ -28,6 +29,14 @@ class GenerateSalesReport extends Component {
       branchPhone: branchData.data.phoneNo,
       salesCount: salesCount.data
     });
+    let total = 0;
+    salesData.data.product_list && salesData.data.product_list.forEach((emp) => {
+      if(emp.selling_value) {
+        total += parseInt(emp.selling_value);
+      }
+    });
+    this.setState({ total });
+    console.log(salesData.data, 'salesData')
     this.setState({
       ...salesData.data,
     });

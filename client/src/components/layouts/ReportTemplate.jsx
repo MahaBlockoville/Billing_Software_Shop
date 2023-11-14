@@ -100,77 +100,83 @@ class ReportTemplate extends Component {
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>GST%</td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>AMOUNT</td>
   </tr>
-  <tr className="bold" style={
-    {
-    //backgroundImage: `url(${local})`, 
-    backgroundRepeat: "no-repeat", 
-    backgroundPosition: 'center', 
-    border: '3px solid black',
-    WebkitPrintColorAdjust: 'exact', 
-    printColorAdjust: 'exact',
-    //filter: 'opacity(30%)',
-    //fontWeight: 'bold',
-    fontSize: '18px',
-    height: '300px',
-    backgroundSize: '400px'}
-    }>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> 1 </td>
-    <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-      <div>
-      {
-      this.props.inward && this.props.inward.product ?
-        this.props.inward.product.name + ' ' + this.props.inward.product.model
-        + ' ' + this.props.inward.product.variant + ' ' + this.props.inward.product.color
-        : ""
-    }
-      </div>
-      <div>
+  {
+    this.props.product_list && this.props.product_list.map((data, index) => {
+      return  <> 
+      <tr className="bold" key={index} style={
         {
-          this.props.imei_number
+        //backgroundImage: `url(${local})`, 
+        backgroundRepeat: "no-repeat", 
+        backgroundPosition: 'center', 
+        border: '3px solid black',
+        WebkitPrintColorAdjust: 'exact', 
+        printColorAdjust: 'exact',
+        //filter: 'opacity(30%)',
+        //fontWeight: 'bold',
+        fontSize: '18px',
+        height: '300px',
+        backgroundSize: '400px'}
+        }>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {index+1} </td>
+        <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+          <div>
+          {
+          data.inward && data.inward.product ?
+          data.inward.product.name + ' ' + data.inward.product.model
+            + ' ' + data.inward.product.variant + ' ' + data.inward.product.color
+            : ""
         }
-      </div>
-    
-    </td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>1</td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{this.props.gst_percentage}</td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
-  </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-      CGST {this.props.gst_percentage / 2} %
-    </td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
-  </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+          </div>
+          <div>
+            {
+              data.imei_number
+            }
+          </div>
+        
+        </td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>1</td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.selling_value - (data.selling_value * (data.gst_percentage / 100))}</td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.gst_percentage}</td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.selling_value - (data.selling_value * (data.gst_percentage / 100))}</td>
+      </tr>
+     <tr className="bold" key={index} style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-      SGST {this.props.gst_percentage / 2} %
+      CGST {data.gst_percentage / 2} %
     </td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
+    <tr className="bold" key={index} style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+      SGST {data.gst_percentage / 2} %
+    </td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}</td>
+  </tr>
+    </>
+    })
+  }
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td colspan="3">Total Amount</td>
     <td></td>
     <td></td>
     <td></td>
-    <td>{parseInt(this.props.selling_value) + '.00'}</td>
+    <td>{this.props.total + '.00'}</td>
   </tr>
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {
-        this.props.selling_value !== undefined &&
-        toWords.convert(parseInt(this.props.selling_value))
+        this.props.total !== undefined &&
+        toWords.convert(this.props.total)
       }
       </div>
       </td>

@@ -379,17 +379,14 @@ router.post("/addInWard", async (req, res) => {
 // @desc: add addSale by admin
 router.post("/addSale", async (req, res) => {
   try {
-    let {name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type, sales_person,
+    let {name, phone, address, email, productList,
+      tenure, payment_type, dos, type, sales_person,
       finance_name, order_no, shipping_address, shipping_name, shipping_email, shipping_phone} = req.body;
     // validation
     if (
       !name ||
-      !imei_number ||
       !phone ||
       !address||
-      !selling_value ||
-      !branch ||
       !payment_type ||
       !dos) {
       return res.status(400).json({ msg: "Please enter all the fields" });
@@ -398,15 +395,16 @@ router.post("/addSale", async (req, res) => {
       type: {$in: ['wgst', 'wogst']}
     })
     const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
-    console.log(invoice_id, 'invoice_id');
-    const inward_value = await InWard.findOne({imei_number: imei_number});
-    await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
+    productList.forEach(async (data, i) => {
+      const inward_value = await InWard.findOne({imei_number: data.imei_number});
+      await InWard.findOneAndUpdate({imei_number: data.imei_number}, {is_sale: true});
+      productList[i].inward = inward_value
+    })
     if(!req.body.sale_id) {
     const newSaleItem = new Sale({
-      name, imei_number, phone, address, email, selling_value, 
-      tenure, branch, payment_type, dos, gst_number, gst_percentage, type,
-      category: inward_value.category, sales_person, invoice_id,
-      inward: inward_value, finance_name, order_no, shipping_address, 
+      name, phone, address, email, product_list: productList,
+      tenure, payment_type, dos, type, sales_person, invoice_id,
+      finance_name, order_no, shipping_address, 
       shipping_name, shipping_email, shipping_phone
     });
     const savedSaleItem = await newSaleItem.save();
@@ -415,9 +413,8 @@ router.post("/addSale", async (req, res) => {
       Sale.findOneAndUpdate(
         { _id: req.body.sale_id },
         {
-          name, imei_number, phone, address, email, selling_value, 
-          tenure, branch, payment_type, dos, gst_number, gst_percentage,sales_person,
-          category: inward_value.category, inward: inward_value, finance_name, order_no, 
+          name, phone, address, email, selling_value, product_list: productList,
+          tenure, payment_type, dos,sales_person, finance_name, order_no, 
           shipping_address, shipping_name, shipping_email, shipping_phone
         },
         { new: true },
@@ -1024,6 +1021,41 @@ router.get("/getSalesList", async (req, res) => {
   res.send(salesList);
 });
 
+// @desc: get list of all sales
+router.get("/updateSalesList", async (req, res) => {
+  const salesList = await Sale.find({}).sort({_id: -1});
+  salesList.forEach( async (s) => {
+    if(s.product_list.length === 0 && s.inward) {
+      console.log(s);
+      s.product_list = [{
+        selectionOption: {
+          value: s.inward.imei_number,
+          label:
+          s.inward.product.name +
+            " - " +
+            s.inward.product.model +
+            " - " +
+            s.inward.product.variant +
+            " - " +
+            s.inward.product?.color +
+            "-" +
+            s.inward.imei_number,
+        },
+        inward: s.inward,
+        imei_number: s.inward.imei_number,
+        branch: s.inward.branch,
+        selling_value: s.inward.selling_value,
+        gst_percentage: s.inward.gst_percentage,
+        gst_number: s.gst_number,
+      }]
+      console.log(s);
+    }
+    s.save();
+  })
+  res.send(salesList);
+});
+
+
 // @desc: get list of all inward
 router.get("/getDayBook", async (req, res) => {
   let dayBookData;
@@ -1308,15 +1340,15 @@ router.post("/searchSale", async (req, res) => {
 
   if(name !== "") {
     filter.$or =  [ 
-      { 'inward.product.name': new RegExp(name, "i") }, 
-      { imei_number: new RegExp(name, "i") },
-      { 'inward.product.color': new RegExp(name, "i") }, 
-      { 'inward.product.model': new RegExp(name, "i") }, 
-      { 'inward.product.variant': new RegExp(name, "i") }, 
+      { 'product_list': { $elemMatch: { "inward.product.imei_number": new RegExp(name, "i") } } },
+      { 'product_list': { $elemMatch: { "inward.product.name": new RegExp(name, "i") } } },
+      { 'product_list': { $elemMatch: { "inward.product.color": new RegExp(name, "i") } } },
+      { 'product_list': { $elemMatch: { "inward.product.model": new RegExp(name, "i") } } },
+      { 'product_list': { $elemMatch: { "inward.product.variant": new RegExp(name, "i") } } }
     ];
   }
   if(category && category !== 'All' && category !== 'Select'){
-    filter.$and.push({'inward.product.category.name': category});
+    filter.$and.push({ 'product_list': { $elemMatch: { "inward.product.category.name": category } } });
   }
   if(type){
     filter.$and.push({type: type});

@@ -58,7 +58,9 @@ export default class Statistics extends Component {
     let totalExpenses = 0;
     console.log("emp sal list: ", this.state.salesList);
     this.state.salesList.forEach((emp) => {
-      totalExpenses += parseInt(emp.selling_value);
+      if(emp.selling_value) {
+        totalExpenses += parseInt(emp.selling_value);
+      }
     });
 
     this.setState({ totalExpenses });

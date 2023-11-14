@@ -40,10 +40,12 @@ export default class BarChart2 extends Component {
     let teamDict = {};
 
     this.state.saleList.forEach((emp) => {
-      if (!teamDict[emp.inward.product.category.name]) {
-        teamDict[emp.inward.product.category.name] = 1;
-      } else {
-        teamDict[emp.inward.product.category.name]++;
+      if(emp.inward) {
+        if (!teamDict[emp.inward.product.category.name]) {
+          teamDict[emp.inward.product.category.name] = 1;
+        } else {
+          teamDict[emp.inward.product.category.name]++;
+        }
       }
     });
 
