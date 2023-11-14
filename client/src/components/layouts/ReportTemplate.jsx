@@ -175,8 +175,7 @@ class ReportTemplate extends Component {
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {
-        this.props.total !== undefined &&
-        toWords.convert(this.props.total)
+        this.props.total && toWords.convert(this.props.total)
       }
       </div>
       </td>
