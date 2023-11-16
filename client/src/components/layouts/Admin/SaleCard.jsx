@@ -64,6 +64,11 @@ export default class SaleCard extends Component {
     }
   };
 
+  productDetails = async (data) => {
+    console.log("Product Details", data.product_list[0].selectionOption.label);
+   return data.product_list[0].selectionOption.label
+  }
+
   render() {
     const { salesList } = this.props;
     const currentdate = "sales " + this.props.type  + ' '+ new Date().toISOString().split('T')[0] +'.xlsx';
@@ -109,11 +114,8 @@ export default class SaleCard extends Component {
           <tr>
                <td>{data.name}</td>
                <td>{data.phone}</td>
-               <td>{data.inward.product.name} {" - "}{data.inward.product.model}
-               {" - "}{data.inward.product.variant}
-               {" - "}{data.inward.product.color} {" - "} {data.imei_number}</td>
+               <td>{data.product_list[0]?.selectionOption?.label}</td>
                <td>{data.payment_type}</td>
-               <td>{data.selling_value}</td>
                <td>{this.onGetDate(data.dos)}</td>
                <td>
                  <Link

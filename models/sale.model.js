@@ -6,15 +6,13 @@ const saleSchema = new Schema({
         //  name, imei_number, phone, address, email, selling_value, 
          // tenure, branch, payment_type, dos
   name: { type: String },
-  imei_number: { type: String },
+  product_list: { type: Array },
   invoice_id: { type: String },
-  category: { type: String },
-  inward: { type: Object },
   phone: { type: String },
   address: { type: String },
   email: { type: String },
-  branch: { type: String },
-  selling_value: { type: String },
+  inward: {type: Object },
+  gst_number: {type: String },
   payment_type: { type: String },
   tenure: { type: String },
   dos: { type: String },
@@ -26,8 +24,6 @@ const saleSchema = new Schema({
   shipping_phone: { type: String },
   shipping_address: { type: String },
   shipping_email: { type: String },
-  gst_number: { type: String },
-  gst_percentage: { type: String },
 });
 
 const Sale = mongoose.model("Sale", saleSchema);

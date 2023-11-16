@@ -162,14 +162,46 @@ export default class InWardCard extends Component {
             }
           </table>
         }
+        {
+            inwardList.length > 0 &&
+            <table className="inputTable searchable sortable" style={{display: 'none'}} id="table-to-xlsx" ref={this.exportTableRef}>
+            <tr>
+            <th> Brand Name </th>
+            <th> Brand Model </th>
+            <th> Brand Variant </th>
+            <th> Brand Color </th>
+            <th>IMEI Number</th>
+              <th>GST Percentage</th>
+              <th>Purchase Value </th>
+              <th> Selling Value</th>
+              <th>Reference Invoice Number</th>
+              <th>Date</th>
+            </tr>
+         {inwardList.map((data, index) => (
+           <tr>
+                <td>{data.product.name} </td>
+                <td> {data.product.model} </td>
+                <td> {data.product.variant} </td>
+                <td> {data.product.color}</td>
+                <td>{data.imei_number}</td>
+                <td>{data.gst_percentage}</td>
+                <td>{data.purchase_value}</td>
+                <td>{data.selling_value}</td>
+                <td>{data.reference_invoice_number ? data.reference_invoice_number : ''}</td>
+                <td>{this.onGetDate(data.doi)}</td>
+             </tr>
+            ))}
+            </table>
+          }
+
           {
             inwardList.length > 0 &&
-            <table className="inputTable searchable sortable" id="table-to-xlsx" ref={this.exportTableRef}>
+            <table className="inputTable searchable sortable">
             <tr>
             <th>Brand Details </th>
+            <th>IMEI Number</th>
               <th>GST Percentage</th>
-              <th>Purchase Value</th>
-              <th>Selling Value</th>
+              <th>Purchase Value / Selling Value</th>
               <th>Reference Invoice Number</th>
               <th>Date</th>
              <th>
@@ -179,10 +211,10 @@ export default class InWardCard extends Component {
             </tr>
          {inwardList.map((data, index) => (
            <tr>
-                <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color} - {data.imei_number}</td>
+                <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color}</td>
+                <td>{data.imei_number}</td>
                 <td>{data.gst_percentage}</td>
-                <td>{data.purchase_value}</td>
-                <td>{data.selling_value}</td>
+                <td>{data.purchase_value}{ " / "}{data.selling_value}</td>
                 <td>{data.reference_invoice_number ? data.reference_invoice_number : ''}</td>
                 <td>{this.onGetDate(data.doi)}</td>
                 <td>
