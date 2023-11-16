@@ -46,6 +46,8 @@ class AddSales extends Component {
         {
           selectionOption: {},
           imei_number: "",
+          inward_id: "",
+          category: "",
           branch: "",
           selling_value: "",
           gst_percentage: "",
@@ -186,6 +188,8 @@ class AddSales extends Component {
           imei_number,
       },
       imei_number,
+      inward_id: currentInward[0]._id,
+      category: currentInward[0].product.category.name,
       branch: currentInward[0].branch,
       selling_value: currentInward[0].selling_value,
       gst_percentage: currentInward[0].gst_percentage,
@@ -288,6 +292,8 @@ class AddSales extends Component {
       );
       console.log(currentInward);
       updatedExtras[index][field] = value;
+      updatedExtras[index]['inward_id'] = currentInward[0]._id;
+      updatedExtras[index]["category"] = currentInward[0].product.category.name;
       updatedExtras[index]["branch"] = currentInward[0].branch;
       updatedExtras[index]["selling_value"] = currentInward[0].selling_value;
       updatedExtras[index]["gst_percentage"] = currentInward[0].gst_percentage;
@@ -316,7 +322,16 @@ class AddSales extends Component {
     e.preventDefault();
     const updatedExtras = [
       ...this.state.productList,
-      { country: "", state: "", city: "" },
+      {
+        selectionOption: {},
+        imei_number: "",
+        inward_id: "",
+        category: "",
+        branch: "",
+        selling_value: "",
+        gst_percentage: "",
+        gst_number: "",
+      },
     ];
     this.setState({
       productList: updatedExtras,

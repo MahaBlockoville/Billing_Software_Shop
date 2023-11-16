@@ -108,60 +108,49 @@ class ReportTemplate extends Component {
         //backgroundImage: `url(${local})`, 
         backgroundRepeat: "no-repeat", 
         backgroundPosition: 'center', 
-        border: '3px solid black',
+        //border: '3px solid black',
         WebkitPrintColorAdjust: 'exact', 
         printColorAdjust: 'exact',
         //filter: 'opacity(30%)',
         //fontWeight: 'bold',
         fontSize: '18px',
-        height: '300px',
+        height: '100px',
         backgroundSize: '400px'}
         }>
         <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {index+1} </td>
         <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
           <div>
           {
-          data.inward && data.inward.product ?
-          data.inward.product.name + ' ' + data.inward.product.model
-            + ' ' + data.inward.product.variant + ' ' + data.inward.product.color
-            : ""
-        }
+          data.selectionOption && data.selectionOption.label 
+          }
           </div>
+          <br/>
           <div>
-            {
-              data.imei_number
-            }
+              CGST {data.gst_percentage / 2} %
           </div>
-        
+          <br/>
+          <div>
+          SGST {data.gst_percentage / 2} %
+          </div>
         </td>
         <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
         <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>1</td>
         <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.selling_value - (data.selling_value * (data.gst_percentage / 100))}</td>
         <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.gst_percentage}</td>
-        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{data.selling_value - (data.selling_value * (data.gst_percentage / 100))}</td>
+        <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+          <div>
+          {parseFloat(data.selling_value - (data.selling_value * (data.gst_percentage / 100))).toFixed(2)}
+          </div>
+          <br/>
+          <div>
+          {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}
+          </div>
+          <br/>
+          <div>
+          {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}
+          </div>
+        </td>
       </tr>
-     <tr className="bold" key={index} style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-      CGST {data.gst_percentage / 2} %
-    </td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}</td>
-  </tr>
-    <tr className="bold" key={index} style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-      SGST {data.gst_percentage / 2} %
-    </td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
-    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((data.selling_value * (data.gst_percentage / 100))) / 2).toFixed(2)}</td>
-  </tr>
     </>
     })
   }

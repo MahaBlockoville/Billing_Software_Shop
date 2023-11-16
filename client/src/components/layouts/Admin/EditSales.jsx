@@ -47,6 +47,8 @@ class EditSales extends Component {
         {
           selectionOption: {},
           imei_number: "",
+          inward_id: "",
+          category: "",
           branch: "",
           selling_value: "",
           gst_percentage: "",

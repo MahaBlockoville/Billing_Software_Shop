@@ -395,10 +395,8 @@ router.post("/addSale", async (req, res) => {
       type: {$in: ['wgst', 'wogst']}
     })
     const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
-    productList.forEach(async (data, i) => {
-      const inward_value = await InWard.findOne({imei_number: data.imei_number});
-      await InWard.findOneAndUpdate({imei_number: data.imei_number}, {is_sale: true});
-      productList[i].inward = inward_value
+    productList.map(async (data, i) => {
+      await InWard.findOneAndUpdate({_id: data.inward_id}, {is_sale: true});
     })
     if(!req.body.sale_id) {
     const newSaleItem = new Sale({
@@ -798,7 +796,9 @@ router.delete("/deleteStock/:id", async (req, res) => {
 router.delete("/deleteSale/:id", async (req, res) => {
   try {
     const sale_data = await Sale.findOne({_id: req.params.id});
-    const inward_data = await InWard.findOneAndUpdate({_id: sale_data.inward._id}, {is_sale: false});    
+    sale_data.productList.map(async (data, i) => {
+      await InWard.findOneAndUpdate({_id: data.inward_id}, {is_sale: false});
+    })  
     const deleteSale = await Sale.findByIdAndDelete(req.params.id);
     res.json(deleteSale);
   } catch (err) {
@@ -1041,7 +1041,8 @@ router.get("/updateSalesList", async (req, res) => {
             "-" +
             s.inward.imei_number,
         },
-        inward: s.inward,
+        inward_id: s.inward._id,
+        category: s.inward.product?.category.name,
         imei_number: s.inward.imei_number,
         branch: s.inward.branch,
         selling_value: s.inward.selling_value,
@@ -1340,15 +1341,11 @@ router.post("/searchSale", async (req, res) => {
 
   if(name !== "") {
     filter.$or =  [ 
-      { 'product_list': { $elemMatch: { "inward.product.imei_number": new RegExp(name, "i") } } },
-      { 'product_list': { $elemMatch: { "inward.product.name": new RegExp(name, "i") } } },
-      { 'product_list': { $elemMatch: { "inward.product.color": new RegExp(name, "i") } } },
-      { 'product_list': { $elemMatch: { "inward.product.model": new RegExp(name, "i") } } },
-      { 'product_list': { $elemMatch: { "inward.product.variant": new RegExp(name, "i") } } }
+      { 'product_list': { $elemMatch: { "selectionOption.label": new RegExp(name, "i") } } },
     ];
   }
   if(category && category !== 'All' && category !== 'Select'){
-    filter.$and.push({ 'product_list': { $elemMatch: { "inward.product.category.name": category } } });
+    filter.$and.push({ 'product_list': { $elemMatch: { "category": category } } });
   }
   if(type){
     filter.$and.push({type: type});
