@@ -394,7 +394,7 @@ router.post("/addSale", async (req, res) => {
     const salesCount = await Sale.countDocuments({
       type: {$in: ['wgst', 'wogst']}
     })
-    const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
+    const invoice_id = process.env.INVOICE_ID + '/00' + (parseInt(salesCount) + 1);
     productList.map(async (data, i) => {
       await InWard.findOneAndUpdate({_id: data.inward_id}, {is_sale: true});
     })
