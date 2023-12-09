@@ -14,6 +14,10 @@ const productSchema = new Schema({
   supplier: { type: Object },
   purchase_value: { type: String },
   selling_value: { type: String },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);

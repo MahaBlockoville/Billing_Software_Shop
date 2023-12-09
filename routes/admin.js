@@ -940,7 +940,14 @@ router.post("/addProduct", async (req, res) => {
           name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
         },
         { new: true },
-        function (err, result) {
+        async (err, result) =>{
+          const inward_list_data = await InWard.find({'product._id': result._id, is_sale: false})
+          inward_list_data.map((data) => {
+            data.product = result;
+            data.purchase_value = result.purchase_value;
+            data.selling_value = result.selling_value;
+            data.save();
+          })
           if (err) {
             res.status(400).json("Error: ", err);
           } else {
@@ -967,7 +974,7 @@ router.get("/getProductData/:id", async (req, res) => {
 
 // @desc: get list of all product
 router.get("/getProductList", async (req, res) => {
-  const productList = await Product.find({});
+  const productList = await Product.find({}).sort({_id: -1});
   res.send(productList);
 });
 
@@ -1274,6 +1281,32 @@ router.post("/searchBranch", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// @desc: search searchProduct component
+router.post("/searchProduct", async (req, res) => {
+  let name = req.body.name;
+
+  let filter = {
+  };
+  
+  if(name !== "") {
+    filter.$or =  [ 
+      { 'name': new RegExp(name, "i") }, 
+      { 'category.name': new RegExp(name, "i") }, 
+      { 'supplier.company_name': new RegExp(name, "i") }, 
+      { 'supplier.contact_person': new RegExp(name, "i") }, 
+      { 'color': new RegExp(name, "i") }, 
+      { 'model': new RegExp(name, "i") }, 
+      { 'variant': new RegExp(name, "i") }, 
+    ];
+  }
+  console.log(filter);
+  Product.find(filter).sort({_id: -1})
+    .then((emp) => {
+      res.json(emp);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
 // @desc: search searchInward component
 router.post("/searchInward", async (req, res) => {
   let name = req.body.name;
@@ -1429,6 +1462,82 @@ router.get("/getUserSalDetails/:id", async (req, res) => {
     res.json(userSalDetails);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+
+
+// @desc: update stock transfer
+router.get("/getStockTransfer", async (req, res) => {
+  try {
+    const data = await InWard.find(
+      { status: 'stockTransfer' }
+    ).sort({_id: -1});
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
+
+// @desc: approve stock transfer
+router.post("/approveStockTransfer/:id", async (req, res) => {
+  try {
+    const inward_id = req.params.id;
+    const inward_data = await InWard.findOne({_id: inward_id});
+    console.log("inward_data", inward_data)
+    const data = await InWard.findOneAndUpdate(
+      { _id: inward_id },
+      {
+        to_branch: '',
+        branch: inward_data.to_branch,
+        status: 'inward'
+      }
+    );
+    console.log(data, 'data');
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ err: e.message });
+  }
+});
+
+// @desc: reject stock transfer
+router.post("/rejectStockTransfer/:id", async (req, res) => {
+  try {
+    const inward_id = req.params.id;
+    const inward_data = await InWard.findOne({_id: inward_id});
+    const data = await InWard.findOneAndUpdate(
+      { _id: inward_id },
+      {
+        to_branch: '',
+        branch: inward_data.branch,
+        status: 'inward'
+      }
+    );
+    console.log(data, 'data');
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ err: e.message });
+  }
+});
+
+
+
+// @desc: update stock transfer
+router.post("/updateStockTransfer", async (req, res) => {
+  try {
+    const inward_id = req.body.inward_id;
+    const branch = req.body.branch;
+    const data = await InWard.findOneAndUpdate(
+      { _id: inward_id },
+      {
+        to_branch: branch,
+        status: 'stockTransfer'
+      }
+    );
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ err: err.message });
   }
 });
 

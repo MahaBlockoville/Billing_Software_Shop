@@ -14,7 +14,9 @@ const inWardSchema = new Schema({
   selling_value: { type: String },
   gst_percentage: { type: String },
   branch: { type: String },
+  to_branch: { type: String},
   doi: { type: String },
+  status: { type: String, default: 'inward' },
   type: { type: String, default: 'first' },
   is_sale: { type: Boolean, default: false},
 });
