@@ -49,6 +49,8 @@ import DayBook from "./components/layouts/Admin/DayBook";
 import EditBranch from "./components/layouts/Admin/EditBranch";
 import AddExpense from "./components/layouts/Admin/AddExpense";
 import UserProfile from "./components/layouts/UserProfile";
+import AddStockTransfer from "./components/layouts/Admin/AddStockTransfer";
+import ViewStockTransfer from "./components/layouts/Admin/ViewStockTransfer";
 
 export default class App extends Component {
   render() {
@@ -106,6 +108,8 @@ export default class App extends Component {
               <Route exact path="/viewInWards/:type" component={ViewInWards} />
 
               <Route exact path="/addInWard/:type" component={AddInWard} />
+              <Route exact path="/addStockTransfer/:id" component={AddStockTransfer} />
+              <Route exact path="/viewStockTransfer" component={ViewStockTransfer} />
 
               <Route exact path="/stockReport" component={StockReport} />
 

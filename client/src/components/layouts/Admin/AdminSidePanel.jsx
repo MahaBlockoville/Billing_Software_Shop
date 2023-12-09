@@ -95,6 +95,13 @@ export default class SidePanel extends Component {
                   {currLocation === "addBranch" ? <b>Branch</b> : "Branch"}
                 </li>
               </Link>
+              <Link to="/viewStockTransfer" style={{ textDecoration: "none" }}>
+                <li className="nav-item list-group-item text-dark border-0 my-1 myList">
+                <i class="fas fa-clipboard mr-4"
+                style={{ fontSize: "20px" }} aria-hidden="true"></i>
+                  {currLocation === "/viewStockTransfer" ? <b>Stock Transfer</b> : "Stock Transfer"}
+                </li>
+              </Link>
               </>
               }
               <Link to="/viewProduct" style={{ textDecoration: "none" }}>
@@ -113,6 +120,7 @@ export default class SidePanel extends Component {
                   {currLocation === "/viewCategory" ? <b>Category</b> : "Category"}
                 </li>
               </Link>
+              
               }
               </ul>
             </div>

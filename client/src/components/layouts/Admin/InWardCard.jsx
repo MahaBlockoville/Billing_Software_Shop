@@ -47,6 +47,11 @@ export default class InWardCard extends Component {
     return returnDate;
   };
 
+  onClickTransfer = async (e, inward_id) => {
+    e.preventDefault();
+    this.props.history.push("/addStockTransfer/" + inward_id);
+  }
+
   onClickDelete = async (e, inward_id) => {
     e.preventDefault();
     try {
@@ -208,6 +213,7 @@ export default class InWardCard extends Component {
              </th>
              <th></th>
              <th></th>
+             <th></th>
             </tr>
          {inwardList.map((data, index) => (
            <tr>
@@ -228,6 +234,18 @@ export default class InWardCard extends Component {
                    >
                      <i className="fa fa-edit"></i>
                    </Link>
+                </td>
+                <td>
+                <Link
+                   to={`/addStockTransfer/${data._id}`}
+                   style={{
+                     textDecoration: "none",
+                     display: "flex",
+                     justifyContent: "center",
+                   }}
+                 >
+                   <i className="fa fa-exchange"></i>
+                 </Link>
                 </td>
                 <td>
                 {

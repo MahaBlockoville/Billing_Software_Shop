@@ -7,7 +7,6 @@ import "../../../assets/add-emp/addEmp.css";
 import AdminSidePanel from "../Admin/AdminSidePanel";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
-import Select from "react-select";
 //import Select from "react-select";
 
 class EditSales extends Component {
@@ -43,8 +42,10 @@ class EditSales extends Component {
       shipping_email: "",
       shipping_phone: "",
       salesCount: "",
+      oldProductList: [],
       productList: [
         {
+          is_gift: false,
           selectionOption: {},
           imei_number: "",
           inward_id: "",
@@ -126,6 +127,7 @@ class EditSales extends Component {
     const empList = await axios.get(
       process.env.REACT_APP_API_URL + "/api/admin/getEmpList"
     );
+    const product_list = salesData.data.product_list.map(v => ({...v, is_gift: false}))
 
     this.setState({
       empList: empList.data,
@@ -135,7 +137,8 @@ class EditSales extends Component {
       salesCount: salesCount.data,
       options: options,
       ...salesData.data,
-      productList: salesData.data.product_list,
+      productList: product_list,
+      oldProductList: product_list,
     });
   };
   onBranchSelect = (branch) => {
@@ -231,6 +234,17 @@ class EditSales extends Component {
   onCancel = (e) => {
     e.preventDefault();
     this.props.history.push("/viewSales/" + this.state.type);
+  };
+
+  handleList = (index, field, value) => {
+    if (field === "imei_number") {
+      let updatedExtras = [...this.state.oldProductList];
+      //updatedExtras[index]['is_gift'] = false;
+      console.log('oldProductList after', updatedExtras)
+      this.setState({
+        productList: updatedExtras,
+      });
+    }
   };
 
   render() {
@@ -381,24 +395,48 @@ class EditSales extends Component {
                                 this.state.productList.map((data, i) => (
                                   <div className="my-2 mt-md-4" key={i}>
                                     <div className="row">
-                                      <div className="col-3">
+                                      <div className="col">
                                         <label htmlFor="team">
                                           IMEI/Serial Number
                                         </label>
-                                        <Select
-                                          value={data.selectionOption}
-                                          options={this.state.options}
+                                        <input
+                                          type="text"
+                                          name="branch"
+                                          className="form-control mb-3 "
+                                          value={data.selectionOption.label}
+                                          placeholder="Branch"
                                           readOnly={true}
-                                          onChange={(e) =>
-                                            this.handleList(
-                                              i,
-                                              "imei_number",
-                                              e.value
-                                            )
-                                          }
                                         />
                                       </div>
-                                      <div className="col-3">
+                                      {
+                                      data && data.imei_number &&  <div className="col">
+                                      <label className="checkbox-holder">
+                                        <input
+                                          type="checkbox"
+                                          name="is_information_saved"
+                                          className="me-2 mt-4"
+                                          checked={data.is_gift}
+                                          onChange={(e) => {
+                                            if(e.target.checked) {
+                                              const updatedExtras = [...this.state.productList];
+                                              updatedExtras[i]['is_gift'] = e.target.checked;
+                                              updatedExtras[i]['selling_value'] = 0;
+                                              updatedExtras[i]['gst_percentage'] = 0;
+                                              this.setState({
+                                                productList: updatedExtras,
+                                              });
+                                            }else {
+                                              this.setState({ error: "Kindly try to do one option at a time" });
+                                              this.props.history.push("/viewSales/" + this.state.type);
+                                            }
+                                          }
+                                          }
+                                        />
+                                        {" "}Is Gift?
+                                      </label>
+                                    </div>
+                                    }
+                                      <div className="col">
                                         <label htmlFor="team">Branch</label>
                                         <input
                                           type="text"
@@ -406,17 +444,10 @@ class EditSales extends Component {
                                           className="form-control mb-3 "
                                           value={data.branch}
                                           placeholder="Branch"
-                                          onChange={(e) =>
-                                            this.handleList(
-                                              i,
-                                              "branch",
-                                              e.target.value
-                                            )
-                                          }
                                           readOnly={true}
                                         />
                                       </div>
-                                      <div className="col-3">
+                                      <div className="col">
                                         <label>Amount</label>
                                         <input
                                           type="number"
@@ -424,13 +455,6 @@ class EditSales extends Component {
                                           value={data.selling_value}
                                           className="form-control mb-3 "
                                           placeholder="Type value"
-                                          onChange={(e) =>
-                                            this.handleList(
-                                              i,
-                                              "selling_value",
-                                              e.target.value
-                                            )
-                                          }
                                           readOnly={true}
                                           required
                                         />
@@ -463,13 +487,6 @@ class EditSales extends Component {
                                             name="gst_percentage"
                                             className="form-control mb-3 "
                                             placeholder="Type value"
-                                            onChange={(e) =>
-                                              this.handleList(
-                                                i,
-                                                "gst_percentage",
-                                                e.target.value
-                                              )
-                                            }
                                             readOnly={true}
                                           />
                                         </div>

@@ -13,7 +13,7 @@ class AddSales extends Component {
   constructor() {
     super();
     this.state = {
-      payment_types: [{ name: "Cash" }, { name: "EMI" }],
+      payment_types: [{ name: "Cash" }, { name: "EMI" }, {name: "Other"}],
       payment_type: "Select...",
       disabled: false,
       name: "",
@@ -44,6 +44,7 @@ class AddSales extends Component {
       salesCount: "",
       productList: [
         {
+          is_gift: false,
           selectionOption: {},
           imei_number: "",
           inward_id: "",
@@ -230,40 +231,42 @@ class AddSales extends Component {
       disabled: true,
     });
     try {
-      const newUser = await axios.post(
-        process.env.REACT_APP_API_URL + "/api/admin/addSale",
-        {
-          name,
-          imei_number,
-          phone,
-          address,
-          email,
-          productList,
-          selling_value,
-          tenure,
-          branch,
-          payment_type,
-          dos,
-          gst_number,
-          gst_percentage,
-          type,
-          sales_person,
-          salesCount,
-          finance_name,
-          order_no,
-          shipping_address,
-          shipping_name,
-          shipping_email,
-          shipping_phone,
-        }
-      );
-
-      toast.notify("Added new item", {
-        position: "top-right",
-      });
-
-      console.log("created acc successfully: ", newUser.data);
-      this.props.history.push(`/viewSales/${type}`);
+      if(payment_type !== 'Select...') {
+        const newUser = await axios.post(
+          process.env.REACT_APP_API_URL + "/api/admin/addSale",
+          {
+            name,
+            imei_number,
+            phone,
+            address,
+            email,
+            productList,
+            selling_value,
+            tenure,
+            branch,
+            payment_type,
+            dos,
+            gst_number,
+            gst_percentage,
+            type,
+            sales_person,
+            salesCount,
+            finance_name,
+            order_no,
+            shipping_address,
+            shipping_name,
+            shipping_email,
+            shipping_phone,
+          }
+        );
+        toast.notify("Added new item", {
+          position: "top-right",
+        });
+        console.log("created acc successfully: ", newUser.data);
+        this.props.history.push(`/viewSales/${type}`);
+      }else {
+        this.setState({ error: "Payment type is required" });
+      }
     } catch (err) {
       // enable signup btn
       this.setState({
@@ -295,6 +298,7 @@ class AddSales extends Component {
       updatedExtras[index]['inward_id'] = currentInward[0]._id;
       updatedExtras[index]["category"] = currentInward[0].product.category.name;
       updatedExtras[index]["branch"] = currentInward[0].branch;
+      updatedExtras[index]['is_gift'] = false;
       updatedExtras[index]["selling_value"] = currentInward[0].selling_value;
       updatedExtras[index]["gst_percentage"] = currentInward[0].gst_percentage;
       updatedExtras[index]["selectionOption"] = {
@@ -323,6 +327,7 @@ class AddSales extends Component {
     const updatedExtras = [
       ...this.state.productList,
       {
+        is_gift: false,
         selectionOption: {},
         imei_number: "",
         inward_id: "",
@@ -489,7 +494,7 @@ class AddSales extends Component {
                                 this.state.productList.map((data, i) => (
                                   <div className="my-2 mt-md-4" key={i}>
                                     <div className="row">
-                                    <div className="col-3">
+                                    <div className="col">
                                       <label htmlFor="team">
                                         IMEI/Serial Number
                                       </label>
@@ -505,7 +510,38 @@ class AddSales extends Component {
                                         }
                                       />
                                     </div>
-                                    <div className="col-3">
+                                    {
+                                      data && data.imei_number &&  <div className="col">
+                                      <label className="checkbox-holder">
+                                        <input
+                                          type="checkbox"
+                                          name="is_information_saved"
+                                          className="me-2 mt-4"
+                                          checked={data.is_gift}
+                                          onChange={(e) => {
+                                            if(e.target.checked) {
+                                              const updatedExtras = [...this.state.productList];
+                                              updatedExtras[i]['is_gift'] = e.target.checked;
+                                              updatedExtras[i]['selling_value'] = 0;
+                                              updatedExtras[i]['gst_percentage'] = 0;
+                                              this.setState({
+                                                productList: updatedExtras,
+                                              });
+                                            }else {
+                                              this.handleList(
+                                                i,
+                                                "imei_number",
+                                                data.imei_number
+                                              )
+                                            }
+                                          }
+                                          }
+                                        />
+                                        {" "}Is Gift?
+                                      </label>
+                                    </div>
+                                    }
+                                    <div className="col">
                                       <label htmlFor="team">Branch</label>
                                       <input
                                         type="text"
@@ -513,17 +549,10 @@ class AddSales extends Component {
                                         className="form-control mb-3 "
                                         value={data.branch}
                                         placeholder="Branch"
-                                        onChange={(e) =>
-                                          this.handleList(
-                                            i,
-                                            "branch",
-                                            e.target.value
-                                          )
-                                        }
                                         readOnly={true}
                                       />
                                     </div>
-                                    <div className="col-3">
+                                    <div className="col">
                                       <label>Amount</label>
                                       <input
                                         type="number"
@@ -531,13 +560,6 @@ class AddSales extends Component {
                                         value={data.selling_value}
                                         className="form-control mb-3 "
                                         placeholder="Type value"
-                                        onChange={(e) =>
-                                          this.handleList(
-                                            i,
-                                            "selling_value",
-                                            e.target.value
-                                          )
-                                        }
                                         readOnly={true}
                                         required
                                       />
@@ -570,13 +592,6 @@ class AddSales extends Component {
                                             name="gst_percentage"
                                             className="form-control mb-3 "
                                             placeholder="Type value"
-                                            onChange={(e) =>
-                                              this.handleList(
-                                                i,
-                                                "gst_percentage",
-                                                e.target.value
-                                              )
-                                            }
                                             readOnly={true}
                                           />
                                         </div>
@@ -637,6 +652,41 @@ class AddSales extends Component {
                                       name="order_no"
                                       className="form-control mb-3 "
                                       placeholder="Type value"
+                                      onChange={this.onChange}
+                                    />
+                                  </div>
+                                  <div className="col">
+                                    <label htmlFor="doj">Initial Amount</label>
+                                    <input
+                                      type="number"
+                                      name="tenure"
+                                      className="form-control mb-3 "
+                                      placeholder="Type value"
+                                      onChange={this.onChange}
+                                      required
+                                    />
+                                  </div>
+                                </>
+                              )}
+                              {this.state.payment_type === "Other" && (
+                                <>
+                                  <div className="col">
+                                    <label></label>
+                                    <input
+                                      type="text"
+                                      name="finance_name"
+                                      className="form-control mb-3 "
+                                      placeholder="Type here..."
+                                      onChange={this.onChange}
+                                    />
+                                  </div>
+                                  <div className="col">
+                                  <label></label>
+                                    <input
+                                      type="text"
+                                      name="order_no"
+                                      className="form-control mb-3 "
+                                      placeholder="Type here..."
                                       onChange={this.onChange}
                                     />
                                   </div>
