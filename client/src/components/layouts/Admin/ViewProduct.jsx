@@ -9,6 +9,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import { createHashHistory } from 'history'
+import SearchProduct from "./SearchProduct";
 export const history = createHashHistory()
 
 //import "../../../assets/add-product/addProduct.css";
@@ -93,18 +94,7 @@ export default class ViewProduct extends Component {
                     {/* right part */}
                     <div className="col " style={props}>
                     <div className="row">
-                    <div className="container mt-3">
-                    <h3>Products</h3>
-                    <div className="row mt-3 px-3">
-                      <button className="btn btn-primary pull-right" style={{marginLeft: '800px'}} onClick={this.onClickAdd}>
-                          <i
-                            className="fas fa-user-plus p-2"
-                            style={{ cursor: "pointer", fontSize: "20px" }}
-                          ></i>
-                          Create
-                      </button>
-                      </div>
-                      </div>
+                    <SearchProduct onFilter={this.onFilter} />
                     </div>
 
                       <hr />
