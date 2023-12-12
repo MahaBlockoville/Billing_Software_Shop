@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../assets/billTemplate.css";
 import { ToWords } from 'to-words';
 import moment from 'moment';
-import local  from "../../assets/images/demo.png";
+import mobihub  from "../../assets/images/mobihub_icon.jpeg";
 
 const toWords = new ToWords();
 let body = document.querySelector('body');
@@ -22,7 +22,7 @@ class ReportTemplate extends Component {
       <div className="bill-template">
        <table className="table" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
   <tr style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${local})`, backgroundRepeat: "no-repeat", border: '3px solid black', backgroundPosition: 'right', backgroundSize: '250px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+    <td className="header-cell" id="header-cell" colspan="4" rowspan="4" style={{backgroundImage: `url(${mobihub})`, backgroundRepeat: "no-repeat", border: '3px solid black', backgroundPosition: 'right', backgroundSize: '250px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
       <div className="header_cell_shop_details">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>{this.props.branchName}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.branchAddress}</div>
@@ -102,7 +102,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr className="bold" style={
     {
-    //backgroundImage: `url(${local})`, 
+    //backgroundImage: `url(${mobihub})`, 
     backgroundRepeat: "no-repeat", 
     backgroundPosition: 'center', 
     border: '3px solid black',
@@ -137,7 +137,7 @@ class ReportTemplate extends Component {
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{this.props.gst_percentage}</td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{this.props.selling_value - (this.props.selling_value * (this.props.gst_percentage / 100))}</td>
   </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+  <tr className="bold" style={{ alignItems: 'flex-start', height: '80px', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
       CGST {this.props.gst_percentage / 2} %
@@ -148,7 +148,7 @@ class ReportTemplate extends Component {
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr className="bold" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+  <tr className="bold" style={{ alignItems: 'flex-start', height: '80px', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td className="item_cell" style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
       SGST {this.props.gst_percentage / 2} %
@@ -159,15 +159,15 @@ class ReportTemplate extends Component {
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
     <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}> {parseFloat(((this.props.selling_value * (this.props.gst_percentage / 100))) / 2).toFixed(2)}</td>
   </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td colspan="3">Total Amount</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>{parseInt(this.props.selling_value) + '.00'}</td>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', height: '80px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}} colspan="3">Total Amount</td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}></td>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>{parseInt(this.props.selling_value) + '.00'}</td>
   </tr>
-  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+  <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', height: '80px', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
+    <td style={{border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {
         this.props.selling_value !== undefined &&
         toWords.convert(parseInt(this.props.selling_value))
@@ -184,7 +184,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr style={{border: '3px solid black'}}>
     <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal', verticalAlign: 'middle', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+    <td colspan="4" style={{ border: '3px solid black', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
       Sales Man: 
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {this.props.sales_person}

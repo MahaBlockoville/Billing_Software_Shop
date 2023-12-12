@@ -397,7 +397,7 @@ router.post("/addSale", async (req, res) => {
     const salesCount = await Sale.countDocuments({
       type: {$in: ['wgst', 'wogst']}
     })
-    const invoice_id = 'VM/' + '00' + (parseInt(salesCount) + 1);
+    const invoice_id = process.env.INVOICE_ID + '/00' + (parseInt(salesCount) + 1);
     console.log(invoice_id, 'invoice_id');
     const inward_value = await InWard.findOne({imei_number: imei_number});
     await InWard.findOneAndUpdate({imei_number: imei_number}, {is_sale: true});
