@@ -609,7 +609,7 @@ router.put("/takeAction", async (req, res) => {
 
 // @desc: get list of all emp
 router.get("/getEmpList", async (req, res) => {
-  const empList = await User.find({});
+  const empList = await User.find({}).sort({_id: -1});
   res.send(empList);
 });
 
@@ -700,7 +700,7 @@ router.post("/addBranch", async (req, res) => {
 
 // @desc: get list of all emp
 router.get("/getBranchList", async (req, res) => {
-  const branchList = await Branch.find({});
+  const branchList = await Branch.find({}).sort({_id: -1});
   res.send(branchList);
 });
 
@@ -783,7 +783,7 @@ router.get("/getCategoryData/:id", async (req, res) => {
 
 // @desc: get list of all category
 router.get("/getCategoryList", async (req, res) => {
-  const categoryList = await Category.find({});
+  const categoryList = await Category.find({}).sort({_id: -1});
   res.send(categoryList);
 });
 
@@ -894,7 +894,7 @@ router.get("/getSupplierData/:id", async (req, res) => {
 
 // @desc: get list of all supplier
 router.get("/getSupplierList", async (req, res) => {
-  const supplierList = await Supplier.find({});
+  const supplierList = await Supplier.find({}).sort({_id: -1});
   res.send(supplierList);
 });
 
@@ -913,14 +913,13 @@ router.delete("/deleteSupplier/:id", async (req, res) => {
 router.post("/addProduct", async (req, res) => {
   try {
 
-    let { name, variant, model, color, supplier, category, hsn, selling_value, purchase_value } = req.body;
+    let { name, variant, model, color, supplier, category, hsn, selling_value, purchase_value, reward_points } = req.body;
     // validation
     if (
       !name ||
       !variant ||
       !model ||
       !color ||
-      !supplier ||
       !selling_value ||
       !purchase_value ||
       !category) {
@@ -930,7 +929,8 @@ router.post("/addProduct", async (req, res) => {
     const category_value = await Category.findOne({name: category});
     if(!req.body.product_id) {
       const newProduct = new Product({
-        name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
+        name, variant, model, color, supplier: supplier_value, 
+        category: category_value, hsn, selling_value, purchase_value, reward_points
       });
       const savedProduct = await newProduct.save();
       res.json(savedProduct);
@@ -938,7 +938,8 @@ router.post("/addProduct", async (req, res) => {
       Product.findOneAndUpdate(
         { _id: req.body.product_id },
         {
-          name, variant, model, color, supplier: supplier_value, category: category_value, hsn, selling_value, purchase_value
+          name, variant, model, color, supplier: supplier_value, 
+          category: category_value, hsn, selling_value, purchase_value, reward_points
         },
         { new: true },
         function (err, result) {
@@ -968,7 +969,7 @@ router.get("/getProductData/:id", async (req, res) => {
 
 // @desc: get list of all product
 router.get("/getProductList", async (req, res) => {
-  const productList = await Product.find({});
+  const productList = await Product.find({}).sort({_id: -1});
   res.send(productList);
 });
 
@@ -1074,13 +1075,13 @@ router.get("/getDayBook", async (req, res) => {
       query.doi = req.query.branch;
     }
     console.log(query);
-    const inwardList = await InWard.find(query);
+    const inwardList = await InWard.find(query).sort({_id: -1});
     console.log(inwardList);
 
-    const salesList = await Sale.find(sales_query);
+    const salesList = await Sale.find(sales_query).sort({_id: -1});
     console.log(salesList);
 
-    const expenseList = await Expense.find(expense_query);
+    const expenseList = await Expense.find(expense_query).sort({_id: -1});
     console.log(expenseList);
 
     dayBookData = inwardList.concat(salesList);
@@ -1101,8 +1102,8 @@ router.get("/getDayBook", async (req, res) => {
       query.doi = req.query.branch;
     }
 
-    const inwardList = await InWard.find(query);
-    const salesList = await Sale.find(sales_query);
+    const inwardList = await InWard.find(query).sort({_id: -1});
+    const salesList = await Sale.find(sales_query).sort({_id: -1});
     dayBookData = inwardList.concat(salesList);
     res.send(dayBookData);
   }
@@ -1215,7 +1216,7 @@ router.post("/search", async (req, res) => {
     branch: new RegExp(branch, "i"),
     email: new RegExp(email, "i"),
     doj: new RegExp(doj, "i"),
-  })
+  }).sort({_id: -1})
     .then((emp) => {
       res.json(emp);
     })
@@ -1232,7 +1233,7 @@ router.post("/searchBranch", async (req, res) => {
   Branch.find({
     name: new RegExp(name, "i"),
     dop: new RegExp(dop, "i"),
-  })
+  }).sort({_id: -1})
     .then((emp) => {
       res.json(emp);
     })

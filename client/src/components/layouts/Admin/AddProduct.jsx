@@ -20,6 +20,7 @@ class AddProduct extends Component {
       hsn: "",
       category: "",
       supplier: "",
+      reward_points: "",
       categoryList: [],
       supplierList: [],
       selling_value: "",
@@ -48,12 +49,12 @@ class AddProduct extends Component {
     });
 
     const {
-      name, model, color, variant, category, supplier, hsn, selling_value, purchase_value
+      name, model, color, variant, category, supplier, hsn, selling_value, purchase_value, reward_points
     } = this.state;
 
     try {
       const newUser = await axios.post(process.env.REACT_APP_API_URL +"/api/admin/addProduct", {
-        name, model, color, variant, category, supplier, hsn, selling_value, purchase_value
+        name, model, color, variant, category, supplier, hsn, selling_value, purchase_value, reward_points
       });
 
       toast.notify("Added new product", {
@@ -191,6 +192,19 @@ class AddProduct extends Component {
                                   name="variant"
                                   className="form-control"
                                   placeholder="Variant"
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                              
+                              <div className="col">
+                                {/* name */}
+                                <label htmlFor="name">Reward Points</label>
+                                <input
+                                  type="text"
+                                  name="reward_points"
+                                  className="form-control"
+                                  placeholder="reward points"
                                   onChange={this.onChange}
                                   required
                                 />
