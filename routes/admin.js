@@ -411,7 +411,7 @@ router.post("/addSale", async (req, res) => {
       Sale.findOneAndUpdate(
         { _id: req.body.sale_id },
         {
-          name, phone, address, email, selling_value, product_list: productList,
+          name, phone, address, email, product_list: productList,
           tenure, payment_type, dos,sales_person, finance_name, order_no, 
           shipping_address, shipping_name, shipping_email, shipping_phone
         },
@@ -796,7 +796,7 @@ router.delete("/deleteStock/:id", async (req, res) => {
 router.delete("/deleteSale/:id", async (req, res) => {
   try {
     const sale_data = await Sale.findOne({_id: req.params.id});
-    sale_data.productList.map(async (data, i) => {
+    sale_data.product_list.map(async (data, i) => {
       await InWard.findOneAndUpdate({_id: data.inward_id}, {is_sale: false});
     })  
     const deleteSale = await Sale.findByIdAndDelete(req.params.id);

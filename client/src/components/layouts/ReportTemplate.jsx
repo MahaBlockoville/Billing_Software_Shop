@@ -155,14 +155,14 @@ class ReportTemplate extends Component {
     })
   }
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td colspan="3">Total Amount</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>{this.props.total + '.00'}</td>
+    <td style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}} colspan="3">Total Amount</td>
+    <td style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}></td>
+    <td style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}></td>
+    <td style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}></td>
+    <td style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>{this.props.total + '.00'}</td>
   </tr>
   <tr style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>
-    <td colspan="8"> Amount In Words: <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
+    <td colspan="8" style={{ border: '3px solid black',alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}> Amount In Words: <div >
       {
         this.props.total && toWords.convert(this.props.total)
       }
@@ -178,7 +178,7 @@ class ReportTemplate extends Component {
   </tr>
   <tr style={{border: '3px solid black'}}>
     <td colspan="4" rowspan="2" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal', verticalAlign: 'middle', border: '3px solid black', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}>We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</td>
-    <td colspan="4" style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
+    <td colspan="4" style={{ border: '3px solid black', alignItems: 'flex-start', fontSize: '17px', fontWeight: 'bold'}}>
       Sales Man: 
       <div style={{ alignItems: 'flex-start', fontSize: '17px', fontWeight: 'normal'}}>
       {this.props.sales_person}
