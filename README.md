@@ -10,7 +10,7 @@
 
 1. clone this repository
 2. run `npm install` to install client dependencies
-3. go to the root directory. ie `Human-Resource-management` folder
+3. go to the root directory. ie `Billing software` folder
 4. run `npm run dev` to run the client and server concurrently
 
 ## Note
