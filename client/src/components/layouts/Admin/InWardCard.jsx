@@ -6,7 +6,6 @@ import "toasted-notes/src/styles.css";
 import axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel-3';
 import { QRCodeCanvas } from "qrcode.react";
-import Barcode from 'react-barcode';
 
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
