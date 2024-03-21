@@ -115,13 +115,16 @@ export default class InWardCard extends Component {
   //   document.body.removeChild(aEl);
   // };
 
-  downloadQR = () => {
-    const canvas = this.downloadRef.current.children[0];
-    const pngFile = canvas.toDataURL("image/png");
-    const downloadLink = document.createElement("a");
-    downloadLink.download = "Bar_Code_" +  new Date().toISOString().split('T')[0] + '.png';
-    downloadLink.href = `${pngFile}`;
-    downloadLink.click();
+  downloadQR = (e, imei_number) => {
+    e.preventDefault();
+    const canvas = this.downloadRef.current?.children[0];
+    if(canvas) {
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = "Bar_Code_" + imei_number + '_' +  new Date().toISOString().split('T')[0] + '.png';
+      downloadLink.href = `${pngFile}`;
+      downloadLink.click();
+    }
   };
 
   render() {
@@ -247,7 +250,9 @@ export default class InWardCard extends Component {
                 <div style={{display: 'none'}} ref={this.downloadRef} className="HpQrcode">
                 <QRCodeCanvas id="barCodeEl"  value={data.imei_number} width={1} height={50} size={50} displayValue={false} style={{ margin: '20px' }} />
                 </div>
-                <br/><a style={{color: 'red'}}onClick={this.downloadQR()}> Download QR </a> 
+                <br/><a style={{color: 'red'}} onClick={(e) => {
+                          this.downloadQR(e, data.imei_number)
+                        }}> Download QR </a> 
                 </td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}{ " / "}{data.selling_value}</td>
