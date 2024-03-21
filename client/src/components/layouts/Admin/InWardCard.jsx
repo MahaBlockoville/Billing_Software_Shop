@@ -5,8 +5,7 @@ import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel-3';
-import { QRCodeCanvas } from "qrcode.react";
-
+import Barcode from 'react-barcode';
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
 export default class InWardCard extends Component {
@@ -248,7 +247,7 @@ export default class InWardCard extends Component {
                 <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color}</td>
                 <td>{data.imei_number} <br/>
                 <div style={{display: 'none'}} ref={this.downloadRef} className="HpQrcode">
-                <QRCodeCanvas id="barCodeEl"  value={data.imei_number} width={1} height={50} size={50} displayValue={false} style={{ margin: '20px' }} />
+                <Barcode id="barCodeEl"  value={data.imei_number}renderer={'canvas'} width={1} height={50} size={50} displayValue={false} style={{ margin: '20px' }}/>
                 </div>
                 <br/><a style={{color: 'red'}} onClick={(e) => {
                           this.downloadQR(e, data.imei_number)
