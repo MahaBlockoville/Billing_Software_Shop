@@ -115,11 +115,11 @@ export default class InWardCard extends Component {
   //   document.body.removeChild(aEl);
   // };
 
-  downloadQR = () => {
+  downloadQR = (data) => {
     const canvas = this.downloadRef.current.children[0];
     const pngFile = canvas.toDataURL("image/png");
     const downloadLink = document.createElement("a");
-    downloadLink.download = "Bar_Code_" +  new Date().toISOString().split('T')[0] + '.png';
+    downloadLink.download = "Bar_Code_" + data + '_' +  new Date().toISOString().split('T')[0] + '.png';
     downloadLink.href = `${pngFile}`;
     downloadLink.click();
   };
@@ -247,7 +247,7 @@ export default class InWardCard extends Component {
                 <div style={{display: 'none'}} ref={this.downloadRef} className="HpQrcode">
                 <QRCodeCanvas id="barCodeEl"  value={data.imei_number} width={1} height={50} size={50} displayValue={false} style={{ margin: '20px' }} />
                 </div>
-                <br/><a style={{color: 'red'}}onClick={this.downloadQR}> Download OR </a> 
+                <br/><a style={{color: 'red'}}onClick={this.downloadQR(data.imei_number)}> Download QR </a> 
                 </td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}{ " / "}{data.selling_value}</td>
