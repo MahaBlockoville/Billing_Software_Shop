@@ -5,6 +5,8 @@ import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
 import axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel-3';
+import { QRCodeCanvas } from "qrcode.react";
+import Barcode from 'react-barcode';
 
 //import { MDBDataTable, MDBBtn } from 'mdbreact';
 
@@ -17,6 +19,7 @@ export default class InWardCard extends Component {
     };
     this.exportTableRef = React.createRef();
     this.exportTableStockRef = React.createRef();
+    this.downloadRef = React.createRef();
   }
 
   componentDidMount = async () => {
@@ -97,6 +100,29 @@ export default class InWardCard extends Component {
     })
 
     return number_list.length > 0 ? number_list : [];
+  };
+
+  // generateBarCode = () => {
+  //   const qrCodeURL = document.getElementById('barCodeEl')
+  //     .toDataURL("image/png")
+  //     .replace("image/png", "image/octet-stream");
+  //   console.log(qrCodeURL)
+  //   let aEl = document.createElement("a");
+  //   aEl.href = qrCodeURL;
+  //   const bar_name = "Bar_Code_" +  new Date().toISOString().split('T')[0] + '.png';
+  //   aEl.download = bar_name;
+  //   document.body.appendChild(aEl);
+  //   aEl.click();
+  //   document.body.removeChild(aEl);
+  // };
+
+  downloadQR = () => {
+    const canvas = this.downloadRef.current.children[0];
+    const pngFile = canvas.toDataURL("image/png");
+    const downloadLink = document.createElement("a");
+    downloadLink.download = "Bar_Code_" +  new Date().toISOString().split('T')[0] + '.png';
+    downloadLink.href = `${pngFile}`;
+    downloadLink.click();
   };
 
   render() {
@@ -218,7 +244,12 @@ export default class InWardCard extends Component {
          {inwardList.map((data, index) => (
            <tr>
                 <td>{data.product.name} - {data.product.model} - {data.product.variant} - {data.product.color}</td>
-                <td>{data.imei_number}</td>
+                <td>{data.imei_number} <br/>
+                <div style={{display: 'none'}} ref={this.downloadRef} className="HpQrcode">
+                <QRCodeCanvas id="barCodeEl"  value={data.imei_number} width={1} height={50} size={50} displayValue={false} style={{ margin: '20px' }} />
+                </div>
+                <br/><a style={{color: 'red'}}onClick={this.downloadQR}> Download OR </a> 
+                </td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}{ " / "}{data.selling_value}</td>
                 <td>{data.reference_invoice_number ? data.reference_invoice_number : ''}</td>
