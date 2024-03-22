@@ -251,7 +251,7 @@ export default class InWardCard extends Component {
                 </div>
                 <br/><a style={{color: 'red'}} onClick={(e) => {
                           this.downloadQR(e, data.imei_number)
-                        }}> Download QR </a> 
+                        }}> Download Barcode </a> 
                 </td>
                 <td>{data.gst_percentage}</td>
                 <td>{data.purchase_value}{ " / "}{data.selling_value}</td>
